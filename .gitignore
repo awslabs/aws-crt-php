@@ -177,9 +177,18 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/autotools,cmake,phpstorm
 
+.deps
+.libs/
 build/
 configure.in
 mkinstalldirs
 run-tests.php
 Makefile.global
 acinclude.m4
+libtool
+modules/
+*.lo
+config.h
+config.nice
+*.la
+Makefile*
