@@ -14,7 +14,7 @@
 #include "php.h"
 
 ZEND_BEGIN_MODULE_GLOBALS(awscrt)
-int log_level;
+long log_level;
 ZEND_END_MODULE_GLOBALS(awscrt)
 
 ZEND_EXTERN_MODULE_GLOBALS(awscrt)
