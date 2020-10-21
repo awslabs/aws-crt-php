@@ -2,6 +2,11 @@
 #ifndef PHP_AWS_CRT_H
 #define PHP_AWS_CRT_H
 
+/**
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

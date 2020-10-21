@@ -1,4 +1,9 @@
 
+/**
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
 #include "php_aws_crt.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);

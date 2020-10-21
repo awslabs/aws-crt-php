@@ -1,4 +1,8 @@
-dnl config.m4
+dnl
+dnl * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+dnl * SPDX-License-Identifier: Apache-2.0.
+dnl
+
 PHP_ARG_WITH(awscrt)
 
 if test "$PHP_AWSCRT" != "no"; then
