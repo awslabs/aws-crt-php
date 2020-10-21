@@ -9,7 +9,7 @@
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
 
 PHP_INI_BEGIN()
-STD_PHP_INI_ENTRY("awscrt.log_level", "", PHP_INI_ALL, OnUpdateLong, log_level, zend_awscrt_globals, awscrt_globals)
+STD_PHP_INI_ENTRY("awscrt.log_level", "", PHP_INI_ALL, OnUpdateLongGEZero, log_level, zend_awscrt_globals, awscrt_globals)
 PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(awscrt)
