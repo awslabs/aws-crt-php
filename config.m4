@@ -20,7 +20,6 @@ if test "$PHP_AWSCRT" != "no"; then
     AC_MSG_RESULT([found at $LIBCRYPTO_PATH])
 
     PHP_ADD_INCLUDE($LIBCRYPTO_PATH/include)
-    dnl PHP_ADD_LIBPATH($LIBCRYPTO_PATH/lib)
     PHP_ADD_LIBRARY_WITH_PATH(:libcrypto.a, $LIBCRYPTO_PATH/lib, AWSCRT_SHARED_LIBADD)
 
     AWSCRT_SOURCES=src/*.c
@@ -28,3 +27,6 @@ if test "$PHP_AWSCRT" != "no"; then
     PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
     PHP_SUBST(AWSCRT_SHARED_LIBADD)
 fi
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

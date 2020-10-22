@@ -192,3 +192,4 @@ config.h
 config.nice
 *.la
 Makefile*
+!Makefile.am
