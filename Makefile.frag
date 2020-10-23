@@ -1,5 +1,5 @@
 
-INSTALL_DIR=$(shell pwd)/build/install/
+INSTALL_DIR=$(shell pwd)/build/install
 
 crt_libs=$(INSTALL_DIR)/lib/libaws-c-common.a \
 	$(INSTALL_DIR)/lib/libaws-c-cal.a \
@@ -26,7 +26,7 @@ $(INSTALL_DIR)/lib/libcrypto.a: build/deps/openssl
 		make install_sw
 
 
-CMAKE_CONFIGURE = cmake -DCMAKE_INSTALL_PREFIX=$(shell pwd)/build/install -DCMAKE_PREFIX_PATH=$(shell pwd)/build/install CMAKE_INSTALL_LIBDIR=$(shell pwd)/build/install/lib -DBUILD_TESTING=OFF -DLibCrypto_INCLUDE_DIR=$(INSTALL_DIR)/include -DLibCrypto_STATIC_LIBRARY=$(INSTALL_DIR)/lib/libcrypto.a
+CMAKE_CONFIGURE = cmake -DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR) -DCMAKE_PREFIX_PATH=$(INSTALL_DIR) -DBUILD_TESTING=OFF
 CMAKE_BUILD = cmake --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $CMAKE_BUILD_TYPE --target install
@@ -73,4 +73,5 @@ build/aws-c-auth/CMakeCache.txt: $(INSTALL_DIR)/lib/libaws-c-http.a
 $(INSTALL_DIR)/lib/libaws-c-auth.a: build/aws-c-auth/CMakeCache.txt
 	$(CMAKE_BUILD) build/aws-c-auth $(CMAKE_TARGET)
 
+# Force the crt object target to depend on all of the libraries above
 src/crt.lo: crt-static
