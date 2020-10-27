@@ -13,7 +13,7 @@ crt-static: $(crt_libs) $(INSTALL_DIR)/lib/libcrypto.a
 
 build/deps/openssl:
 	@echo Fetching libcrypto source
-	git clone --single-branch --branch OpenSSL_1_1_1 https://github.com/openssl/openssl.git build/deps/openssl
+	git clone --depth=1 --single-branch --branch OpenSSL_1_1_1-stable https://github.com/openssl/openssl.git build/deps/openssl
 
 $(INSTALL_DIR)/lib/libcrypto.a: build/deps/openssl
 	@echo Building libcrypto
