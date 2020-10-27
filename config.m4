@@ -6,25 +6,18 @@ dnl
 PHP_ARG_WITH(awscrt)
 
 if test "$PHP_AWSCRT" != "no"; then
-    AC_MSG_CHECKING([for libcrypto])
-    for search_path in "$AWS_LIBCRYTO_INSTALL" "$PHP_AWSCRT/build/deps/openssl" /opt/openssl /usr/local /usr; do
-        if test -f "$search_path/include/openssl/crypto.h"; then
-            LIBCRYPTO_PATH=$search_path
-            break
-        fi
-    done
-    if test -z "$LIBCRYPTO_PATH"; then
-        AC_MSG_ERROR([not found])
-    fi
+    # force lib paths to be absolute, or PHP will mangle them
+    cwd=`pwd`
+    CRT_LIBPATHS="-L${cwd}/build/install/lib64 -L${cwd}/build/install/lib"
+    CRT_LIBS="-laws-c-auth -laws-c-http -laws-c-cal -laws-c-io -laws-c-compression -laws-c-common -ls2n -l:libcrypto.a"
+    PHP_EVAL_LIBLINE([$CRT_LIBPATHS $CRT_LIBS], AWSCRT_SHARED_LIBADD)
 
-    AC_MSG_RESULT([found at $LIBCRYPTO_PATH])
-
-    PHP_ADD_INCLUDE($LIBCRYPTO_PATH/include)
-    dnl PHP_ADD_LIBPATH($LIBCRYPTO_PATH/lib)
-    PHP_ADD_LIBRARY_WITH_PATH(:libcrypto.a, $LIBCRYPTO_PATH/lib, AWSCRT_SHARED_LIBADD)
-
-    AWSCRT_SOURCES=src/*.c
-
-    PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
+    # Shoves the linker line into the Makefile
     PHP_SUBST(AWSCRT_SHARED_LIBADD)
+
+    # Sources for the PHP extension itself
+    AWSCRT_SOURCES=src/*.c
+    PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
 fi
+
+PHP_ADD_MAKEFILE_FRAGMENT
