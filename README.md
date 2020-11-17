@@ -1,11 +1,15 @@
-## My Project
+# AWS Common Runtime PHP bindings
 
-TODO: Fill this README out!
+## Requirements
+* PHP 5.5
+* CMake 3.x
+* GCC 4.4+, clang, MSVC
 
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+## Building
+```sh
+$ ./configure
+$ make && make test
+```
 
 ## Security
 
