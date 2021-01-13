@@ -9,37 +9,33 @@
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
 
 PHP_INI_BEGIN()
-STD_PHP_INI_ENTRY("awscrt.log_level", "", PHP_INI_ALL, OnUpdateLongGEZero, log_level, zend_awscrt_globals, awscrt_globals)
+STD_PHP_INI_ENTRY("awscrt.log_level", "", PHP_INI_ALL, OnUpdateLongGEZero,
+                  log_level, zend_awscrt_globals, awscrt_globals)
 PHP_INI_END()
 
-static PHP_MINIT_FUNCTION(awscrt)
-{
-    REGISTER_INI_ENTRIES();
-    return SUCCESS;
+static PHP_MINIT_FUNCTION(awscrt) {
+  REGISTER_INI_ENTRIES();
+  return SUCCESS;
 }
 
-static PHP_MSHUTDOWN_FUNCTION(awscrt)
-{
-    UNREGISTER_INI_ENTRIES();
+static PHP_MSHUTDOWN_FUNCTION(awscrt) {
+  UNREGISTER_INI_ENTRIES();
 
-    return SUCCESS;
+  return SUCCESS;
 }
 
-static PHP_GINIT_FUNCTION(awscrt)
-{
+static PHP_GINIT_FUNCTION(awscrt) {
 #if defined(COMPILE_DL_ASTKIT) && defined(ZTS)
-    ZEND_TSRMLS_CACHE_UPDATE();
+  ZEND_TSRMLS_CACHE_UPDATE();
 #endif
-    awscrt_globals->log_level = 0;
+  awscrt_globals->log_level = 0;
 }
 
 ZEND_BEGIN_ARG_INFO(awscrt_version_arginfo, 0)
 ZEND_END_ARG_INFO()
 
-PHP_FUNCTION(awscrt_version) {
-    RETURN_STRING("1.0.0-dev", 0);
-}
-
+PHP_FUNCTION(awscrt_version) { RETURN_STRING("1.0.0-dev", 0); }
+/* clang-format off */
 const zend_function_entry awscrt_functions[] = {
     PHP_FE(awscrt_version, awscrt_version_arginfo)
     PHP_FE_END
@@ -60,6 +56,8 @@ zend_module_entry awscrt_module_entry = {
     NULL, /* GSHUTDOWN */
     NULL, /* RPOSTSHUTDOWN */
     STANDARD_MODULE_PROPERTIES_EX};
+
+/* clang-format on */
 
 #ifdef COMPILE_DL_AWSCRT
 ZEND_GET_MODULE(awscrt)
