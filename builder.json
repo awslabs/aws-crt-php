@@ -3,7 +3,7 @@
     "hosts": {
         "ubuntu": {
             "pkg_setup": [
-                "apt-add-repository ppa:ondrej/php"
+                "add-apt-repository -y ppa:ondrej/php"
             ],
             "packages": [
                 "autotools-dev",
