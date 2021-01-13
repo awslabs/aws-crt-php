@@ -38,6 +38,7 @@ PHP_FUNCTION(awscrt_version) {
   static const char *version = "1.0.0-dev";
   RETURN_STRING(version, 0);
 }
+
 /* clang-format off */
 const zend_function_entry awscrt_functions[] = {
     PHP_FE(awscrt_version, awscrt_version_arginfo)
