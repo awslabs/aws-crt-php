@@ -1,0 +1,34 @@
+{
+    "name": "aws-crt-php",
+    "hosts" {
+        "ubuntu": {
+            "packages": [
+                "autotools-dev",
+                "autoconf",
+                "libtool",
+                "clang",
+                "php5-dev"
+            ]
+        },
+        "al2": {
+            "packages": [
+                "autoconf",
+                "automake",
+                "libtool",
+                "clang",
+                "php-devel"
+            ]
+        },
+    },
+    "build_steps": [
+        ["phpize"],
+        ["./configure"],
+        ["make"]
+    ],
+    "test_env": {
+        "NO_INTERACTION": "1"
+    },
+    "test_steps": [
+        ["make", "test"]
+    ]
+}
