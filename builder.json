@@ -10,7 +10,7 @@
                 "autoconf",
                 "libtool",
                 "clang",
-                "php5.6-dev"
+                "php-dev"
             ]
         },
         "al2": {
