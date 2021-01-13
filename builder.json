@@ -1,6 +1,6 @@
 {
     "name": "aws-crt-php",
-    "hosts" {
+    "hosts": {
         "ubuntu": {
             "packages": [
                 "autotools-dev",
