@@ -33,10 +33,22 @@ static PHP_GINIT_FUNCTION(awscrt)
     awscrt_globals->log_level = 0;
 }
 
+ZEND_BEGIN_ARG_INFO(awscrt_version_arginfo, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(awscrt_version) {
+    RETURN_STRING("1.0.0-dev", 0);
+}
+
+const zend_function_entry awscrt_functions[] = {
+    PHP_FE(awscrt_version, awscrt_version_arginfo)
+    PHP_FE_END
+};
+
 zend_module_entry awscrt_module_entry = {
     STANDARD_MODULE_HEADER,
     "awscrt",
-    NULL, /* functions */
+    awscrt_functions, /* functions */
     PHP_MINIT(awscrt),
     PHP_MSHUTDOWN(awscrt),
     NULL, /* RINIT */
