@@ -10,6 +10,7 @@ if test "$PHP_AWSCRT" != "no"; then
     cwd=`pwd`
     CRT_LIBPATHS="-L${cwd}/build/install/lib64 -L${cwd}/build/install/lib"
     CRT_LIBS="-laws-c-auth -laws-c-http -laws-c-cal -laws-c-io -laws-c-compression -laws-c-common -ls2n -l:libcrypto.a"
+    PHP_ADD_INCLUDE(${cwd}/build/install/include)
     PHP_EVAL_LIBLINE([$CRT_LIBPATHS $CRT_LIBS], AWSCRT_SHARED_LIBADD)
 
     # Shoves the linker line into the Makefile
