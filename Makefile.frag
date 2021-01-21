@@ -1,16 +1,7 @@
 
 INSTALL_DIR=$(shell pwd)/build/install
 
-crt_libs=$(INSTALL_DIR)/lib/libaws-c-common.a \
-	$(INSTALL_DIR)/lib/libaws-c-cal.a \
-	$(INSTALL_DIR)/lib/libaws-c-io.a \
-	$(INSTALL_DIR)/lib/libaws-c-compression.a \
-	$(INSTALL_DIR)/lib/libaws-c-http.a \
-	$(INSTALL_DIR)/lib/libaws-c-auth.a \
-	$(INSTALL_DIR)/lib/libs2n.a
-
-crt-static: $(crt_libs) $(INSTALL_DIR)/lib/libcrypto.a
-
+# download and build libcrypto.a for the CRT with -fPIC
 build/deps/openssl:
 	@echo Fetching libcrypto source
 	git clone --depth=1 --single-branch --branch OpenSSL_1_1_1-stable https://github.com/openssl/openssl.git build/deps/openssl
@@ -31,47 +22,13 @@ CMAKE_BUILD = cmake --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $CMAKE_BUILD_TYPE --target install
 
-build/aws-c-common/CMakeCache.txt: $(INSTALL_DIR)/lib/libcrypto.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-c-common -Bbuild/aws-c-common
+# cmake configure depends on libcrypto above
+build/aws-crt-ffi/CMakeCache.txt: $(INSTALL_DIR)/lib/libcrypto.a
+	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi
 
-$(INSTALL_DIR)/lib/libaws-c-common.a: build/aws-c-common/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-c-common $(CMAKE_TARGET)
+# build the FFI library
+$(INSTALL_DIR)/lib/libaws-crt-ffi.so: build/aws-crt-ffi/CMakeCache.txt
+	$(CMAKE_BUILD) build/aws-crt-ffi $(CMAKE_TARGET)
 
-build/s2n/CMakeCache.txt: $(INSTALL_DIR)/lib/libcrypto.a
-	$(CMAKE_CONFIGURE) -Hcrt/s2n -Bbuild/s2n
-
-$(INSTALL_DIR)/lib/libs2n.a: build/s2n/CMakeCache.txt
-	$(CMAKE_BUILD) build/s2n $(CMAKE_TARGET)
-
-build/aws-c-io/CMakeCache.txt: $(INSTALL_DIR)/lib/libaws-c-common.a $(INSTALL_DIR)/lib/libcrypto.a $(INSTALL_DIR)/lib/libs2n.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-c-io -Bbuild/aws-c-io
-
-$(INSTALL_DIR)/lib/libaws-c-io.a: build/aws-c-io/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-c-io $(CMAKE_TARGET)
-
-build/aws-c-cal/CMakeCache.txt: $(INSTALL_DIR)/lib/libaws-c-common.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-c-cal -Bbuild/aws-c-cal
-
-$(INSTALL_DIR)/lib/libaws-c-cal.a: build/aws-c-cal/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-c-cal $(CMAKE_TARGET)
-
-build/aws-c-compression/CMakeCache.txt: $(INSTALL_DIR)/lib/libaws-c-common.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-c-compression -Bbuild/aws-c-compression
-
-$(INSTALL_DIR)/lib/libaws-c-compression.a: build/aws-c-compression/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-c-compression $(CMAKE_TARGET)
-
-build/aws-c-http/CMakeCache.txt: $(INSTALL_DIR)/lib/libaws-c-compression.a $(INSTALL_DIR)/lib/libaws-c-io.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-c-http -Bbuild/aws-c-http
-
-$(INSTALL_DIR)/lib/libaws-c-http.a: build/aws-c-http/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-c-http $(CMAKE_TARGET)
-
-build/aws-c-auth/CMakeCache.txt: $(INSTALL_DIR)/lib/libaws-c-http.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-c-auth -Bbuild/aws-c-auth
-
-$(INSTALL_DIR)/lib/libaws-c-auth.a: build/aws-c-auth/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-c-auth $(CMAKE_TARGET)
-
-# Force the crt object target to depend on all of the libraries above
-src/crt.lo: crt-static
+# Force the crt object target to depend on the FFI library
+src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
