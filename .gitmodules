@@ -1,21 +1,3 @@
-[submodule "aws-c-common"]
-	path = crt/aws-c-common
-	url = https://github.com/awslabs/aws-c-common.git
-[submodule "aws-c-io"]
-	path = crt/aws-c-io
-	url = https://github.com/awslabs/aws-c-io.git
-[submodule "aws-c-http"]
-	path = crt/aws-c-http
-	url = https://github.com/awslabs/aws-c-http.git
-[submodule "aws-c-compression"]
-	path = crt/aws-c-compression
-	url = https://github.com/awslabs/aws-c-compression.git
-[submodule "aws-c-auth"]
-	path = crt/aws-c-auth
-	url = https://github.com/awslabs/aws-c-auth.git
-[submodule "aws-c-cal"]
-	path = crt/aws-c-cal
-	url = https://github.com/awslabs/aws-c-cal.git
-[submodule "s2n"]
-	path = crt/s2n
-	url = https://github.com/awslabs/s2n.git
+[submodule "crt/aws-crt-ffi"]
+	path = crt/aws-crt-ffi
+	url = https://github.com/awslabs/aws-crt-ffi.git
