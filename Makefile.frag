@@ -1,5 +1,5 @@
 
-INSTALL_DIR=$(shell pwd)/build/install
+INSTALL_DIR=$(shell pwd)
 
 # download and build libcrypto.a for the CRT with -fPIC
 build/deps/openssl:
@@ -24,7 +24,7 @@ CMAKE_TARGET = --config $CMAKE_BUILD_TYPE --target install
 
 # cmake configure depends on libcrypto above
 build/aws-crt-ffi/CMakeCache.txt: $(INSTALL_DIR)/lib/libcrypto.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi
+	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi -DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR)
 
 # build the FFI library
 $(INSTALL_DIR)/lib/libaws-crt-ffi.so: build/aws-crt-ffi/CMakeCache.txt
