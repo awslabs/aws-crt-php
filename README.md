@@ -7,6 +7,8 @@
 
 ## Building on UNIX
 ```sh
+$ git clone --recursive https://github.com/awslabs/aws-crt-php.git
+$ cd aws-crt-php
 $ phpize
 $ ./configure
 $ make && make test
