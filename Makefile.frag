@@ -20,7 +20,7 @@ $(INT_DIR)/lib/libcrypto.a: $(DEPS_DIR)/openssl
 		make install_sw
 
 
-CMAKE_CONFIGURE = cmake -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DLibCrypto_INCLUDE_DIR=$(INT_DIR)/include -DLibCrypto_STATIC_LIBRARY=$(INT_DIR)/lib/libcrypto.a -DBUILD_TESTING=OFF
+CMAKE_CONFIGURE = cmake -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DBUILD_TESTING=OFF
 CMAKE_BUILD = cmake --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
@@ -36,6 +36,10 @@ $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/CMakeCache.
 # copy the lib into the lib folder
 $(INSTALL_DIR)/lib/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so
 	cp -v $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/libaws-crt-ffi.so
+
+# install api.h from FFI lib
+$(INSTALL_DIR)/lib/api.h: crt/aws-crt-ffi/src/api.h
+	cp -v crt/aws-crt-ffi/src/api.h $(INSTALL_DIR)/lib/api.h
 
 # Force the crt object target to depend on the FFI library
 src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
