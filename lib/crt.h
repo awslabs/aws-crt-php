@@ -6,4 +6,3 @@
 #define AWS_EXTERN_C_END }
 
 #include "api.h"
-
