@@ -1,0 +1,4 @@
+
+#define FFI_SCOPE "AWSCRT"
+#define FFI_LIB "./libaws-crt-ffi.so"
+

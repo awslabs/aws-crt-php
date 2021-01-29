@@ -5,7 +5,14 @@ final class CRT {
     private static $ffi = null;
     function __construct() {
         if (is_null(self::$ffi)) {
-            self::$ffi = FFI::scope("AWSCRT");
+            //$cwd = getcwd();
+            //chdir(dirname(__FILE__));
+            try {
+                self::$ffi = FFI::load(__DIR__ . "/crt.h");
+            } catch (Exception $e) {
+                echo 'Exception: ', $e->getMessage(), "\n";
+            }
+            //chdir($cwd);
         }
     }
 
