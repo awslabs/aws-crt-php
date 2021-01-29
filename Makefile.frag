@@ -36,7 +36,7 @@ $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/CMakeCache.
 	$(CMAKE_BUILD) build/aws-crt-ffi $(CMAKE_TARGET)
 
 # copy the lib into the lib folder
-$(INSTALL_DIR)/lib/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/api.h $(INSTALL_DIR)/lib/crt.h
+$(INSTALL_DIR)/lib/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/api.h
 	cp -v $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/libaws-crt-ffi.so
 
 # install api.h from FFI lib
