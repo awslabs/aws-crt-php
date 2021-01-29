@@ -36,4 +36,3 @@ final class CRT {
         return self::$ffi->aws_crt_error_name((int)$error);
     }
 }
-?>

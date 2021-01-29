@@ -5,4 +5,3 @@
 if (function_exists("opcache_compile_file")) {
     opcache_compile_file(__DIR__ . "/crt.php");
 }
-?>
