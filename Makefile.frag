@@ -36,13 +36,12 @@ $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/CMakeCache.
 	$(CMAKE_BUILD) build/aws-crt-ffi $(CMAKE_TARGET)
 
 # copy the lib into the lib folder
-$(INSTALL_DIR)/lib/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/crt.h
+$(INSTALL_DIR)/lib/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/api.h $(INSTALL_DIR)/lib/crt.h
 	cp -v $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/libaws-crt-ffi.so
 
 # install api.h from FFI lib
-$(INSTALL_DIR)/lib/crt.h: crt/aws-crt-ffi/src/api.h lib/crt.h.in
-	cp -v lib/crt.h.in $(INSTALL_DIR)/lib/crt.h
-	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' >> $(INSTALL_DIR)/lib/crt.h
+$(INSTALL_DIR)/lib/api.h: crt/aws-crt-ffi/src/api.h
+	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' > $(INSTALL_DIR)/lib/api.h
 
 # Force the crt object target to depend on the FFI library
 src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so

@@ -8,7 +8,7 @@ final class CRT {
             //$cwd = getcwd();
             //chdir(dirname(__FILE__));
             try {
-                self::$ffi = FFI::load(__DIR__ . "/crt.h");
+                self::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/api.h"), __DIR__ . "/libaws-crt-ffi.so");
             } catch (Exception $e) {
                 echo 'Exception: ', $e->getMessage(), "\n";
             }
