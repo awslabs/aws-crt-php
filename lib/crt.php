@@ -29,10 +29,10 @@ final class CRT {
     }
 
     function error_str($error) {
-        return self::$ffi->aws_crt_error_str((int)$error);
+        return self::$ffi->aws_crt_error_str((int) $error);
     }
 
     function error_name($error) {
-        return self::$ffi->aws_crt_error_name((int)$error);
+        return self::$ffi->aws_crt_error_name((int) $error);
     }
 }

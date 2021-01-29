@@ -4,6 +4,11 @@ DEPS_DIR=$(BUILD_DIR)/deps
 INT_DIR=$(BUILD_DIR)/install
 INSTALL_DIR=$(shell pwd)
 
+CMAKE = cmake3
+ifeq (, $(shell which cmake3))
+	CMAKE = cmake
+endif
+
 # download and build libcrypto.a for the CRT with -fPIC
 $(DEPS_DIR)/openssl:
 	@echo Fetching libcrypto source
@@ -22,8 +27,8 @@ $(INT_DIR)/lib/libcrypto.a: $(DEPS_DIR)/openssl
 	ln -s $(INT_DIR)/lib64/libcrypto.a $(INT_DIR)/lib/libcrypto.a || true
 
 
-CMAKE_CONFIGURE = cmake -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DBUILD_TESTING=OFF
-CMAKE_BUILD = cmake --build
+CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DBUILD_TESTING=OFF
+CMAKE_BUILD = $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 
