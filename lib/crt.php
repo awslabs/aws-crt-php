@@ -5,14 +5,11 @@ final class CRT {
     private static $ffi = null;
     function __construct() {
         if (is_null(self::$ffi)) {
-            //$cwd = getcwd();
-            //chdir(dirname(__FILE__));
             try {
                 self::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/api.h"), __DIR__ . "/libaws-crt-ffi.so");
             } catch (Exception $e) {
                 echo 'Exception: ', $e->getMessage(), "\n";
             }
-            //chdir($cwd);
         }
     }
 
