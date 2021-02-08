@@ -193,3 +193,4 @@ config.nice
 *.la
 Makefile*
 !Makefile.am
+/vendor/

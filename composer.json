@@ -1,0 +1,32 @@
+{
+    "name": "aws/awscrt",
+    "description": "AWS Common Runtime for PHP",
+    "type": "library",
+    "require": {
+
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5"
+    },
+    "conflict": {
+        "phpunit/php-timer": ">=2"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "lib/"
+        ]
+    },
+    "autoload": {
+        "files": ["lib/preload.php"]
+    },
+    "scripts": {
+        "test": "phpunit --bootstrap lib/lib.php"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "AWS Common Runtime Team",
+            "email": "aws-sdk-common-runtime@amazon.com"
+        }
+    ]
+}
