@@ -4,6 +4,7 @@
 final class CRT {
     private static $ffi = null;
     private static $refcount = 0;
+
     function __construct() {
         if (is_null(self::$ffi)) {
             try {

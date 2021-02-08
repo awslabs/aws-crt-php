@@ -1,12 +1,14 @@
 # AWS Common Runtime PHP bindings
 
 ## Requirements
-* PHP 5.5
+* PHP 5.6+
 * CMake 3.x
-* GCC 4.4+, clang, MSVC
+* GCC 4.4+, clang 3.8+
 
-## Building
+## Building on UNIX
 ```sh
+$ git clone --recursive https://github.com/awslabs/aws-crt-php.git
+$ cd aws-crt-php
 $ phpize
 $ ./configure
 $ make && make test
