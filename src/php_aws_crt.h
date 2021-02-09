@@ -30,10 +30,10 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
 /* PHP 7 removed the string duplicate parameter */
-#if AWS_PHP_API > 560
-#    define AWS_RETURN_STRING(s) RETURN_STRING(s)
-#else
+#if AWS_PHP_API < 7
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
+#else
+#    define AWS_RETURN_STRING(s) RETURN_STRING(s)
 #endif
 
 #endif /* PHP_AWS_CRT_H */
