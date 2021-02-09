@@ -8,10 +8,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#    include "config.h"
 #endif
 
 #include "php.h"
+
+#if ZEND_EXTENSION_API_NO < ZEND_EXTENSION_API_NO_5_6_X
+#    error "PHP >= 5.6 is required"
+#elif (ZEND_EXTENSION_API_NO >= ZEND_EXTENSION_API_NO_5_6_X) && (ZEND_EXTENSION_API_NO < ZEND_EXTENSION_API_NO_7_0_X)
+#    define AWS_PHP_API 5
+#else
+#    define AWS_PHP_API 7
+#endif
 
 ZEND_BEGIN_MODULE_GLOBALS(awscrt)
 long log_level;
@@ -20,5 +28,12 @@ ZEND_END_MODULE_GLOBALS(awscrt)
 ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
+
+/* PHP 7 removed the string duplicate parameter */
+#if AWS_PHP_API > 5
+#    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
+#else
+#    define AWS_RETURN_STRING(s) RETURN_STRING(s)
+#endif
 
 #endif /* PHP_AWS_CRT_H */
