@@ -63,7 +63,7 @@ jobs:
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
         export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php7-linux-x64:${{ env.BUILDER_VERSION }}
         docker pull $DOCKER_IMAGE
-        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream test_steps="make test-ffi"
+        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream test_steps="make test-ffi" --skip-install
 
   php7-linux-x64-ext:
     runs-on: ubuntu-latest
@@ -73,7 +73,7 @@ jobs:
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
         export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php7-linux-x64:${{ env.BUILDER_VERSION }}
         docker pull $DOCKER_IMAGE
-        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
 
   php5-linux-x64-ext:
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
         export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php5-linux-x64:${{ env.BUILDER_VERSION }}
         docker pull $DOCKER_IMAGE
-        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
 
 #   linux-arm:
 #     name: ARM (${{ matrix.arch }})
