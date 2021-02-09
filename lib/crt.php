@@ -26,12 +26,10 @@ final class CRT {
 
     // library lifetime
     private static function init() {
-        //echo("Initializing CRT\n");
         return self::$ffi->aws_crt_init();
     }
 
     private static function clean_up() {
-        //echo("Shutting down CRT\n");
         return self::$ffi->aws_crt_clean_up();
     }
 
