@@ -12,6 +12,10 @@ final class ErrorTest extends PHPUnit_Framework_TestCase {
         self::$crt = null;
     }
 
+    public function testNoInitialError() {
+        $this->assertEquals(0, CRT::last_error());
+    }
+
     public function testCanResolveErrorName() {
         $this->assertEquals("AWS_ERROR_SUCCESS", CRT::error_name(0));
     }
