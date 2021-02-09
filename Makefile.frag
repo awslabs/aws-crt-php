@@ -50,3 +50,7 @@ $(INSTALL_DIR)/lib/api.h: crt/aws-crt-ffi/src/api.h
 
 # Force the crt object target to depend on the FFI library
 src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
+
+# Test the FFI interface
+test-ffi: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
+	composer run test lib/tests
