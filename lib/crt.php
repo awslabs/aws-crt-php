@@ -1,6 +1,10 @@
 <?php
 
-// Wrapper for the FFI interface to the CRT. There only ever needs to be one of these.
+/**
+ * Wrapper for the FFI interface to the CRT. There only ever needs to be one of these.
+ * Creating an instance of any NativeResource will activate the CRT binding. User code
+ * should only need to create one of these if they are only accessing CRT:: functions.
+ */
 final class CRT {
     private static $ffi = null;
     private static $refcount = 0;
@@ -24,7 +28,6 @@ final class CRT {
         }
     }
 
-    // library lifetime
     private static function init() {
         return self::$ffi->aws_crt_init();
     }
@@ -33,20 +36,29 @@ final class CRT {
         return self::$ffi->aws_crt_clean_up();
     }
 
-    // Error handling
+    /**
+     * @return integer last error code reported within the CRT
+     */
     public static function last_error() {
         return self::$ffi->aws_crt_last_error();
     }
 
+    /**
+     * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
+     * @return string Human-readable description of the provided error code
+     */
     public static function error_str($error) {
         return self::$ffi->aws_crt_error_str((int) $error);
     }
 
+    /**
+     * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
+     * @return string Name/enum identifier for the provided error code
+     */
     public static function error_name($error) {
         return self::$ffi->aws_crt_error_name((int) $error);
     }
 
-    // IO
     function event_loop_group_new($options) {
         return self::$ffi->aws_crt_event_loop_group_new($options->num_threads);
     }
@@ -56,8 +68,10 @@ final class CRT {
     }
 }
 
-// Base class for all native resources, tracks all outstanding resources
-// and provides basic leak checking
+/**
+ * Base class for all native resources, tracks all outstanding resources
+ * and provides basic leak checking
+ */
 abstract class NativeResource {
     protected static $crt = null;
     protected static $resources = [];
