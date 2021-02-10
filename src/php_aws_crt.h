@@ -15,9 +15,11 @@
 
 #include "Zend/zend_extensions.h" /* for ZEND_EXTENSION_API_NO */
 
-#if ZEND_EXTENSION_API_NO < ZEND_EXTENSION_API_NO_5_6_X
+#if ZEND_EXTENSION_API_NO < 220131226
 #    error "PHP >= 5.6 is required"
 #endif
+
+#define AWS_PHP_AT_LEAST_7 defined(ZEND_EXTENSION_API_NO_7_0_X) && ZEND_EXTENSION_API_NO >= ZEND_EXTENSION_API_NO_7_0_X
 
 ZEND_BEGIN_MODULE_GLOBALS(awscrt)
 long log_level;
@@ -28,10 +30,10 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
 /* PHP 7 removed the string duplicate parameter */
-#if ZEND_EXTENSION_API_NO < ZEND_EXTENSION_API_NO_7_0_X
-#    define AWS_RETURN_STRING(s, dupe) RETURN_STRING(s, dupe)
+#if AWS_PHP_AT_LEAST_7
+#    define AWS_RETURN_STRING(s) RETURN_STRING(s)
 #else
-#    define AWS_RETURN_STRING(s, dupe) RETURN_STRING(s)
+#    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
 #endif
 
 #endif /* PHP_AWS_CRT_H */
