@@ -16,7 +16,7 @@
 #include "Zend/zend_extensions.h" /* for ZEND_EXTENSION_API_NO */
 
 #if ZEND_EXTENSION_API_NO < 220131226
-#    error "PHP >= 5.6 is required (found: " #ZEND_EXTENSION_API_NO ")"
+#    error "PHP >= 5.6 is required"
 #endif
 
 #define AWS_PHP_AT_LEAST_7 defined(ZEND_EXTENSION_API_NO_7_0_X)
