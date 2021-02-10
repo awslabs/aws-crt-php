@@ -19,7 +19,7 @@
 #    error "PHP >= 5.6 is required"
 #endif
 
-#define AWS_PHP_AT_LEAST_7 defined(ZEND_EXTENSION_API_NO_7_0_X) && ZEND_EXTENSION_API_NO >= ZEND_EXTENSION_API_NO_7_0_X
+#define AWS_PHP_AT_LEAST_7 defined(ZEND_EXTENSION_API_NO_7_0_X)
 
 ZEND_BEGIN_MODULE_GLOBALS(awscrt)
 long log_level;
