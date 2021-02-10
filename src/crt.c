@@ -42,7 +42,7 @@ ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(awscrt_version) {
     static const char *version = "1.0.0-dev";
-    AWS_RETURN_STRING(version);
+    AWS_RETURN_STRING(version, 0);
 }
 /* clang-format off */
 const zend_function_entry awscrt_functions[] = {

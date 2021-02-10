@@ -29,9 +29,9 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 /* PHP 7 removed the string duplicate parameter */
 #if ZEND_EXTENSION_API_NO < ZEND_EXTENSION_API_NO_7_0_X
-#    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
+#    define AWS_RETURN_STRING(s, dupe) RETURN_STRING(s, dupe)
 #else
-#    define AWS_RETURN_STRING(s) RETURN_STRING(s)
+#    define AWS_RETURN_STRING(s, dupe) RETURN_STRING(s)
 #endif
 
 #endif /* PHP_AWS_CRT_H */
