@@ -13,6 +13,8 @@
 
 #include "php.h"
 
+#include "Zend/zend_extensions.h" /* for ZEND_EXTENSION_API_NO */
+
 #if ZEND_EXTENSION_API_NO < ZEND_EXTENSION_API_NO_5_6_X
 #    error "PHP >= 5.6 is required"
 #endif
