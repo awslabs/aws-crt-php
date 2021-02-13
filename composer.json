@@ -1,9 +1,8 @@
 {
-    "name": "aws/awscrt",
+    "name": "aws/crt",
     "description": "AWS Common Runtime for PHP",
     "type": "library",
     "require": {
-
     },
     "require-dev": {
         "phpunit/phpunit": "^5"
@@ -11,16 +10,21 @@
     "conflict": {
         "phpunit/php-timer": ">=2"
     },
-    "autoload-dev": {
+    "autoload": {
         "classmap": [
             "lib/"
+        ],
+        "psr-4": {
+            "AWS\\": "lib/AWS"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "lib/tests/"
         ]
     },
-    "autoload": {
-        "files": ["lib/preload.php"]
-    },
     "scripts": {
-        "test": "phpunit --bootstrap lib/lib.php"
+        "test": "phpunit lib/tests"
     },
     "license": "Apache-2.0",
     "authors": [

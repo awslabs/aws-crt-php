@@ -53,4 +53,5 @@ src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
 
 # Test the FFI interface
 test-ffi: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
-	composer run test lib/tests
+	composer update
+	composer run test
