@@ -51,7 +51,7 @@ $(INSTALL_DIR)/lib/api.h: crt/aws-crt-ffi/src/api.h
 # Force the crt object target to depend on the FFI library
 src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
 
-ifeq($(TEST_FFI),1)
+ifeq ($(TEST_FFI),1)
 test-ci: test-ffi
 else
 test-ci: test
