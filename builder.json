@@ -32,6 +32,6 @@
         "NO_INTERACTION": "1"
     },
     "test_steps": [
-        ["make", "test"]
+        ["make", "test-ci"]
     ]
 }
