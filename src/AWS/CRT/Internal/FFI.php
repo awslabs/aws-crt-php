@@ -33,7 +33,7 @@ final class FFI {
     }
 
     /**
-     * Forwards any call made on this object to the extension function of the
+     * Forwards any call made on this object to the FFI function of the
      * same name with the supplied arguments. Argument type hinting and checking
      * occurs at the CRT wrapper.
      */
