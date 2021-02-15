@@ -1,5 +1,9 @@
 <?php
 
+namespace AWS\CRT\IO;
+
+use AWS\CRT\NativeResource as NativeResource;
+
 /**
  * Represents 1 or more event loops (1 per thread) for doing I/O and background tasks.
  * Typically, every application has one EventLoopGroup.

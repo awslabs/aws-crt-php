@@ -1,5 +1,7 @@
 <?php
 
+use AWS\CRT\CRT;
+
 final class ErrorTest extends PHPUnit_Framework_TestCase {
     private static $crt = null;
     public static function setUpBeforeClass() {

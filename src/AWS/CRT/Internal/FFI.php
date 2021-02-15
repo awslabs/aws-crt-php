@@ -1,0 +1,46 @@
+<?php
+
+namespace AWS\CRT\Internal;
+
+use \Exception;
+use \RuntimeException;
+
+/**
+ * Forwards calls on to libaws-crt-ffi via FFI
+ */
+final class FFI {
+    private static $ffi = null;
+    private static $refcount = 0;
+
+    function __construct() {
+        if (is_null(self::$ffi)) {
+            try {
+                self::$ffi = \FFI::cdef(file_get_contents(__DIR__ . "/../../../api.h"), __DIR__ . "/../../../libaws-crt-ffi.so");
+                self::init();
+                echo("AWSCRT: loaded via FFI");
+            } catch (Exception $e) {
+                throw new RuntimeException('Exception while initializing CRT via FFI', 0, $e);
+            }
+        }
+        ++self::$refcount;
+    }
+
+    function __destruct() {
+        if (--self::$refcount == 0) {
+            self::clean_up();
+            self::$ffi = null;
+        }
+    }
+
+    function __call(string $name, $args) {
+        return call_user_func_array(array(self::$ffi, $name), $args);
+    }
+
+    private static function init() {
+        return self::$ffi->aws_crt_init();
+    }
+
+    private static function clean_up() {
+        return self::$ffi->aws_crt_clean_up();
+    }
+}

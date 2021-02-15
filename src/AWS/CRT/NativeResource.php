@@ -1,5 +1,9 @@
 <?php
 
+namespace AWS\CRT;
+
+use AWS\CRT\CRT as CRT;
+
 /**
  * Base class for all native resources, tracks all outstanding resources
  * and provides basic leak checking
@@ -11,11 +15,7 @@ abstract class NativeResource {
 
     function __construct() {
         if (is_null(self::$crt)) {
-            try {
-                self::$crt = new CRT();
-            } catch (Exception $e) {
-                echo 'Exception while loading CRT: ', $e->getMessage(), "\n";
-            }
+            self::$crt = new CRT();
         }
 
         self::$resources[spl_object_hash($this)] = 1;
