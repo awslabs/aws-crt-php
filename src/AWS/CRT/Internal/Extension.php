@@ -12,7 +12,6 @@ final class Extension {
         if (!extension_loaded('awscrt')) {
             throw new RuntimeException('awscrt extension is not loaded');
         }
-        echo("AWSCRT: loaded via awscrt PHP extension");
     }
 
     function __call(string $name, $args) {

@@ -13,10 +13,7 @@
     "autoload": {
         "classmap": [
             "src/"
-        ],
-        "psr-4": {
-            "AWS\\": "src/AWS"
-        }
+        ]
     },
     "autoload-dev": {
         "classmap": [

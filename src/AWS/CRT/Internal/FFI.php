@@ -17,7 +17,6 @@ final class FFI {
             try {
                 self::$ffi = \FFI::cdef(file_get_contents(__DIR__ . "/../../../api.h"), __DIR__ . "/../../../libaws-crt-ffi.so");
                 self::init();
-                echo("AWSCRT: loaded via FFI");
             } catch (Exception $e) {
                 throw new RuntimeException('Exception while initializing CRT via FFI', 0, $e);
             }
