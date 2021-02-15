@@ -28,8 +28,7 @@ final class EventLoopGroup extends NativeResource {
     }
 
     function __destruct() {
-        self::$crt->event_loop_group_release($this->native);
-        $this->release();
+        self::$crt->event_loop_group_release($this->release());
         parent::__destruct();
     }
 }

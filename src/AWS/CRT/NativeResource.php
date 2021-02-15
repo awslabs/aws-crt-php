@@ -26,7 +26,9 @@ abstract class NativeResource {
     }
 
     protected function release() {
+        $native = $this->native;
         $this->native = null;
+        return $native;
     }
 
     function __destruct() {

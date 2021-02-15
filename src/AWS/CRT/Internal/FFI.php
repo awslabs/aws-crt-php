@@ -6,6 +6,7 @@ use \Exception;
 use \RuntimeException;
 
 /**
+ * @internal
  * Forwards calls on to libaws-crt-ffi via FFI
  */
 final class FFI {
@@ -31,6 +32,11 @@ final class FFI {
         }
     }
 
+    /**
+     * Forwards any call made on this object to the extension function of the
+     * same name with the supplied arguments. Argument type hinting and checking
+     * occurs at the CRT wrapper.
+     */
     function __call(string $name, $args) {
         return call_user_func_array(array(self::$ffi, $name), $args);
     }

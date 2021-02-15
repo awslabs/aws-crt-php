@@ -5,6 +5,7 @@ namespace AWS\CRT\Internal;
 use \RuntimeException;
 
 /**
+ * @internal
  * Forwards calls on to awscrt PHP extension functions
  */
 final class Extension {
@@ -14,6 +15,11 @@ final class Extension {
         }
     }
 
+    /**
+     * Forwards any call made on this object to the extension function of the
+     * same name with the supplied arguments. Argument type hinting and checking
+     * occurs at the CRT wrapper.
+     */
     function __call(string $name, $args) {
         return call_user_func_array($name, $args);
     }
