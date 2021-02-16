@@ -30,7 +30,7 @@ final class CRT {
                 }
             }
         }
-        self::$refcount++;
+        ++self::$refcount;
     }
 
     function __destruct() {
