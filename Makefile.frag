@@ -40,16 +40,20 @@ $(BUILD_DIR)/aws-crt-ffi/CMakeCache.txt: $(INT_DIR)/lib/libcrypto.a
 $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/CMakeCache.txt
 	$(CMAKE_BUILD) build/aws-crt-ffi $(CMAKE_TARGET)
 
-# copy the lib into the lib folder
-$(INSTALL_DIR)/lib/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/api.h
-	cp -v $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/lib/libaws-crt-ffi.so
+# copy the lib into the src folder
+$(INSTALL_DIR)/src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/src/api.h
+	cp -v $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/src/libaws-crt-ffi.so
 
 # install api.h from FFI lib
-$(INSTALL_DIR)/lib/api.h: crt/aws-crt-ffi/src/api.h
-	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' > $(INSTALL_DIR)/lib/api.h
+$(INSTALL_DIR)/src/api.h: crt/aws-crt-ffi/src/api.h
+	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' > $(INSTALL_DIR)/src/api.h
+
+# copy the FFI lib from src to ext for the extension to use
+$(INSTALL_DIR)/ext/libaws-crt-ffi.so: $(INSTALL_DIR)/src/libaws-crt-ffi.so
+	cp -v $(INSTALL_DIR)/src/libaws-crt-ffi.so $(INSTALL_DIR)/ext/libaws-crt-ffi.so
 
 # Force the crt object target to depend on the FFI library
-src/crt.lo: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
+ext/crt.lo: $(INSTALL_DIR)/ext/libaws-crt-ffi.so
 
 ifeq ($(TEST_FFI),1)
 test-ci: test-ffi
@@ -58,6 +62,6 @@ test-ci: test
 endif
 
 # Test the FFI interface
-test-ffi: $(INSTALL_DIR)/lib/libaws-crt-ffi.so
+test-ffi: $(INSTALL_DIR)/src/libaws-crt-ffi.so
 	composer update
 	composer run test

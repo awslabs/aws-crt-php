@@ -12,19 +12,16 @@
     },
     "autoload": {
         "classmap": [
-            "lib/"
-        ],
-        "psr-4": {
-            "AWS\\": "lib/AWS"
-        }
+            "src/"
+        ]
     },
     "autoload-dev": {
         "classmap": [
-            "lib/tests/"
+            "src/tests/"
         ]
     },
     "scripts": {
-        "test": "phpunit lib/tests"
+        "test": "phpunit src/tests"
     },
     "license": "Apache-2.0",
     "authors": [

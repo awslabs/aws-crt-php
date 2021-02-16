@@ -181,6 +181,7 @@ fabric.properties
 .libs/
 build/
 configure.in
+configure.ac
 mkinstalldirs
 run-tests.php
 Makefile.global

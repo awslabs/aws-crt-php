@@ -17,7 +17,7 @@ if test "$PHP_AWSCRT" != "no"; then
     PHP_SUBST(AWSCRT_SHARED_LIBADD)
 
     # Sources for the PHP extension itself
-    AWSCRT_SOURCES=src/*.c
+    AWSCRT_SOURCES=ext/*.c
     PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
 fi
 
