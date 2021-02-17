@@ -32,28 +32,43 @@ CMAKE_BUILD = $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 
-# cmake configure depends on libcrypto above
-$(BUILD_DIR)/aws-crt-ffi/CMakeCache.txt: $(INT_DIR)/lib/libcrypto.a
-	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi
+# configure for shared aws-crt-ffi.so
+$(BUILD_DIR)/aws-crt-ffi-shared/CMakeCache.txt: $(INT_DIR)/lib/libcrypto.a
+	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi-shared -DBUILD_SHARED_LIBS=ON
 
-# build the FFI library
-$(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-crt-ffi $(CMAKE_TARGET)
+# build shared libaws-crt-ffi.so
+$(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/CMakeCache.txt
+	$(CMAKE_BUILD) build/aws-crt-ffi-shared $(CMAKE_TARGET)
 
-# copy the lib into the src folder
-$(INSTALL_DIR)/src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/src/api.h
-	cp -v $(BUILD_DIR)/aws-crt-ffi/libaws-crt-ffi.so $(INSTALL_DIR)/src/libaws-crt-ffi.so
+# configure for static aws-crt-ffi.a
+$(BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt: $(INT_DIR)/lib/libcrypto.a
+	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi-static -DBUILD_SHARED_LIBS=OFF
 
-# install api.h from FFI lib
+# build static libaws-crt-ffi.a
+$(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a: $(BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt
+	$(CMAKE_BUILD) build/aws-crt-ffi-static $(CMAKE_TARGET)
+
+# PHP extension target
+extension: ext/crt.lo
+
+# Force the crt object target to depend on the CRT static library
+ext/crt.lo: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h
+
+# transform/install api.h from FFI lib
 $(INSTALL_DIR)/src/api.h: crt/aws-crt-ffi/src/api.h
 	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' > $(INSTALL_DIR)/src/api.h
 
-# copy the FFI lib from src to ext for the extension to use
-$(INSTALL_DIR)/ext/libaws-crt-ffi.so: $(INSTALL_DIR)/src/libaws-crt-ffi.so
-	cp -v $(INSTALL_DIR)/src/libaws-crt-ffi.so $(INSTALL_DIR)/ext/libaws-crt-ffi.so
+# install api.h to ext/ as well
+ext/api.h : $(INSTALL_DIR)/src/api.h
+	cp -v $(INSTALL_DIR)/src/api.h ext/api.h
 
-# Force the crt object target to depend on the FFI library
-ext/crt.lo: $(INSTALL_DIR)/ext/libaws-crt-ffi.so
+# FFI target
+ffi: src/libaws-crt-ffi.so
+	TEST_FFI = 1
+
+# copy the lib into the src folder
+src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so $(INSTALL_DIR)/src/api.h
+	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so $(INSTALL_DIR)/src/libaws-crt-ffi.so
 
 ifeq ($(TEST_FFI),1)
 test-ci: test-ffi
