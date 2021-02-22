@@ -6,6 +6,8 @@
 
 #include "php_aws_crt.h"
 
+#include "api.h"
+
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
 
 PHP_INI_BEGIN()
@@ -21,12 +23,14 @@ PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(awscrt) {
     REGISTER_INI_ENTRIES();
+
+    aws_crt_init();
     return SUCCESS;
 }
 
 static PHP_MSHUTDOWN_FUNCTION(awscrt) {
     UNREGISTER_INI_ENTRIES();
-
+    aws_crt_clean_up();
     return SUCCESS;
 }
 
@@ -37,6 +41,7 @@ static PHP_GINIT_FUNCTION(awscrt) {
     awscrt_globals->log_level = 0;
 }
 
+/* awscrt_version */
 ZEND_BEGIN_ARG_INFO(awscrt_version_arginfo, 0)
 ZEND_END_ARG_INFO()
 
@@ -44,9 +49,19 @@ PHP_FUNCTION(awscrt_version) {
     static const char *version = "1.0.0-dev";
     AWS_RETURN_STRING(version);
 }
+
+/* aws_crt_last_error() */
+ZEND_BEGIN_ARG_INFO(aws_crt_last_error_arginfo, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(aws_crt_last_error) {
+    RETURN_LONG(aws_crt_last_error());
+}
+
 /* clang-format off */
 const zend_function_entry awscrt_functions[] = {
     PHP_FE(awscrt_version, awscrt_version_arginfo)
+    PHP_FE(aws_crt_last_error, aws_crt_last_error_arginfo)
     PHP_FE_END
 };
 
