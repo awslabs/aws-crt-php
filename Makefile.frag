@@ -77,6 +77,6 @@ test-ci: test
 endif
 
 # Test the FFI interface
-test-ffi: $(INSTALL_DIR)/src/libaws-crt-ffi.so
+test-ffi: src/libaws-crt-ffi.so
 	composer update
 	composer run test
