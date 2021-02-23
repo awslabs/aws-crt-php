@@ -1,5 +1,5 @@
 --TEST--
-aws_crt_error_name
+aws_crt_error_debug_str
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');
@@ -8,7 +8,7 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 <?php
 require_once(dirname(__FILE__) . '/common.inc');
 
-echo aws_crt_error_name(0);
+echo aws_crt_error_debug_str(0);
 ?>
 --EXPECT--
-AWS_ERROR_SUCCESS
+aws-c-common: AWS_ERROR_SUCCESS, Success.
