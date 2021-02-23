@@ -50,7 +50,7 @@ PHP_FUNCTION(aws_crt_last_error) {
 
 /* aws_crt_error_str(int error_code) */
 PHP_FUNCTION(aws_crt_error_str) {
-    zend_long error_code = 0;
+    zend_ulong error_code = 0;
 
     ZEND_PARSE_PARAMETERS_START(1, 1)
     Z_PARAM_LONG(error_code)
@@ -61,7 +61,7 @@ PHP_FUNCTION(aws_crt_error_str) {
 
 /* aws_crt_error_name(int error_code) */
 PHP_FUNCTION(aws_crt_error_name) {
-    zend_long error_code = 0;
+    zend_ulong error_code = 0;
 
     ZEND_PARSE_PARAMETERS_START(1, 1)
     Z_PARAM_LONG(error_code);
@@ -72,7 +72,7 @@ PHP_FUNCTION(aws_crt_error_name) {
 
 /* aws_crt_error_debug_str(int error_code) */
 PHP_FUNCTION(aws_crt_error_debug_str) {
-    zend_long error_code = 0;
+    zend_ulong error_code = 0;
 
     ZEND_PARSE_PARAMETERS_START(1, 1)
     Z_PARAM_LONG(error_code)
