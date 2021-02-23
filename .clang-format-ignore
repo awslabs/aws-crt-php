@@ -1,3 +1,4 @@
 # ignore generated files
 ext/api.h
-ext/awscrt_arginfo.h
+ext/*_arginfo.h
+src/api.h
