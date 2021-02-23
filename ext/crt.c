@@ -52,9 +52,9 @@ PHP_FUNCTION(aws_crt_last_error) {
 PHP_FUNCTION(aws_crt_error_str) {
     zend_ulong error_code = 0;
 
-    ZEND_PARSE_PARAMETERS_START(1, 1)
-    Z_PARAM_LONG(error_code)
-    ZEND_PARSE_PARAMETERS_END();
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+        RETURN_NULL();
+    }
 
     AWS_RETURN_STRING(aws_crt_error_str(error_code));
 }
@@ -63,9 +63,9 @@ PHP_FUNCTION(aws_crt_error_str) {
 PHP_FUNCTION(aws_crt_error_name) {
     zend_ulong error_code = 0;
 
-    ZEND_PARSE_PARAMETERS_START(1, 1)
-    Z_PARAM_LONG(error_code);
-    ZEND_PARSE_PARAMETERS_END();
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+        RETURN_NULL();
+    }
 
     AWS_RETURN_STRING(aws_crt_error_name(error_code));
 }
@@ -74,9 +74,9 @@ PHP_FUNCTION(aws_crt_error_name) {
 PHP_FUNCTION(aws_crt_error_debug_str) {
     zend_ulong error_code = 0;
 
-    ZEND_PARSE_PARAMETERS_START(1, 1)
-    Z_PARAM_LONG(error_code)
-    ZEND_PARSE_PARAMETERS_END();
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+        RETURN_NULL();
+    }
 
     AWS_RETURN_STRING(aws_crt_error_debug_str(error_code));
 }
