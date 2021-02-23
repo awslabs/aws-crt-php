@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-#include "awscrt_arginfo.h"
 #include "php_aws_crt.h"
 
 #include "api.h"
+
+#include "awscrt_arginfo.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
 
@@ -79,8 +80,6 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
 
     AWS_RETURN_STRING(aws_crt_error_debug_str(error_code));
 }
-
-#define AWS_PHP_FE(fun) PHP_FE(fun, fun##_arginfo)
 
 /* clang-format off */
 zend_module_entry awscrt_module_entry = {

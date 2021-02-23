@@ -3,6 +3,7 @@ BUILD_DIR=$(shell pwd)/build
 DEPS_DIR=$(BUILD_DIR)/deps
 INT_DIR=$(BUILD_DIR)/install
 INSTALL_DIR=$(shell pwd)
+AT_LEAST_PHP7=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
@@ -54,17 +55,16 @@ extension: ext/crt.lo
 # Force the crt object target to depend on the CRT static library
 ext/crt.lo: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
-# generate awscrt_arginfo.h
-ext/awscrt_arginfo.h: ext/awscrt.stub.php build/gen_stub.php
-	php build/gen_stub.php ext/awscrt.stub.php
+ifeq ($(AT_LEAST_PHP7),1)
+	GEN_STUB=build/gen_stub.php
+	# generate awscrt_arginfo.h
+	ext/awscrt_arginfo.h: ext/awscrt.stub.php $(GEN_STUB)
+		php build/gen_stub.php ext/awscrt.stub.php
 
-# borrow the gen_stub script from PHP's build process
-build/gen_stub.php:
-	curl -o build/gen_stub.php -sSL https://raw.githubusercontent.com/php/php-src/bbb86ba7e2fe8ae365294d1834c6a392570a9dcd/build/gen_stub.php
-
-# transform/install api.h from FFI lib
-$(INSTALL_DIR)/src/api.h: crt/aws-crt-ffi/src/api.h
-	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' > $(INSTALL_DIR)/src/api.h
+	# borrow the gen_stub script from PHP's build process
+	$(GEN_STUB):
+		curl -o $(GEN_STUB) -sSL https://raw.githubusercontent.com/php/php-src/bbb86ba7e2fe8ae365294d1834c6a392570a9dcd/build/gen_stub.php
+endif
 
 # install api.h to ext/ as well
 ext/api.h : $(INSTALL_DIR)/src/api.h
