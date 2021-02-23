@@ -5,6 +5,7 @@
  */
 
 #include "php_aws_crt.h"
+#include "awscrt_arginfo.h"
 
 #include "api.h"
 
@@ -42,18 +43,11 @@ static PHP_GINIT_FUNCTION(awscrt) {
 }
 
 /* aws_crt_last_error() */
-ZEND_BEGIN_ARG_INFO(aws_crt_last_error_arginfo, 0)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(aws_crt_last_error) {
     RETURN_LONG(aws_crt_last_error());
 }
 
 /* aws_crt_error_str(int error_code) */
-ZEND_BEGIN_ARG_INFO(aws_crt_error_str_arginfo, 1)
-ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(aws_crt_error_str) {
     zend_long error_code = 0;
 
@@ -65,10 +59,6 @@ PHP_FUNCTION(aws_crt_error_str) {
 }
 
 /* aws_crt_error_name(int error_code) */
-ZEND_BEGIN_ARG_INFO(aws_crt_error_name_arginfo, 1)
-ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(aws_crt_error_name) {
     zend_long error_code = 0;
 
@@ -80,10 +70,6 @@ PHP_FUNCTION(aws_crt_error_name) {
 }
 
 /* aws_crt_error_debug_str(int error_code) */
-ZEND_BEGIN_ARG_INFO(aws_crt_error_debug_str_arginfo, 1)
-ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(aws_crt_error_debug_str) {
     zend_long error_code = 0;
 
@@ -97,18 +83,10 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
 #define AWS_PHP_FE(fun) PHP_FE(fun, fun##_arginfo)
 
 /* clang-format off */
-const zend_function_entry awscrt_functions[] = {
-    AWS_PHP_FE(aws_crt_last_error)
-    AWS_PHP_FE(aws_crt_error_str)
-    AWS_PHP_FE(aws_crt_error_name)
-    AWS_PHP_FE(aws_crt_error_debug_str)
-    PHP_FE_END
-};
-
 zend_module_entry awscrt_module_entry = {
     STANDARD_MODULE_HEADER,
     "awscrt",
-    awscrt_functions, /* functions */
+    ext_functions, /* functions */
     PHP_MINIT(awscrt),
     PHP_MSHUTDOWN(awscrt),
     NULL, /* RINIT */
