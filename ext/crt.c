@@ -51,7 +51,7 @@ PHP_FUNCTION(aws_crt_last_error) {
 
 /* aws_crt_error_str(int) */
 ZEND_BEGIN_ARG_INFO(aws_crt_error_str_arginfo, 1)
-    ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
+ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(aws_crt_error_str) {
