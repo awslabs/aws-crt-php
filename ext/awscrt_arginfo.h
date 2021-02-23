@@ -20,9 +20,9 @@ ZEND_FUNCTION(aws_crt_error_debug_str);
 
 
 static const zend_function_entry ext_functions[] = {
-	PHP_FE(aws_crt_last_error, arginfo_aws_crt_last_error)
-	PHP_FE(aws_crt_error_name, arginfo_aws_crt_error_name)
-	PHP_FE(aws_crt_error_str, arginfo_aws_crt_error_str)
-	PHP_FE(aws_crt_error_debug_str, arginfo_aws_crt_error_debug_str)
-	PHP_FE_END
+	ZEND_FE(aws_crt_last_error, arginfo_aws_crt_last_error)
+	ZEND_FE(aws_crt_error_name, arginfo_aws_crt_error_name)
+	ZEND_FE(aws_crt_error_str, arginfo_aws_crt_error_str)
+	ZEND_FE(aws_crt_error_debug_str, arginfo_aws_crt_error_debug_str)
+	ZEND_FE_END
 };

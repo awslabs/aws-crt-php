@@ -34,6 +34,11 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s)
 #else
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
+#    define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)       \
+        static const zend_internal_arg_info name[] = {                                                                 \
+            {(const char *)(zend_uintptr_t)(required_num_args),                                                        \
+             ZEND_TYPE_INIT_CODE(type, allow_null, _ZEND_ARG_INFO_FLAGS(return_reference, 0)),                         \
+             NULL},
 #endif
 
 #endif /* PHP_AWS_CRT_H */
