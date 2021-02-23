@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-#include "api.h"
-
 #include "php_aws_crt.h"
+
+#include "api.h"
 
 #include "awscrt_arginfo.h"
 
