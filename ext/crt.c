@@ -41,15 +41,6 @@ static PHP_GINIT_FUNCTION(awscrt) {
     awscrt_globals->log_level = 0;
 }
 
-/* awscrt_version */
-ZEND_BEGIN_ARG_INFO(awscrt_version_arginfo, 0)
-ZEND_END_ARG_INFO()
-
-PHP_FUNCTION(awscrt_version) {
-    static const char *version = "1.0.0-dev";
-    AWS_RETURN_STRING(version);
-}
-
 /* aws_crt_last_error() */
 ZEND_BEGIN_ARG_INFO(aws_crt_last_error_arginfo, 0)
 ZEND_END_ARG_INFO()
@@ -58,10 +49,27 @@ PHP_FUNCTION(aws_crt_last_error) {
     RETURN_LONG(aws_crt_last_error());
 }
 
+/* aws_crt_error_str(int) */
+ZEND_BEGIN_ARG_INFO(aws_crt_error_str_arginfo, 1)
+    ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(aws_crt_error_str) {
+    zend_long error_code = 0;
+
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+    Z_PARAM_LONG(error_code)
+    ZEND_PARSE_PARAMETERS_END();
+
+    AWS_RETURN_STRING(aws_crt_error_str(error_code));
+}
+
+#define AWS_PHP_FE(fun) PHP_FE(fun, fun##_arginfo)
+
 /* clang-format off */
 const zend_function_entry awscrt_functions[] = {
-    PHP_FE(awscrt_version, awscrt_version_arginfo)
-    PHP_FE(aws_crt_last_error, aws_crt_last_error_arginfo)
+    AWS_PHP_FE(aws_crt_last_error)
+    AWS_PHP_FE(aws_crt_error_str)
     PHP_FE_END
 };
 
