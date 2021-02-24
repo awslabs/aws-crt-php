@@ -81,7 +81,6 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
     AWS_RETURN_STRING(aws_crt_error_debug_str(error_code));
 }
 
-/* clang-format off */
 zend_module_entry awscrt_module_entry = {
     STANDARD_MODULE_HEADER,
     "awscrt",
@@ -96,9 +95,8 @@ zend_module_entry awscrt_module_entry = {
     PHP_GINIT(awscrt),
     NULL, /* GSHUTDOWN */
     NULL, /* RPOSTSHUTDOWN */
-    STANDARD_MODULE_PROPERTIES_EX};
-
-/* clang-format on */
+    STANDARD_MODULE_PROPERTIES_EX,
+};
 
 #ifdef COMPILE_DL_AWSCRT
 ZEND_GET_MODULE(awscrt)
