@@ -34,6 +34,13 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s)
 #else
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
+/* definitions for ZEND API macros taken from PHP7 and backported to 5.6 */
+#    define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)       \
+        static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0, 0},
+
+/* PHP5 doesn't really handle type hints well, so elide them */
+#    define ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)                                               \
+        {#name, sizeof(#name) - 1, NULL, 0, 0, pass_by_ref, allow_null, 0},
 #endif
 
 #endif /* PHP_AWS_CRT_H */

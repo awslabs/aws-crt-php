@@ -1,5 +1,5 @@
 --TEST--
-Version: Simple function call
+aws_crt_error_debug_str
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');
@@ -8,7 +8,7 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 <?php
 require_once(dirname(__FILE__) . '/common.inc');
 
-echo awscrt_version();
+echo aws_crt_error_debug_str(0);
 ?>
 --EXPECT--
-1.0.0-dev
+aws-c-common: AWS_ERROR_SUCCESS, Success.

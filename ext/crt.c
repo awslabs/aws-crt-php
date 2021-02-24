@@ -8,6 +8,8 @@
 
 #include "api.h"
 
+#include "awscrt_arginfo.h"
+
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
 
 PHP_INI_BEGIN()
@@ -41,34 +43,48 @@ static PHP_GINIT_FUNCTION(awscrt) {
     awscrt_globals->log_level = 0;
 }
 
-/* awscrt_version */
-ZEND_BEGIN_ARG_INFO(awscrt_version_arginfo, 0)
-ZEND_END_ARG_INFO()
-
-PHP_FUNCTION(awscrt_version) {
-    static const char *version = "1.0.0-dev";
-    AWS_RETURN_STRING(version);
-}
-
 /* aws_crt_last_error() */
-ZEND_BEGIN_ARG_INFO(aws_crt_last_error_arginfo, 0)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(aws_crt_last_error) {
     RETURN_LONG(aws_crt_last_error());
 }
 
-/* clang-format off */
-const zend_function_entry awscrt_functions[] = {
-    PHP_FE(awscrt_version, awscrt_version_arginfo)
-    PHP_FE(aws_crt_last_error, aws_crt_last_error_arginfo)
-    PHP_FE_END
-};
+/* aws_crt_error_str(int error_code) */
+PHP_FUNCTION(aws_crt_error_str) {
+    zend_ulong error_code = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    AWS_RETURN_STRING(aws_crt_error_str(error_code));
+}
+
+/* aws_crt_error_name(int error_code) */
+PHP_FUNCTION(aws_crt_error_name) {
+    zend_ulong error_code = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    AWS_RETURN_STRING(aws_crt_error_name(error_code));
+}
+
+/* aws_crt_error_debug_str(int error_code) */
+PHP_FUNCTION(aws_crt_error_debug_str) {
+    zend_ulong error_code = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    AWS_RETURN_STRING(aws_crt_error_debug_str(error_code));
+}
 
 zend_module_entry awscrt_module_entry = {
     STANDARD_MODULE_HEADER,
     "awscrt",
-    awscrt_functions, /* functions */
+    ext_functions, /* functions */
     PHP_MINIT(awscrt),
     PHP_MSHUTDOWN(awscrt),
     NULL, /* RINIT */
@@ -79,9 +95,8 @@ zend_module_entry awscrt_module_entry = {
     PHP_GINIT(awscrt),
     NULL, /* GSHUTDOWN */
     NULL, /* RPOSTSHUTDOWN */
-    STANDARD_MODULE_PROPERTIES_EX};
-
-/* clang-format on */
+    STANDARD_MODULE_PROPERTIES_EX,
+};
 
 #ifdef COMPILE_DL_AWSCRT
 ZEND_GET_MODULE(awscrt)
