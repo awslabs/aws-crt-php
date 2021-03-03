@@ -8,8 +8,8 @@ PHP_ARG_WITH(awscrt)
 if test "$PHP_AWSCRT" != "no"; then
     # force lib paths to be absolute, or PHP will mangle them
     cwd=`pwd`
-    CRT_LIBPATHS="-L${cwd}/build/install/lib"
-    CRT_LIBS="-laws-crt-ffi -laws-c-auth -laws-c-http -laws-c-cal -laws-c-io -laws-c-compression -laws-c-common -ls2n -l:libcrypto.a"
+    CRT_LIBPATHS="-L${cwd}/build/install/lib -L${cwd}/build/install/lib64"
+    CRT_LIBS="-laws-crt-ffi -laws-c-auth -laws-c-http -laws-c-io -laws-c-cal -laws-c-compression -laws-c-common -ls2n -l:libcrypto.a"
     PHP_ADD_INCLUDE(${cwd}/build/install/include)
     PHP_EVAL_LIBLINE([$CRT_LIBPATHS $CRT_LIBS], AWSCRT_SHARED_LIBADD)
 
