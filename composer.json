@@ -1,7 +1,16 @@
 {
-    "name": "aws/crt",
+    "name": "aws/aws-crt-php",
+    "homepage": "http://aws.amazon.com/sdkforphp",
     "description": "AWS Common Runtime for PHP",
+    "keywords": ["aws","amazon","sdk","crt"],
     "type": "library",
+    "authors": [
+        {
+            "name": "AWS SDK Common Runtime Team",
+            "email": "aws-sdk-common-runtime@amazon.com"
+        }
+    ],
+    "minimum-stability": "alpha",
     "require": {
     },
     "require-dev": {
@@ -31,3 +40,4 @@
         }
     ]
 }
+
