@@ -50,7 +50,7 @@ final class CRT {
      * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
      * @return string Human-readable description of the provided error code
      */
-    public static function error_str(int $error) {
+    public static function error_str(int $error) : string {
         return self::$impl->aws_crt_error_str((int) $error);
     }
 
@@ -58,7 +58,7 @@ final class CRT {
      * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
      * @return string Name/enum identifier for the provided error code
      */
-    public static function error_name(int $error) {
+    public static function error_name(int $error) : string {
         return self::$impl->aws_crt_error_name((int) $error);
     }
 
@@ -66,14 +66,14 @@ final class CRT {
      * @param integer $num_threads Maximum threads to use in the event loop group
      * @return object Pointer to the new event loop group
      */
-    function event_loop_group_new(int $num_threads) : object {
+    function event_loop_group_new(int $num_threads) {
         return self::$impl->aws_crt_event_loop_group_new($num_threads);
     }
 
     /**
      * @param object $elg Pointer to the event loop group to release
      */
-    function event_loop_group_release(object $elg) {
+    function event_loop_group_release($elg) {
         return self::$impl->aws_crt_event_loop_group_release($elg);
     }
 }
