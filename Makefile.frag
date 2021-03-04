@@ -37,15 +37,15 @@ extension: ext/crt.lo
 # Force the crt object target to depend on the CRT static library
 ext/crt.lo: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
-ifeq ($(AT_LEAST_PHP7),1)
-	GEN_STUB=build/gen_stub.php
-	# generate awscrt_arginfo.h
-	ext/awscrt_arginfo.h: ext/awscrt.stub.php $(GEN_STUB)
-		php $(GEN_STUB) ext/awscrt.stub.php
+# borrow the gen_stub script from PHP's build process
+GEN_STUB=build/gen_stub.php
+$(GEN_STUB):
+	curl -o $(GEN_STUB) -sSL https://raw.githubusercontent.com/php/php-src/bbb86ba7e2fe8ae365294d1834c6a392570a9dcd/build/gen_stub.php
 
-	# borrow the gen_stub script from PHP's build process
-	$(GEN_STUB):
-		curl -o $(GEN_STUB) -sSL https://raw.githubusercontent.com/php/php-src/bbb86ba7e2fe8ae365294d1834c6a392570a9dcd/build/gen_stub.php
+ext/awscrt_arginfo.h: ext/awscrt.stub.php $(GEN_STUB)
+ifeq ($(AT_LEAST_PHP7),1)
+	# generate awscrt_arginfo.h
+	php $(GEN_STUB) ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib

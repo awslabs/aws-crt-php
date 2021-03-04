@@ -42,7 +42,7 @@ final class CRT {
     /**
      * @return integer last error code reported within the CRT
      */
-    public static function last_error() {
+    public static function last_error(): int {
         return self::$impl->aws_crt_last_error();
     }
 
@@ -50,7 +50,7 @@ final class CRT {
      * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
      * @return string Human-readable description of the provided error code
      */
-    public static function error_str($error) {
+    public static function error_str(int $error) {
         return self::$impl->aws_crt_error_str((int) $error);
     }
 
@@ -58,15 +58,22 @@ final class CRT {
      * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
      * @return string Name/enum identifier for the provided error code
      */
-    public static function error_name($error) {
+    public static function error_name(int $error) {
         return self::$impl->aws_crt_error_name((int) $error);
     }
 
-    function event_loop_group_new($num_threads) {
+    /**
+     * @param integer $num_threads Maximum threads to use in the event loop group
+     * @return object Pointer to the new event loop group
+     */
+    function event_loop_group_new(int $num_threads) : object {
         return self::$impl->aws_crt_event_loop_group_new($num_threads);
     }
 
-    function event_loop_group_release($elg) {
+    /**
+     * @param object $elg Pointer to the event loop group to release
+     */
+    function event_loop_group_release(object $elg) {
         return self::$impl->aws_crt_event_loop_group_release($elg);
     }
 }

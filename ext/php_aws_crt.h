@@ -41,6 +41,9 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 /* PHP5 doesn't really handle type hints well, so elide them */
 #    define ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)                                               \
         {#name, sizeof(#name) - 1, NULL, 0, 0, pass_by_ref, allow_null, 0},
+
+/* PHP5 doesn't have RETURN_OBJ, so shim it */
+#    define RETURN_OBJ(o) RETURN_RESOURCE(o)
 #endif
 
 #endif /* PHP_AWS_CRT_H */
