@@ -81,6 +81,28 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
     AWS_RETURN_STRING(aws_crt_error_debug_str(error_code));
 }
 
+PHP_FUNCTION(aws_crt_event_loop_group_new) {
+    zend_ulong num_threads = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &num_threads) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    struct aws_event_loop_group *elg = aws_crt_event_loop_group_new(num_threads);
+    RETURN_LONG((zend_ulong)elg);
+}
+
+PHP_FUNCTION(aws_crt_event_loop_group_release) {
+    zend_ulong php_elg = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_elg) == FAILURE) {
+        return;
+    }
+
+    struct aws_event_loop_group *elg = (void *)php_elg;
+    aws_crt_event_loop_group_release(elg);
+}
+
 zend_module_entry awscrt_module_entry = {
     STANDARD_MODULE_HEADER,
     "awscrt",
