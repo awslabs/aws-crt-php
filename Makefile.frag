@@ -58,19 +58,14 @@ ext/api.h : src/api.h
 
 # FFI target
 ffi: src/libaws-crt-ffi.so
-	TEST_FFI = 1
 
 # copy the lib into the src folder
-src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so $(INSTALL_DIR)/src/api.h
-	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so $(INSTALL_DIR)/src/libaws-crt-ffi.so
+src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
+	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/libaws-crt-ffi.so
 
-ifeq ($(TEST_FFI),1)
-test-ci: test-ffi
-else
-test-ci: test
-endif
-
-# Test the FFI interface
-test-ffi: src/libaws-crt-ffi.so
+# Test the FFI interface on PHP7+
+ifeq ($(AT_LEAST_PHP7), 1)
+test: src/libaws-crt-ffi.so
 	composer update
 	composer run test
+endif

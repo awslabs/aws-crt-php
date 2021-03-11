@@ -32,12 +32,5 @@
     "scripts": {
         "test": "phpunit src/tests"
     },
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "AWS Common Runtime Team",
-            "email": "aws-sdk-common-runtime@amazon.com"
-        }
-    ]
+    "license": "Apache-2.0"
 }
-
