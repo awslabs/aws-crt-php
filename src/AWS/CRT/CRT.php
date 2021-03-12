@@ -20,14 +20,23 @@ final class CRT {
 
     function __construct() {
         if (is_null(self::$impl)) {
-            try {
-                self::$impl = new Extension();
-            } catch (RuntimeException $rex) {
+            $backends = ['Extension', 'FFI'];
+            if (getenv('AWS_CRT_PHP_EXTENSION')) {
+                $backends = ['Extension'];
+            } else if (getenv('AWS_CRT_PHP_FFI')) {
+                $backends = ['FFI'];
+            }
+            $exceptions = [];
+            foreach ($backends as $backend) {
                 try {
-                    self::$impl = new FFI();
-                } catch (RuntimeException $frex) {
-                    throw new RuntimeException('Unable to initialize AWS CRT via extension or FFI', -1, $frex);
+                    $backend = 'AWS\\CRT\\Internal\\' . $backend;
+                    self::$impl = new $backend();
+                } catch (RuntimeException $rex) {
+                    array_push($exceptions, $rex);
                 }
+            }
+            if (is_null(self::$impl)) {
+                throw new RuntimeException('Unable to initialize AWS CRT via ' . join(', ', $backends) . ": \n" . join("\n", $exceptions), -1);
             }
         }
         ++self::$refcount;
