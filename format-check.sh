@@ -10,7 +10,7 @@ if NOT type $CLANG_FORMAT 2> /dev/null ; then
 fi
 
 FAIL=0
-SOURCE_FILES=`find src ext -type f \( -name '*.h' -o -name '*.c' \)`
+SOURCE_FILES=`find src ext -type f \( -name '*.c' \)`
 for i in $SOURCE_FILES
 do
     $CLANG_FORMAT -output-replacements-xml $i | grep -c "<replacement " > /dev/null
