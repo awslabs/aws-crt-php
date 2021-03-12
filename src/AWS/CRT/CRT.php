@@ -62,16 +62,26 @@ final class CRT {
         return self::$impl->aws_crt_error_name((int) $error);
     }
 
+    /**
+     * @return object Pointer to native event_loop_group_options
+     */
     function event_loop_group_options_new() {
         return self::$impl->aws_crt_event_loop_group_options_new();
     }
 
+    /**
+     * @param object $elg_options Pointer to native event_loop_group_options
+     */
     function event_loop_group_options_release($elg_options) {
         self::$impl->aws_crt_event_loop_group_options_release($elg_options);
     }
 
-    function event_loop_group_options_set_max_threads($elg_options, int $num_threads) {
-        self::$impl->aws_crt_event_loop_group_options_set_max_threads($elg_options, $num_threads);
+    /**
+     * @param object $elg_options Pointer to native event_loop_group_options
+     * @param integer $max_threads Maximum number of threads to allow the event loop group to use, default: 0/1 per CPU core
+     */
+    function event_loop_group_options_set_max_threads($elg_options, int $max_threads) {
+        self::$impl->aws_crt_event_loop_group_options_set_max_threads($elg_options, $max_threads);
     }
 
     /**
