@@ -10,6 +10,9 @@
             "email": "aws-sdk-common-runtime@amazon.com"
         }
     ],
+    "config": {
+        "platform": {"php": "5.6"}
+    },
     "minimum-stability": "alpha",
     "require": {
     },
@@ -30,14 +33,7 @@
         ]
     },
     "scripts": {
-        "test": "phpunit src/tests"
+        "test": "@php -d extension=modules/awscrt.so vendor/bin/phpunit src/tests"
     },
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "AWS Common Runtime Team",
-            "email": "aws-sdk-common-runtime@amazon.com"
-        }
-    ]
+    "license": "Apache-2.0"
 }
-

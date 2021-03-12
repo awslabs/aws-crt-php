@@ -15,7 +15,7 @@ final class EventLoopGroup extends NativeResource {
 
     static function defaults() {
         return array(
-            'num_threads' => 0,
+            'max_threads' => 0,
         );
     }
 
@@ -24,7 +24,10 @@ final class EventLoopGroup extends NativeResource {
         if (count($options) == 0) {
             $options = self::defaults();
         }
-        $this->acquire(self::$crt->event_loop_group_new($options['num_threads']));
+        $elg_options = self::$crt->event_loop_group_options_new();
+        self::$crt->event_loop_group_options_set_max_threads($elg_options, $options['max_threads']);
+        $this->acquire(self::$crt->event_loop_group_new($elg_options));
+        self::$crt->event_loop_group_options_release($elg_options);
     }
 
     function __destruct() {
