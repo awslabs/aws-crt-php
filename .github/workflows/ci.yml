@@ -7,7 +7,7 @@ on:
       - '!main'
 
 env:
-  BUILDER_VERSION: v0.8.1
+  BUILDER_VERSION: v0.8.9
   BUILDER_SOURCE: releases
   BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
   PACKAGE_NAME: aws-crt-php
@@ -15,7 +15,7 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  php7-linux-x64-ffi:
+  php7-linux-x64:
     runs-on: ubuntu-latest
     steps:
     - name: Build PHP 7.4 with ffi
@@ -23,19 +23,9 @@ jobs:
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
         export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php7-linux-x64:${{ env.BUILDER_VERSION }}
         docker pull $DOCKER_IMAGE
-        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 --env TEST_FFI=1 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
-
-  php7-linux-x64-ext:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Build PHP 7.4 extension
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
-        export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php7-linux-x64:${{ env.BUILDER_VERSION }}
-        docker pull $DOCKER_IMAGE
         docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
 
-  php5-linux-x64-ext:
+  php5-linux-x64:
     runs-on: ubuntu-latest
     steps:
     - name: Build PHP 5.6 extension
