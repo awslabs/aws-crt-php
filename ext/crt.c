@@ -81,14 +81,43 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
     AWS_RETURN_STRING(aws_crt_error_debug_str(error_code));
 }
 
-PHP_FUNCTION(aws_crt_event_loop_group_new) {
+PHP_FUNCTION(aws_crt_event_loop_group_options_new) {
+    aws_crt_event_loop_group_options *options = aws_crt_event_loop_group_options_new();
+    RETURN_LONG((zend_ulong)options);
+}
+
+PHP_FUNCTION(aws_crt_event_loop_group_options_release) {
+    zend_ulong php_options = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+        return;
+    }
+
+    aws_crt_event_loop_group_options *options = (void *)php_options;
+    aws_crt_event_loop_group_options_release(options);
+}
+
+PHP_FUNCTION(aws_crt_event_loop_group_options_set_max_threads) {
+    zend_ulong php_options = 0;
     zend_ulong num_threads = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &num_threads) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_options, &num_threads) == FAILURE) {
         RETURN_NULL();
     }
 
-    struct aws_event_loop_group *elg = aws_crt_event_loop_group_new(num_threads);
+    aws_crt_event_loop_group_options *options = (void *)php_options;
+    aws_crt_event_loop_group_options_set_max_threads(options, num_threads);
+}
+
+PHP_FUNCTION(aws_crt_event_loop_group_new) {
+    zend_ulong php_options = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_event_loop_group_options *options = (void *)php_options;
+    struct aws_event_loop_group *elg = aws_crt_event_loop_group_new(options);
     RETURN_LONG((zend_ulong)elg);
 }
 

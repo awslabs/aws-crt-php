@@ -67,5 +67,10 @@ src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api
 ifeq ($(AT_LEAST_PHP7), 1)
 test: src/libaws-crt-ffi.so
 	composer update
+	AWS_CRT_PHP_EXTENSION=1 composer run test
+	AWS_CRT_PHP_FFI=1 composer run test
+else
+test: ext/api.h ext/awscrt_arginfo.h ext/crt.lo
+	composer update
 	composer run test
 endif
