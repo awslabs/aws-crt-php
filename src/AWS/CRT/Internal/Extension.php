@@ -20,7 +20,7 @@ final class Extension {
      * same name with the supplied arguments. Argument type hinting and checking
      * occurs at the CRT wrapper.
      */
-    function __call(string $name, $args) {
+    function __call($name, $args) {
         return call_user_func_array($name, $args);
     }
 }

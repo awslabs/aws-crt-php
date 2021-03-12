@@ -10,6 +10,9 @@
             "email": "aws-sdk-common-runtime@amazon.com"
         }
     ],
+    "config": {
+        "platform": {"php": "5.6"}
+    },
     "minimum-stability": "alpha",
     "require": {
     },

@@ -20,12 +20,18 @@ final class CRT {
 
     function __construct() {
         if (is_null(self::$impl)) {
-            $backends = ['Extension', 'FFI'];
-            if (getenv('AWS_CRT_PHP_EXTENSION')) {
-                $backends = ['Extension'];
-            } else if (getenv('AWS_CRT_PHP_FFI')) {
-                $backends = ['FFI'];
+            // Figure out what backends are/should be available
+            $backends = ['Extension'];
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+                $backends = ['Extension', 'FFI'];
+                if (getenv('AWS_CRT_PHP_EXTENSION')) {
+                    $backends = ['Extension'];
+                } else if (getenv('AWS_CRT_PHP_FFI')) {
+                    $backends = ['FFI'];
+                }
             }
+
+            // Try to load each backend, give up if none succeed
             $exceptions = [];
             foreach ($backends as $backend) {
                 try {
@@ -51,7 +57,7 @@ final class CRT {
     /**
      * @return integer last error code reported within the CRT
      */
-    public static function last_error(): int {
+    public static function last_error() {
         return self::$impl->aws_crt_last_error();
     }
 
@@ -59,7 +65,7 @@ final class CRT {
      * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
      * @return string Human-readable description of the provided error code
      */
-    public static function error_str(int $error) : string {
+    public static function error_str($error) {
         return self::$impl->aws_crt_error_str((int) $error);
     }
 
@@ -67,7 +73,7 @@ final class CRT {
      * @param integer $error Error code from the CRT, usually delivered via callback or {@see last_error}
      * @return string Name/enum identifier for the provided error code
      */
-    public static function error_name(int $error) : string {
+    public static function error_name($error) {
         return self::$impl->aws_crt_error_name((int) $error);
     }
 
@@ -89,8 +95,8 @@ final class CRT {
      * @param object $elg_options Pointer to native event_loop_group_options
      * @param integer $max_threads Maximum number of threads to allow the event loop group to use, default: 0/1 per CPU core
      */
-    function event_loop_group_options_set_max_threads($elg_options, int $max_threads) {
-        self::$impl->aws_crt_event_loop_group_options_set_max_threads($elg_options, $max_threads);
+    function event_loop_group_options_set_max_threads($elg_options, $max_threads) {
+        self::$impl->aws_crt_event_loop_group_options_set_max_threads($elg_options, (int)$max_threads);
     }
 
     /**
