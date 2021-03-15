@@ -63,14 +63,7 @@ ffi: src/libaws-crt-ffi.so
 src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
 	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/libaws-crt-ffi.so
 
-# Test the FFI interface on PHP7+
-ifeq ($(AT_LEAST_PHP7), 1)
-test: src/libaws-crt-ffi.so
-	composer update
-	AWS_CRT_PHP_EXTENSION=1 composer run test
-	AWS_CRT_PHP_FFI=1 composer run test
-else
+# Use PHPUnit to run tests
 test: ext/api.h ext/awscrt_arginfo.h ext/crt.lo
 	composer update
 	composer run test
-endif

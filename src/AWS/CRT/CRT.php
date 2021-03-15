@@ -22,14 +22,15 @@ final class CRT {
         if (is_null(self::$impl)) {
             // Figure out what backends are/should be available
             $backends = ['Extension'];
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-                $backends = ['Extension', 'FFI'];
-                if (getenv('AWS_CRT_PHP_EXTENSION')) {
-                    $backends = ['Extension'];
-                } else if (getenv('AWS_CRT_PHP_FFI')) {
-                    $backends = ['FFI'];
-                }
-            }
+            // Disabled until FFI is fully supported/works properly
+            // if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            //     $backends = ['Extension', 'FFI'];
+            //     if (getenv('AWS_CRT_PHP_EXTENSION')) {
+            //         $backends = ['Extension'];
+            //     } else if (getenv('AWS_CRT_PHP_FFI')) {
+            //         $backends = ['FFI'];
+            //     }
+            // }
 
             // Try to load each backend, give up if none succeed
             $exceptions = [];
@@ -112,5 +113,36 @@ final class CRT {
      */
     function event_loop_group_release($elg) {
         return self::$impl->aws_crt_event_loop_group_release($elg);
+    }
+
+    /**
+     * return object Pointer to native AWS credentials options
+     */
+    function aws_credentials_options_new() {
+        return self::$impl->aws_crt_credentials_options_new();
+    }
+
+    function aws_credentials_options_release($options) {
+        self::$impl->aws_crt_credentials_options_release($options);
+    }
+
+    function aws_credentials_options_set_access_key_id($options, $access_key_id) {
+        self::$impl->aws_crt_credentials_options_set_access_key_id($options, $access_key_id);
+    }
+
+    function aws_credentials_options_set_secret_access_key($options, $secret_access_key) {
+        self::$impl->aws_crt_credentials_options_set_secret_access_key($options, $secret_access_key);
+    }
+
+    function aws_credentials_options_set_session_token($options, $session_token) {
+        self::$impl->aws_crt_credentials_options_set_session_token($options, $session_token);
+    }
+
+    function aws_credentials_new($options) {
+        return self::$impl->aws_crt_credentials_new($options);
+    }
+
+    function aws_credentials_release($credentials) {
+        self::$impl->aws_crt_credentials_release($credentials);
     }
 }
