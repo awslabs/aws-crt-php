@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: f7bcaadecc2b2a4f8f3b36ffad105eed7c48e32f */
+ * Stub hash: e98ad48d10f99b8601b29aae474bbae6b10d27fd */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -53,11 +53,30 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_
 	ZEND_ARG_TYPE_INFO(0, session_token, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, expiration_timepoint_seconds, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_aws_crt_credentials_new arginfo_aws_crt_event_loop_group_new
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_release, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, credentials, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
+
+#define arginfo_aws_crt_credentials_provider_release arginfo_aws_crt_credentials_release
+
+#define arginfo_aws_crt_credentials_provider_static_options_new arginfo_aws_crt_event_loop_group_options_new
+
+#define arginfo_aws_crt_credentials_provider_static_options_release arginfo_aws_crt_credentials_options_release
+
+#define arginfo_aws_crt_credentials_provider_static_options_set_access_key_id arginfo_aws_crt_credentials_options_set_access_key_id
+
+#define arginfo_aws_crt_credentials_provider_static_options_set_secret_access_key arginfo_aws_crt_credentials_options_set_secret_access_key
+
+#define arginfo_aws_crt_credentials_provider_static_options_set_session_token arginfo_aws_crt_credentials_options_set_session_token
+
+#define arginfo_aws_crt_credentials_provider_static_new arginfo_aws_crt_event_loop_group_new
 
 
 ZEND_FUNCTION(aws_crt_last_error);
@@ -74,8 +93,16 @@ ZEND_FUNCTION(aws_crt_credentials_options_release);
 ZEND_FUNCTION(aws_crt_credentials_options_set_access_key_id);
 ZEND_FUNCTION(aws_crt_credentials_options_set_secret_access_key);
 ZEND_FUNCTION(aws_crt_credentials_options_set_session_token);
+ZEND_FUNCTION(aws_crt_credentials_options_set_expiration_timepoint_seconds);
 ZEND_FUNCTION(aws_crt_credentials_new);
 ZEND_FUNCTION(aws_crt_credentials_release);
+ZEND_FUNCTION(aws_crt_credentials_provider_release);
+ZEND_FUNCTION(aws_crt_credentials_provider_static_options_new);
+ZEND_FUNCTION(aws_crt_credentials_provider_static_options_release);
+ZEND_FUNCTION(aws_crt_credentials_provider_static_options_set_access_key_id);
+ZEND_FUNCTION(aws_crt_credentials_provider_static_options_set_secret_access_key);
+ZEND_FUNCTION(aws_crt_credentials_provider_static_options_set_session_token);
+ZEND_FUNCTION(aws_crt_credentials_provider_static_new);
 
 
 static const zend_function_entry ext_functions[] = {
@@ -93,7 +120,15 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_credentials_options_set_access_key_id, arginfo_aws_crt_credentials_options_set_access_key_id)
 	ZEND_FE(aws_crt_credentials_options_set_secret_access_key, arginfo_aws_crt_credentials_options_set_secret_access_key)
 	ZEND_FE(aws_crt_credentials_options_set_session_token, arginfo_aws_crt_credentials_options_set_session_token)
+	ZEND_FE(aws_crt_credentials_options_set_expiration_timepoint_seconds, arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds)
 	ZEND_FE(aws_crt_credentials_new, arginfo_aws_crt_credentials_new)
 	ZEND_FE(aws_crt_credentials_release, arginfo_aws_crt_credentials_release)
+	ZEND_FE(aws_crt_credentials_provider_release, arginfo_aws_crt_credentials_provider_release)
+	ZEND_FE(aws_crt_credentials_provider_static_options_new, arginfo_aws_crt_credentials_provider_static_options_new)
+	ZEND_FE(aws_crt_credentials_provider_static_options_release, arginfo_aws_crt_credentials_provider_static_options_release)
+	ZEND_FE(aws_crt_credentials_provider_static_options_set_access_key_id, arginfo_aws_crt_credentials_provider_static_options_set_access_key_id)
+	ZEND_FE(aws_crt_credentials_provider_static_options_set_secret_access_key, arginfo_aws_crt_credentials_provider_static_options_set_secret_access_key)
+	ZEND_FE(aws_crt_credentials_provider_static_options_set_session_token, arginfo_aws_crt_credentials_provider_static_options_set_session_token)
+	ZEND_FE(aws_crt_credentials_provider_static_new, arginfo_aws_crt_credentials_provider_static_new)
 	ZEND_FE_END
 };

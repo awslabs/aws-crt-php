@@ -138,11 +138,43 @@ final class CRT {
         self::$impl->aws_crt_credentials_options_set_session_token($options, $session_token);
     }
 
+    function aws_credentials_options_set_expiration_timepoint_seconds($options, $expiration_timepoint_seconds) {
+        self::$impl->aws_crt_credentials_options_set_expiration_timepoint_seconds($options, $expiration_timepoint_seconds);
+    }
+
     function aws_credentials_new($options) {
         return self::$impl->aws_crt_credentials_new($options);
     }
 
     function aws_credentials_release($credentials) {
         self::$impl->aws_crt_credentials_release($credentials);
+    }
+
+    function aws_credentials_provider_release($provider) {
+        self::$impl->aws_crt_credentials_provider_release($provider);
+    }
+
+    function aws_credentials_provider_static_options_new() {
+        return self::$impl->aws_crt_credentials_provider_static_options_new();
+    }
+
+    function aws_credentials_provider_static_options_release($options) {
+        self::$impl->aws_crt_credentials_provider_static_options_release($options);
+    }
+
+    function aws_credentials_provider_static_options_set_access_key_id($options, $access_key_id) {
+        self::$impl->aws_crt_credentials_provider_static_options_set_access_key_id($options, $access_key_id);
+    }
+
+    function aws_credentials_provider_static_options_set_secret_access_key($options, $secret_access_key) {
+        self::$impl->aws_crt_credentials_provider_static_options_set_secret_access_key($options, $secret_access_key);
+    }
+
+    function aws_credentials_provider_static_options_set_session_token($options, $session_token) {
+        self::$impl->aws_crt_credentials_provider_static_options_set_session_token($options, $session_token);
+    }
+
+    function aws_credentials_provider_static_new($options) {
+        return self::$impl->aws_crt_credentials_provider_static_new($options);
     }
 }
