@@ -193,7 +193,8 @@ PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
 PHP_FUNCTION(aws_crt_credentials_options_set_expiration_timepoint_seconds) {
     zend_ulong php_options = 0;
     zend_ulong expiration_timepoint_seconds = 0;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_options, &expiration_timepoint_seconds) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_options, &expiration_timepoint_seconds) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
@@ -276,7 +277,8 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_secret_access_key) 
     aws_crt_credentials_provider_static_options *options = (void *)php_options;
     const char *secret_access_key = ZSTR_VAL(php_secret_access_key);
     size_t secret_access_key_len = ZSTR_LEN(php_secret_access_key);
-    aws_crt_credentials_provider_static_options_set_secret_access_key(options, (uint8_t *)secret_access_key, secret_access_key_len);
+    aws_crt_credentials_provider_static_options_set_secret_access_key(
+        options, (uint8_t *)secret_access_key, secret_access_key_len);
 }
 
 PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_session_token) {

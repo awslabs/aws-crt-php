@@ -7,7 +7,7 @@ require_once('common.inc');
 
 final class CredentialsTest extends CrtTestCase {
 
-    public function testLifetime() {
+    public function testEmptyCredentials() {
         $this->expectException(InvalidArgumentException::class);
         $creds = new AwsCredentials(AwsCredentials::defaults());
         $this->assertNotNull($creds, "Failed to create default/empty credentials");
@@ -23,7 +23,7 @@ final class CredentialsTest extends CrtTestCase {
         return $options;
     }
 
-    public function testConstructionWithOptions() {
+    public function testCredentialsLifetime() {
         $options = $this->credentialsOptions();
         $creds = new AwsCredentials($options);
         $this->assertNotNull($creds, "Failed to create Credentials with options");
@@ -34,7 +34,7 @@ final class CredentialsTest extends CrtTestCase {
         $creds = null;
     }
 
-    public function testStaticCredentialsProvider() {
+    public function testStaticCredentialsProviderLifetime() {
         $options = $this->credentialsOptions();
         $provider = new StaticCredentialsProvider($options);
         $this->assertNotNull($provider, "Failed to create StaticCredentialsProvider");
