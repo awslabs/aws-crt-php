@@ -26,7 +26,7 @@ final class StaticCredentialsProvider extends CredentialsProvider {
         return $this->$name;
     }
 
-    function __construct(array $options = array()) {
+    function __construct(array $options = []) {
         parent::__construct();
         if (count($options) == 0) {
             $options = self::defaults();

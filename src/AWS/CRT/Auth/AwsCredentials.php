@@ -3,6 +3,7 @@
 namespace AWS\CRT\Auth;
 
 use AWS\CRT\NativeResource as NativeResource;
+use AWS\CRT\Options as Options;
 
 /**
  * Represents a set of AWS credentials
@@ -33,15 +34,16 @@ final class AwsCredentials extends NativeResource {
         return $this->$name;
     }
 
-    function __construct(array $options = array()) {
+    function __construct(array $options = []) {
         parent::__construct();
         if (count($options) == 0) {
             $options = self::defaults();
         }
-        $this->access_key_id = $options['access_key_id'];
-        $this->secret_access_key = $options['secret_access_key'];
-        $this->session_token = $options['session_token'];
-        $this->expiration_timepoint_seconds = (int)$options['expiration_timepoint_seconds'];
+        $options = new Options($options);
+        $this->access_key_id = $options->getString('access_key_id');
+        $this->secret_access_key = $options->getString('secret_access_key');
+        $this->session_token = $options->getString('session_token');
+        $this->expiration_timepoint_seconds = $options->getInt('expiration_timepoint_seconds');
 
         if (strlen($this->access_key_id) == 0) {
             throw new \InvalidArgumentException("access_key_id must be provided");

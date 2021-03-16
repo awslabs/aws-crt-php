@@ -3,7 +3,6 @@
 namespace AWS\CRT;
 
 use AWS\CRT\Internal\Extension;
-use AWS\CRT\Internal\FFI;
 
 use \RuntimeException;
 
@@ -22,15 +21,6 @@ final class CRT {
         if (is_null(self::$impl)) {
             // Figure out what backends are/should be available
             $backends = ['Extension'];
-            // Disabled until FFI is fully supported/works properly
-            // if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            //     $backends = ['Extension', 'FFI'];
-            //     if (getenv('AWS_CRT_PHP_EXTENSION')) {
-            //         $backends = ['Extension'];
-            //     } else if (getenv('AWS_CRT_PHP_FFI')) {
-            //         $backends = ['FFI'];
-            //     }
-            // }
 
             // Try to load each backend, give up if none succeed
             $exceptions = [];

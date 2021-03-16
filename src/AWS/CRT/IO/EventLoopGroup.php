@@ -3,6 +3,7 @@
 namespace AWS\CRT\IO;
 
 use AWS\CRT\NativeResource as NativeResource;
+use AWS\CRT\Options as Options;
 
 /**
  * Represents 1 or more event loops (1 per thread) for doing I/O and background tasks.
@@ -19,13 +20,14 @@ final class EventLoopGroup extends NativeResource {
         );
     }
 
-    function __construct(array $options = array()) {
+    function __construct(array $options = []) {
         parent::__construct();
         if (count($options) == 0) {
             $options = self::defaults();
         }
+        $options = new Options($options);
         $elg_options = self::$crt->event_loop_group_options_new();
-        self::$crt->event_loop_group_options_set_max_threads($elg_options, $options['max_threads']);
+        self::$crt->event_loop_group_options_set_max_threads($elg_options, $options->getInt('max_threads'));
         $this->acquire(self::$crt->event_loop_group_new($elg_options));
         self::$crt->event_loop_group_options_release($elg_options);
     }

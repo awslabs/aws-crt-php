@@ -9,7 +9,7 @@ use AWS\CRT\NativeResource as NativeResource;
  */
 abstract class CredentialsProvider extends NativeResource {
 
-    function __construct(array $options = array()) {
+    function __construct(array $options = []) {
         parent::__construct();
     }
 
