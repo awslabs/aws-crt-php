@@ -3,7 +3,7 @@
 namespace AWS\CRT;
 
 final class Options {
-    private array $options = [];
+    private $options = [];
 
     public function __construct($opts = []) {
         $this->options = $opts;
