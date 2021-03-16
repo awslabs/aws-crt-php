@@ -153,7 +153,8 @@ PHP_FUNCTION(aws_crt_credentials_options_set_access_key_id) {
     const char *access_key_id = NULL;
     int access_key_id_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &access_key_id, &access_key_id_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &access_key_id, &access_key_id_len) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
@@ -166,12 +167,14 @@ PHP_FUNCTION(aws_crt_credentials_options_set_secret_access_key) {
     const char *secret_access_key = NULL;
     int secret_access_key_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
+    if (zend_parse_parameters(
+            ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
         RETURN_NULL();
     }
 
     aws_crt_credentials_options *options = (void *)php_options;
-    aws_crt_credentials_options_set_secret_access_key(options, (uint8_t *)secret_access_key, (size_t)secret_access_key_len);
+    aws_crt_credentials_options_set_secret_access_key(
+        options, (uint8_t *)secret_access_key, (size_t)secret_access_key_len);
 }
 
 PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
@@ -179,7 +182,8 @@ PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
     const char *session_token = NULL;
     int session_token_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &session_token, &session_token_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &session_token, &session_token_len) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
@@ -254,12 +258,14 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_access_key_id) {
     const char *access_key_id = NULL;
     int access_key_id_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &access_key_id, &access_key_id_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &access_key_id, &access_key_id_len) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
     aws_crt_credentials_provider_static_options *options = (void *)php_options;
-    aws_crt_credentials_provider_static_options_set_access_key_id(options, (uint8_t *)access_key_id, (size_t)access_key_id_len);
+    aws_crt_credentials_provider_static_options_set_access_key_id(
+        options, (uint8_t *)access_key_id, (size_t)access_key_id_len);
 }
 
 PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_secret_access_key) {
@@ -267,7 +273,8 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_secret_access_key) 
     const char *secret_access_key = NULL;
     int secret_access_key_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
+    if (zend_parse_parameters(
+            ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -281,12 +288,14 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_session_token) {
     const char *session_token = NULL;
     int session_token_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &session_token, &session_token_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &session_token, &session_token_len) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
     aws_crt_credentials_provider_static_options *options = (void *)php_options;
-    aws_crt_credentials_provider_static_options_set_session_token(options, (uint8_t *)session_token, (size_t)session_token_len);
+    aws_crt_credentials_provider_static_options_set_session_token(
+        options, (uint8_t *)session_token, (size_t)session_token_len);
 }
 
 PHP_FUNCTION(aws_crt_credentials_provider_static_new) {
