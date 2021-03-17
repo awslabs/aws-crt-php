@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: e98ad48d10f99b8601b29aae474bbae6b10d27fd */
+ * Stub hash: c681786667e5b7755b2874e4862ea7f162ef61ee */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -12,61 +12,60 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_error_debug_str arginfo_aws_crt_error_name
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_options_new, 0, 0, IS_OBJECT, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_aws_crt_event_loop_group_options_new arginfo_aws_crt_last_error
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_options_release, 0, 1, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, elg_options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, elg_options, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_options_set_max_threads, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, elg_options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, elg_options, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, max_threads, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_new, 0, 1, IS_OBJECT, 0)
-	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_new, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_release, 0, 1, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, event_loop_group, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, event_loop_group, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_aws_crt_credentials_options_new arginfo_aws_crt_event_loop_group_options_new
+#define arginfo_aws_crt_credentials_options_new arginfo_aws_crt_last_error
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_release, 0, 1, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_access_key_id, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, access_key_id, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_secret_access_key, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, secret_access_key, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_session_token, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, session_token, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds, 0, 2, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, expiration_timepoint_seconds, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_credentials_new arginfo_aws_crt_event_loop_group_new
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_release, 0, 1, IS_VOID, 0)
-	ZEND_ARG_TYPE_INFO(0, credentials, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, credentials, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_credentials_provider_release arginfo_aws_crt_credentials_release
 
-#define arginfo_aws_crt_credentials_provider_static_options_new arginfo_aws_crt_event_loop_group_options_new
+#define arginfo_aws_crt_credentials_provider_static_options_new arginfo_aws_crt_last_error
 
 #define arginfo_aws_crt_credentials_provider_static_options_release arginfo_aws_crt_credentials_options_release
 
