@@ -13,6 +13,8 @@ final class InputStream extends NativeResource {
         // The stream implementation in native just converts the PHP stream into
         // a native php_stream* and execute operations entirely in native
         self::$crt->aws_input_stream_options_set_user_data($options, $stream);
+        $this->acquire(self::$crt->aws_input_stream_new($options));
+        self::$crt->aws_input_stream_options_release($options);
     }
 
     public function __destruct() {
