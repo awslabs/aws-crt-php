@@ -10,7 +10,7 @@ ifeq (, $(shell which cmake3))
 	CMAKE = cmake
 endif
 
-CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DBUILD_TESTING=OFF
+CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
 CMAKE_BUILD = $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
@@ -63,14 +63,7 @@ ffi: src/libaws-crt-ffi.so
 src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
 	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/libaws-crt-ffi.so
 
-# Test the FFI interface on PHP7+
-ifeq ($(AT_LEAST_PHP7), 1)
-test: src/libaws-crt-ffi.so
-	composer update
-	AWS_CRT_PHP_EXTENSION=1 composer run test
-	AWS_CRT_PHP_FFI=1 composer run test
-else
+# Use PHPUnit to run tests
 test: ext/api.h ext/awscrt_arginfo.h ext/crt.lo
 	composer update
 	composer run test
-endif

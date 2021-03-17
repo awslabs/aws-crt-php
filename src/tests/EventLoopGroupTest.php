@@ -2,7 +2,9 @@
 
 use AWS\CRT\IO\EventLoopGroup as EventLoopGroup;
 
-final class EventLoopGroupTest extends PHPUnit_Framework_TestCase {
+require_once('common.inc');
+
+final class EventLoopGroupTest extends CrtTestCase {
 
     public function testLifetime() {
         $elg = new EventLoopGroup();

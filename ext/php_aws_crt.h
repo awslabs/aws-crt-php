@@ -39,6 +39,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
         static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0, 0},
 
 /* PHP5 doesn't really handle type hints well, so elide them */
+#    undef ZEND_ARG_TYPE_INFO
 #    define ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)                                               \
         {#name, sizeof(#name) - 1, NULL, 0, 0, pass_by_ref, allow_null, 0},
 #endif
