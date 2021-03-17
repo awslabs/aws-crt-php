@@ -34,7 +34,7 @@ final class AwsCredentials extends NativeResource {
         return $this->$name;
     }
 
-    function __construct(array $options = []) {
+    function __construct($options = []) {
         parent::__construct();
         if (count($options) == 0) {
             $options = self::defaults();

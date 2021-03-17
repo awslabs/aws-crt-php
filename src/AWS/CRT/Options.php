@@ -27,7 +27,6 @@ final class Options {
     }
 
     public function getString($name) {
-        $val = (string)$this->$name;
-        return (is_null($val)) ? "" : (string)$val;
+        return !empty($this->options[$name]) ? strval($this->options[$name]) : "";
     }
 }

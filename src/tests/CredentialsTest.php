@@ -14,7 +14,7 @@ final class CredentialsTest extends CrtTestCase {
         $creds = null;
     }
 
-    private function credentialsOptions() {
+    private function getCredentialsConfig() {
         $options = AwsCredentials::defaults();
         $options['access_key_id'] = 'TESTAWSACCESSKEYID';
         $options['secret_access_key'] = 'TESTSECRETaccesskeyThatDefinitelyDoesntWork';
@@ -24,7 +24,7 @@ final class CredentialsTest extends CrtTestCase {
     }
 
     public function testCredentialsLifetime() {
-        $options = $this->credentialsOptions();
+        $options = $this->getCredentialsConfig();
         $creds = new AwsCredentials($options);
         $this->assertNotNull($creds, "Failed to create Credentials with options");
         $this->assertEquals($creds->access_key_id, $options['access_key_id']);
@@ -35,7 +35,7 @@ final class CredentialsTest extends CrtTestCase {
     }
 
     public function testStaticCredentialsProviderLifetime() {
-        $options = $this->credentialsOptions();
+        $options = $this->getCredentialsConfig();
         $provider = new StaticCredentialsProvider($options);
         $this->assertNotNull($provider, "Failed to create StaticCredentialsProvider");
         $provider = null;
