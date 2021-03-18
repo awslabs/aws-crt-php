@@ -185,7 +185,7 @@ static int s_php_stream_seek(void *user_data, int64_t offset, aws_crt_input_stre
     return php_stream_seek(stream, offset, basis);
 }
 
-static int s_php_stream_read(void *user_data, uint8_t* dest, size_t dest_length) {
+static int s_php_stream_read(void *user_data, uint8_t *dest, size_t dest_length) {
     php_stream *stream = user_data;
     return php_stream_read(stream, dest, dest_length) != 0;
 }
@@ -213,7 +213,7 @@ static int s_php_stream_get_status(void *user_data, aws_crt_input_stream_status 
 
 static void s_php_stream_destroy(void *user_data) {
     php_stream *stream = user_data;
-    //php_stream_close(stream);
+    // php_stream_close(stream);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_new) {
