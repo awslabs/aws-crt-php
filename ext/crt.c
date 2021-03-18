@@ -189,6 +189,11 @@ static int s_php_stream_get_length(void *user_data, int64_t *out_length) {
     return 0;
 }
 
+static void s_php_stream_destroy(void *user_data) {
+    php_stream *stream = user_data;
+    php_stream_close(stream);
+}
+
 PHP_FUNCTION(aws_crt_input_stream_new) {
     zend_ulong php_options = 0;
 
@@ -201,6 +206,7 @@ PHP_FUNCTION(aws_crt_input_stream_new) {
     aws_crt_input_stream_options_set_read(options, s_php_stream_read);
     aws_crt_input_stream_options_set_get_status(options, s_php_stream_get_status);
     aws_crt_input_stream_options_set_get_length(options, s_php_stream_get_length);
+    aws_crt_input_stream_options_set_destroy(options, s_php_stream_destroy);
     aws_crt_input_stream *stream = aws_crt_input_stream_new(options);
     RETURN_LONG((zend_ulong)stream);
 }
