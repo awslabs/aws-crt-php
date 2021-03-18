@@ -212,8 +212,8 @@ static int s_php_stream_get_status(void *user_data, aws_crt_input_stream_status 
 }
 
 static void s_php_stream_destroy(void *user_data) {
-    php_stream *stream = user_data;
-    // php_stream_close(stream);
+    (void)user_data;
+    /* no op, stream will be freed by PHP refcount dropping from InputStream::stream */
 }
 
 PHP_FUNCTION(aws_crt_input_stream_new) {
