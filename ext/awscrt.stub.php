@@ -30,6 +30,14 @@ function aws_crt_input_stream_new(object $options): object {}
 
 function aws_crt_input_stream_release(int $stream): void {}
 
+function aws_crt_input_stream_seek(int $stream, int $offset, int $basis): int {}
+
+function aws_crt_input_stream_read(int $stream, int $length): string {}
+
+function aws_crt_input_stream_eof(int $stream): boolean {}
+
+function aws_crt_input_stream_get_length(int $stream): int {}
+
 function aws_crt_credentials_options_new(): object {}
 
 function aws_crt_credentials_options_release(object $options): void {}

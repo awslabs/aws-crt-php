@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: f0e1084f20cd511e28cc189a375ae0619945dd00 */
+ * Stub hash: f863a12cec44e371915687f6a7d131443df6ea3c */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -46,6 +46,25 @@ ZEND_END_ARG_INFO()
 #define arginfo_aws_crt_input_stream_new arginfo_aws_crt_event_loop_group_new
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_seek, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, offset, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, basis, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_read, 0, 2, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, length, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_aws_crt_input_stream_eof, 0, 1, boolean, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_get_length, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
@@ -110,6 +129,10 @@ ZEND_FUNCTION(aws_crt_input_stream_options_release);
 ZEND_FUNCTION(aws_crt_input_stream_options_set_user_data);
 ZEND_FUNCTION(aws_crt_input_stream_new);
 ZEND_FUNCTION(aws_crt_input_stream_release);
+ZEND_FUNCTION(aws_crt_input_stream_seek);
+ZEND_FUNCTION(aws_crt_input_stream_read);
+ZEND_FUNCTION(aws_crt_input_stream_eof);
+ZEND_FUNCTION(aws_crt_input_stream_get_length);
 ZEND_FUNCTION(aws_crt_credentials_options_new);
 ZEND_FUNCTION(aws_crt_credentials_options_release);
 ZEND_FUNCTION(aws_crt_credentials_options_set_access_key_id);
@@ -142,6 +165,10 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_input_stream_options_set_user_data, arginfo_aws_crt_input_stream_options_set_user_data)
 	ZEND_FE(aws_crt_input_stream_new, arginfo_aws_crt_input_stream_new)
 	ZEND_FE(aws_crt_input_stream_release, arginfo_aws_crt_input_stream_release)
+	ZEND_FE(aws_crt_input_stream_seek, arginfo_aws_crt_input_stream_seek)
+	ZEND_FE(aws_crt_input_stream_read, arginfo_aws_crt_input_stream_read)
+	ZEND_FE(aws_crt_input_stream_eof, arginfo_aws_crt_input_stream_eof)
+	ZEND_FE(aws_crt_input_stream_get_length, arginfo_aws_crt_input_stream_get_length)
 	ZEND_FE(aws_crt_credentials_options_new, arginfo_aws_crt_credentials_options_new)
 	ZEND_FE(aws_crt_credentials_options_release, arginfo_aws_crt_credentials_options_release)
 	ZEND_FE(aws_crt_credentials_options_set_access_key_id, arginfo_aws_crt_credentials_options_set_access_key_id)

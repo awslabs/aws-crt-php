@@ -180,7 +180,7 @@ PHP_FUNCTION(aws_crt_input_stream_options_set_user_data) {
     aws_crt_input_stream_options_set_user_data(options, stream);
 }
 
-static int s_php_stream_seek(void *user_data, int64_t offset, aws_crt_stream_seek_basis basis) {
+static int s_php_stream_seek(void *user_data, int64_t offset, aws_crt_input_stream_seek_basis basis) {
     php_stream *stream = user_data;
     return php_stream_seek(stream, offset, basis);
 }
@@ -190,22 +190,30 @@ static int s_php_stream_read(void *user_data, uint8_t* dest, size_t dest_length)
     return php_stream_read(stream, dest, dest_length) != 0;
 }
 
-static int s_php_stream_get_status(void *user_data, aws_crt_stream_status *out_status) {
+static int s_php_stream_get_length(void *user_data, int64_t *out_length) {
     php_stream *stream = user_data;
-    out_status->is_valid = stream != NULL;
-    out_status->is_end_of_stream = php_stream_eof(stream);
+    size_t pos = php_stream_tell(stream);
+    php_stream_seek(stream, 0, SEEK_END);
+    *out_length = php_stream_tell(stream);
+    php_stream_seek(stream, pos, SEEK_SET);
     return 0;
 }
 
-static int s_php_stream_get_length(void *user_data, int64_t *out_length) {
+static int s_php_stream_get_status(void *user_data, aws_crt_input_stream_status *out_status) {
     php_stream *stream = user_data;
-    *out_length = php_stream_tell(stream);
+    out_status->is_valid = stream != NULL;
+    /* We would like to use php_stream_eof here, but certain streams (notably php://memory)
+     * are not actually capable of EOF, so we get to do it the hard way */
+    size_t length = 0, pos = 0;
+    s_php_stream_get_length(stream, &length);
+    pos = php_stream_tell(stream);
+    out_status->is_end_of_stream = pos == length;
     return 0;
 }
 
 static void s_php_stream_destroy(void *user_data) {
     php_stream *stream = user_data;
-    php_stream_close(stream);
+    //php_stream_close(stream);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_new) {
@@ -234,6 +242,60 @@ PHP_FUNCTION(aws_crt_input_stream_release) {
 
     aws_crt_input_stream *stream = (void *)php_stream;
     aws_crt_input_stream_release(stream);
+}
+
+PHP_FUNCTION(aws_crt_input_stream_seek) {
+    zend_ulong php_stream = 0;
+    zend_ulong offset = 0;
+    zend_ulong basis = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &php_stream, &offset, &basis) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_input_stream *stream = (void *)php_stream;
+    RETURN_LONG(aws_crt_input_stream_seek(stream, offset, basis));
+}
+
+PHP_FUNCTION(aws_crt_input_stream_read) {
+    zend_ulong php_stream = 0;
+    zend_ulong length = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_stream, &length) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_input_stream *stream = (void *)php_stream;
+    uint8_t *buf = emalloc(length);
+    int ret = aws_crt_input_stream_read(stream, buf, length);
+    AWS_RETURN_STRINGL(buf, length);
+    efree(buf);
+}
+
+PHP_FUNCTION(aws_crt_input_stream_eof) {
+    zend_ulong php_stream = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_stream) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_input_stream *stream = (void *)php_stream;
+    aws_crt_input_stream_status status = {0};
+    aws_crt_input_stream_get_status(stream, &status);
+    RETURN_BOOL(status.is_end_of_stream);
+}
+
+PHP_FUNCTION(aws_crt_input_stream_get_length) {
+    zend_ulong php_stream = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_stream) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_input_stream *stream = (void *)php_stream;
+    size_t length = 0;
+    aws_crt_input_stream_get_length(stream, &length);
+    RETURN_LONG(length);
 }
 
 PHP_FUNCTION(aws_crt_credentials_options_new) {
@@ -411,18 +473,23 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_new) {
     RETURN_LONG((zend_ulong)provider);
 }
 
-,   NULL, /* RINIT */
-NULL, /* RSHUTDOWN NULL, /* MINFO */
-     NO_VE                        R SION_YET,
-    PHP_M                       O                                        DULE_GLOBALS(awscrt),
-    PHP_G        I                                                       NIT(awscrt),
-    NULL, /* GSHUTD NULL, /* RPOSTSHUT(awscrt), PHP_GINITDOWN */
-, NULL  /* GSHUTDOWN */
-    NULL,                                                                /* RPOSTSHUTDOWN */   STANDARD_MODULE_PROPERTIES_EX,
+zend_module_entry awscrt_module_entry = {
+    STANDARD_MODULE_HEADER,
+    "awscrt",
+    ext_functions, /* functions */
+    PHP_MINIT(awscrt),
+    PHP_MSHUTDOWN(awscrt),
+    NULL, /* RINIT */
+    NULL, /* RSHUTDOWN */
+    NULL, /* MINFO */
+    NO_VERSION_YET,
+    PHP_MODULE_GLOBALS(awscrt),
+    PHP_GINIT(awscrt),
+    NULL, /* GSHUTDOWN */
+    NULL, /* RPOSTSHUTDOWN */
+    STANDARD_MODULE_PROPERTIES_EX,
 };
 
 #ifdef COMPILE_DL_AWSCRT
-ZEND_GET_MODULE(awscrt)
-#endif
 ZEND_GET_MODULE(awscrt)
 #endif
