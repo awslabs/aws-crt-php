@@ -10,6 +10,15 @@
 
 #include "awscrt_arginfo.h"
 
+/* Helpful references for this file:
+ * zend_parse_parameters and friends -
+ * https://git.php.net/?p=php-src.git;a=blob;f=docs/parameter-parsing-api.md;h=c962fc6ee58cc756aaac9e65759b7d5ea5c18fc4;hb=HEAD
+ * https://git.php.net/?p=php-src.git;a=blob;f=docs/self-contained-extensions.md;h=47f4c636baca8ca195118e2cc234ac7fd2842c1b;hb=HEAD
+ * Examples:
+ * Curl extension: https://github.com/php/php-src/blob/PHP-5.6/ext/curl/interface.c
+ * libuv extension: https://github.com/amphp/ext-uv/blob/master/php_uv.c
+ */
+
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
 
 PHP_INI_BEGIN()
@@ -151,6 +160,11 @@ PHP_FUNCTION(aws_crt_input_stream_options_release) {
     aws_crt_input_stream_options *options = (void *)php_options;
     aws_crt_input_stream_options_release(options);
 }
+
+/* PHP streams info:
+ * https://git.php.net/?p=php-src.git;a=blob;f=docs/streams.md;h=0ec3846d68bf70067297d8a6c691d2591c49b48a;hb=HEAD
+ * https://github.com/php/php-src/blob/PHP-5.6.0/main/php_streams.h
+ */
 
 PHP_FUNCTION(aws_crt_input_stream_options_set_user_data) {
     zend_ulong php_options = 0;
@@ -397,23 +411,18 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_new) {
     RETURN_LONG((zend_ulong)provider);
 }
 
-zend_module_entry awscrt_module_entry = {
-    STANDARD_MODULE_HEADER,
-    "awscrt",
-    ext_functions, /* functions */
-    PHP_MINIT(awscrt),
-    PHP_MSHUTDOWN(awscrt),
-    NULL, /* RINIT */
-    NULL, /* RSHUTDOWN */
-    NULL, /* MINFO */
-    NO_VERSION_YET,
-    PHP_MODULE_GLOBALS(awscrt),
-    PHP_GINIT(awscrt),
-    NULL, /* GSHUTDOWN */
-    NULL, /* RPOSTSHUTDOWN */
-    STANDARD_MODULE_PROPERTIES_EX,
+,   NULL, /* RINIT */
+NULL, /* RSHUTDOWN NULL, /* MINFO */
+     NO_VE                        R SION_YET,
+    PHP_M                       O                                        DULE_GLOBALS(awscrt),
+    PHP_G        I                                                       NIT(awscrt),
+    NULL, /* GSHUTD NULL, /* RPOSTSHUT(awscrt), PHP_GINITDOWN */
+, NULL  /* GSHUTDOWN */
+    NULL,                                                                /* RPOSTSHUTDOWN */   STANDARD_MODULE_PROPERTIES_EX,
 };
 
 #ifdef COMPILE_DL_AWSCRT
+ZEND_GET_MODULE(awscrt)
+#endif
 ZEND_GET_MODULE(awscrt)
 #endif
