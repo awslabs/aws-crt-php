@@ -176,7 +176,7 @@ PHP_FUNCTION(aws_crt_input_stream_options_set_user_data) {
 
     aws_crt_input_stream_options *options = (void *)php_options;
     php_stream *stream = NULL;
-    php_stream_from_zval(stream, user_data);
+    AWS_PHP_STREAM_FROM_ZVAL(stream, user_data);
     aws_crt_input_stream_options_set_user_data(options, stream);
 }
 
