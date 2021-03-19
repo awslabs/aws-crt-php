@@ -34,7 +34,7 @@ function aws_crt_input_stream_seek(int $stream, int $offset, int $basis): int {}
 
 function aws_crt_input_stream_read(int $stream, int $length): string {}
 
-function aws_crt_input_stream_eof(int $stream): boolean {}
+function aws_crt_input_stream_eof(int $stream): bool {}
 
 function aws_crt_input_stream_get_length(int $stream): int {}
 

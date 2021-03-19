@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: f863a12cec44e371915687f6a7d131443df6ea3c */
+ * Stub hash: 5549e1214a9a419075f5cb561adb2d7a340c5916 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -60,7 +60,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_read, 0, 2,
 	ZEND_ARG_TYPE_INFO(0, length, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_aws_crt_input_stream_eof, 0, 1, boolean, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_eof, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
