@@ -29,11 +29,18 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
-/* PHP 7 removed the string duplicate parameter */
+
 #if AWS_PHP_AT_LEAST_7
+/* PHP 7 removed the string duplicate parameter */
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s)
+#    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l)
+/* PHP 7 takes a zval*, PHP5 takes a zval** */
+#    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
 #else
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
+#    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
+#    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
+
 /* definitions for ZEND API macros taken from PHP7 and backported to 5.6 */
 #    define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)       \
         static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0, 0},

@@ -140,31 +140,67 @@ final class CRT {
         self::$impl->aws_crt_credentials_release($credentials);
     }
 
-    function aws_credentials_provider_release($provider) {
+    function credentials_provider_release($provider) {
         self::$impl->aws_crt_credentials_provider_release($provider);
     }
 
-    function aws_credentials_provider_static_options_new() {
+    function credentials_provider_static_options_new() {
         return self::$impl->aws_crt_credentials_provider_static_options_new();
     }
 
-    function aws_credentials_provider_static_options_release($options) {
+    function credentials_provider_static_options_release($options) {
         self::$impl->aws_crt_credentials_provider_static_options_release($options);
     }
 
-    function aws_credentials_provider_static_options_set_access_key_id($options, $access_key_id) {
+    function credentials_provider_static_options_set_access_key_id($options, $access_key_id) {
         self::$impl->aws_crt_credentials_provider_static_options_set_access_key_id($options, $access_key_id);
     }
 
-    function aws_credentials_provider_static_options_set_secret_access_key($options, $secret_access_key) {
+    function credentials_provider_static_options_set_secret_access_key($options, $secret_access_key) {
         self::$impl->aws_crt_credentials_provider_static_options_set_secret_access_key($options, $secret_access_key);
     }
 
-    function aws_credentials_provider_static_options_set_session_token($options, $session_token) {
+    function credentials_provider_static_options_set_session_token($options, $session_token) {
         self::$impl->aws_crt_credentials_provider_static_options_set_session_token($options, $session_token);
     }
 
-    function aws_credentials_provider_static_new($options) {
+    function credentials_provider_static_new($options) {
         return self::$impl->aws_crt_credentials_provider_static_new($options);
+    }
+
+    function input_stream_options_new() {
+        return self::$impl->aws_crt_input_stream_options_new();
+    }
+
+    function input_stream_options_release($options) {
+        self::$impl->aws_crt_input_stream_options_release($options);
+    }
+
+    function input_stream_options_set_user_data($options, $user_data) {
+        self::$impl->aws_crt_input_stream_options_set_user_data($options, $user_data);
+    }
+
+    function input_stream_new($options) {
+        return self::$impl->aws_crt_input_stream_new($options);
+    }
+
+    function input_stream_release($stream) {
+        self::$impl->aws_crt_input_stream_release($stream);
+    }
+
+    function input_stream_seek($stream, $offset, $basis) {
+        return self::$impl->aws_crt_input_stream_seek($stream, $offset, $basis);
+    }
+
+    function input_stream_read($stream, $length) {
+        return self::$impl->aws_crt_input_stream_read($stream, $length);
+    }
+
+    function input_stream_eof($stream) {
+        return self::$impl->aws_crt_input_stream_eof($stream);
+    }
+
+    function input_stream_get_length($stream) {
+        return self::$impl->aws_crt_input_stream_get_length($stream);
     }
 }

@@ -14,7 +14,7 @@ abstract class CredentialsProvider extends NativeResource {
     }
 
     function __destruct() {
-        self::$crt->aws_credentials_provider_release($this->release());
+        self::$crt->credentials_provider_release($this->release());
         parent::__destruct();
     }
 }
