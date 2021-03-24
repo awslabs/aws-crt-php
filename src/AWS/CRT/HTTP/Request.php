@@ -17,4 +17,8 @@ class Request extends Message {
     public static function unmarshall($buf) {
         return parent::_unmarshall($buf, Request::class);
     }
+
+    public function body_stream() {
+        return $this->body_stream;
+    }
 }
