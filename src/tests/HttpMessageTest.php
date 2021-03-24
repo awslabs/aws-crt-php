@@ -29,6 +29,13 @@ final class HttpMessageTest extends CrtTestCase {
         $this->assertEquals($headers_array['test'], $headers_copy->get('test'));
     }
 
+    private function assertMessagesMatch($a, $b) {
+        $this->assertEquals($a->method(), $b->method());
+        $this->assertEquals($a->path(), $b->path());
+        $this->assertEquals($a->query(), $b->query());
+        $this->assertEquals($a->headers()->toArray(), $b->headers()->toArray());
+    }
+
     public function testRequestMarshalling() {
         $headers_array = [
             "host" => "s3.amazonaws.com",
@@ -43,9 +50,47 @@ final class HttpMessageTest extends CrtTestCase {
         $msg_buf = Request::marshall($msg);
         $msg_copy = Request::unmarshall($msg_buf);
 
-        $this->assertEquals($method, $msg_copy->method());
-        $this->assertEquals($path, $msg_copy->path());
-        $this->assertEquals($query, $msg_copy->query());
-        $this->assertEquals($headers_array, $msg_copy->headers()->toArray());
+        $this->assertMessagesMatch($msg, $msg_copy);
+    }
+
+    public function testRequestMarshallingWithQueryParams() {
+        $headers_array = [
+            "host" => "s3.amazonaws.com",
+            "test" => "this is a test header value"
+        ];
+        $headers = new Headers($headers_array);
+        $method = "GET";
+        $path = "/index.php";
+        $query = [
+            'request' => 1,
+            'test' => true,
+            'answer' => 42,
+            'foo' => 'bar',
+        ];
+
+        $msg = new Request($method, $path, $query, $headers);
+        $msg_buf = Request::marshall($msg);
+        $msg_copy = Request::unmarshall($msg_buf);
+
+        $this->assertMessagesMatch($msg, $msg_copy);
+    }
+
+    public function testResponseMarshalling() {
+        $headers_array = [
+            "content-length" => "42",
+            "test" => "this is a test header value"
+        ];
+        $headers = new Headers($headers_array);
+        $method = "GET";
+        $path = "/index.php";
+        $query = [
+            'response' => 1
+        ];
+
+        $msg = new Response($method, $path, $query, $headers, 400);
+        $msg_buf = Request::marshall($msg);
+        $msg_copy = Request::unmarshall($msg_buf);
+
+        $this->assertMessagesMatch($msg, $msg_copy);
     }
 }

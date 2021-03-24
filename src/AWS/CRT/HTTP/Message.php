@@ -37,7 +37,7 @@ abstract class Message extends NativeResource {
         $method = Encoding::readString($buf);
         $path_and_query = Encoding::readString($buf);
         if (strchr($path_and_query, "?")) {
-            list($path, $query) = preg_split("?", $path_and_query, 2);
+            list($path, $query) = preg_split("/\?/", $path_and_query, 2);
         } else {
             list($path, $query) = [$path_and_query, ""];
         }
@@ -46,12 +46,17 @@ abstract class Message extends NativeResource {
 
         // Turn query params back into a dictionary
         if (strlen($query)) {
-            $query = preg_split("&", $query);
+            if (strchr($query, "&")) {
+                $query = preg_split("/&/", $query);
+            } else {
+                $query = [$query];
+            }
+
             $query = array_reduce($query, function($params, $pair) {
-                list($param, $value) = preg_split( "=", $pair, 2);
+                list($param, $value) = preg_split( "/=/", $pair, 2);
                 $params[$param] = $value;
                 return $params;
-            }, $query, []);
+            }, []);
         } else {
             $query = [];
         }
