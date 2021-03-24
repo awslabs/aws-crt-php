@@ -85,7 +85,7 @@ jobs:
     runs-on: macos-${{ matrix.version }}
     strategy:
       matrix:
-        version: [10.15, 11.0]
+        version: [10.15]
     steps:
     - name: Build PHP 8 extension and test
       run: |
