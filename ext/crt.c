@@ -187,7 +187,7 @@ static int s_php_stream_seek(void *user_data, int64_t offset, aws_crt_input_stre
 
 static int s_php_stream_read(void *user_data, uint8_t *dest, size_t dest_length) {
     php_stream *stream = user_data;
-    return php_stream_read(stream, (char*)dest, dest_length) != 0;
+    return php_stream_read(stream, (char *)dest, dest_length) != 0;
 }
 
 static int s_php_stream_get_length(void *user_data, int64_t *out_length) {
@@ -269,7 +269,7 @@ PHP_FUNCTION(aws_crt_input_stream_read) {
     aws_crt_input_stream *stream = (void *)php_stream;
     uint8_t *buf = emalloc(length);
     int ret = aws_crt_input_stream_read(stream, buf, length);
-    AWS_RETURN_STRINGL((const char*)buf, length);
+    AWS_RETURN_STRINGL((const char *)buf, length);
     efree(buf);
 }
 
@@ -303,12 +303,11 @@ PHP_FUNCTION(aws_crt_http_message_new_from_blob) {
     const char *blob = NULL;
     size_t blob_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &blob, &blob_len) ==
-        FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &blob, &blob_len) == FAILURE) {
         RETURN_NULL();
     }
 
-    aws_crt_http_message *message = aws_crt_http_message_new_from_blob((uint8_t*)blob, blob_len);
+    aws_crt_http_message *message = aws_crt_http_message_new_from_blob((uint8_t *)blob, blob_len);
     RETURN_LONG((zend_ulong)message);
 }
 
@@ -323,7 +322,7 @@ PHP_FUNCTION(aws_crt_http_message_to_blob) {
     uint8_t *blob = NULL;
     size_t blob_len = 0;
     aws_crt_http_message_to_blob(message, &blob, &blob_len);
-    AWS_RETURN_STRINGL((const char*)blob, blob_len);
+    AWS_RETURN_STRINGL((const char *)blob, blob_len);
     aws_crt_mem_release(blob);
 }
 
@@ -359,8 +358,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_access_key_id) {
     const char *access_key_id = NULL;
     size_t access_key_id_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &access_key_id, &access_key_id_len) ==
-        FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &access_key_id, &access_key_id_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -373,8 +371,8 @@ PHP_FUNCTION(aws_crt_credentials_options_set_secret_access_key) {
     const char *secret_access_key = NULL;
     size_t secret_access_key_len = 0;
 
-    if (zend_parse_parameters(
-            ZEND_NUM_ARGS(), "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &secret_access_key, &secret_access_key_len) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
@@ -387,8 +385,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
     const char *session_token = NULL;
     size_t session_token_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &session_token, &session_token_len) ==
-        FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &session_token, &session_token_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -399,8 +396,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
 PHP_FUNCTION(aws_crt_credentials_options_set_expiration_timepoint_seconds) {
     zend_ulong php_options = 0;
     zend_ulong expiration_timepoint_seconds = 0;
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &php_options, &expiration_timepoint_seconds) ==
-        FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &php_options, &expiration_timepoint_seconds) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -463,8 +459,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_access_key_id) {
     const char *access_key_id = NULL;
     size_t access_key_id_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &access_key_id, &access_key_id_len) ==
-        FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &access_key_id, &access_key_id_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -477,8 +472,8 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_secret_access_key) 
     const char *secret_access_key = NULL;
     size_t secret_access_key_len = 0;
 
-    if (zend_parse_parameters(
-            ZEND_NUM_ARGS(), "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &secret_access_key, &secret_access_key_len) ==
+        FAILURE) {
         RETURN_NULL();
     }
 
@@ -492,8 +487,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_session_token) {
     const char *session_token = NULL;
     size_t session_token_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &session_token, &session_token_len) ==
-        FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &session_token, &session_token_len) == FAILURE) {
         RETURN_NULL();
     }
 
