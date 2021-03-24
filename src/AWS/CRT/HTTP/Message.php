@@ -25,7 +25,7 @@ abstract class Message extends NativeResource {
         parent::__destruct();
     }
 
-    public static function marshall($msg) {
+    protected static function marshall($msg) {
         $buf = "";
         $buf .= Encoding::encodeString($msg->method);
         $buf .= Encoding::encodeString($msg->pathAndQuery());
@@ -33,7 +33,7 @@ abstract class Message extends NativeResource {
         return $buf;
     }
 
-    public static function unmarshall($buf, $class=Message::class) {
+    protected static function _unmarshall($buf, $class=Message::class) {
         $method = Encoding::decodeString($buf);
         $path_and_query = Encoding::decodeString($buf);
         list($path, $query) = split($path_and_query, "?", 2);
@@ -41,9 +41,9 @@ abstract class Message extends NativeResource {
 
         // Turn query params back into a dictionary
         if (strlen($query)) {
-            $query = split($query, "&");
-            $query = array_reduce(function($params, $pair) {
-                list($param, $value) = split($pair, "=", 2);
+            $query = preg_split("&", $query);
+            $query = array_reduce($query, function($params, $pair) {
+                list($param, $value) = preg_split( "=", $pair, 2);
                 $params[$param] = $value;
                 return $params;
             }, $query, []);

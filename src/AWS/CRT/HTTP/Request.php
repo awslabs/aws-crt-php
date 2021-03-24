@@ -15,6 +15,6 @@ class Request extends Message {
     }
 
     public static function unmarshall($buf) {
-        return parent::unmarshall($buf, Request::class);
+        return parent::_unmarshall($buf, Request::class);
     }
 }

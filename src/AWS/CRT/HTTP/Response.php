@@ -15,6 +15,6 @@ class Response extends Message {
     }
 
     public static function unmarshall($buf) {
-        return parent::unmarshall($buf, Response::class);
+        return parent::_unmarshall($buf, Response::class);
     }
 }
