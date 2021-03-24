@@ -20,7 +20,8 @@ final class Encoding {
 
     public static function decodeString($buffer) {
         $len = unpack("N", $buffer)[1];
-        $str = unpack("a${len}", $buffer, 4)[1];
+        $buffer = substr($buffer, 4);
+        $str = unpack("a${len}", $buffer)[1];
         return [$len, $str];
     }
 
