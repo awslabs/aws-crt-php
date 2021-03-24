@@ -81,13 +81,13 @@ jobs:
   #       python -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
   #       python builder.pyz build -p ${{ env.PACKAGE_NAME }} downstream
 
-  osx:
+  macos:
     runs-on: macos-${{ matrix.version }}
     strategy:
       matrix:
         version: [10.15, 11.0]
     steps:
-    - name: Build ${{ env.PACKAGE_NAME }} + consumers
+    - name: Build PHP 8 extension and test
       run: |
         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
         chmod a+x builder
