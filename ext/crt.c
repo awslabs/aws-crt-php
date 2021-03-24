@@ -61,7 +61,7 @@ PHP_FUNCTION(aws_crt_last_error) {
 PHP_FUNCTION(aws_crt_error_str) {
     zend_ulong error_code = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &error_code) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -72,7 +72,7 @@ PHP_FUNCTION(aws_crt_error_str) {
 PHP_FUNCTION(aws_crt_error_name) {
     zend_ulong error_code = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &error_code) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -83,7 +83,7 @@ PHP_FUNCTION(aws_crt_error_name) {
 PHP_FUNCTION(aws_crt_error_debug_str) {
     zend_ulong error_code = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &error_code) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &error_code) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -98,7 +98,7 @@ PHP_FUNCTION(aws_crt_event_loop_group_options_new) {
 PHP_FUNCTION(aws_crt_event_loop_group_options_release) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         return;
     }
 
@@ -110,7 +110,7 @@ PHP_FUNCTION(aws_crt_event_loop_group_options_set_max_threads) {
     zend_ulong php_options = 0;
     zend_ulong num_threads = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_options, &num_threads) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &php_options, &num_threads) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -121,7 +121,7 @@ PHP_FUNCTION(aws_crt_event_loop_group_options_set_max_threads) {
 PHP_FUNCTION(aws_crt_event_loop_group_new) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -133,7 +133,7 @@ PHP_FUNCTION(aws_crt_event_loop_group_new) {
 PHP_FUNCTION(aws_crt_event_loop_group_release) {
     zend_ulong php_elg = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_elg) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_elg) == FAILURE) {
         return;
     }
 
@@ -153,7 +153,7 @@ PHP_FUNCTION(aws_crt_input_stream_options_new) {
 PHP_FUNCTION(aws_crt_input_stream_options_release) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         return;
     }
 
@@ -170,7 +170,7 @@ PHP_FUNCTION(aws_crt_input_stream_options_set_user_data) {
     zend_ulong php_options = 0;
     zval *user_data = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz", &php_options, &user_data) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &php_options, &user_data) == FAILURE) {
         return;
     }
 
@@ -187,7 +187,7 @@ static int s_php_stream_seek(void *user_data, int64_t offset, aws_crt_input_stre
 
 static int s_php_stream_read(void *user_data, uint8_t *dest, size_t dest_length) {
     php_stream *stream = user_data;
-    return php_stream_read(stream, dest, dest_length) != 0;
+    return php_stream_read(stream, (char*)dest, dest_length) != 0;
 }
 
 static int s_php_stream_get_length(void *user_data, int64_t *out_length) {
@@ -204,7 +204,8 @@ static int s_php_stream_get_status(void *user_data, aws_crt_input_stream_status 
     out_status->is_valid = stream != NULL;
     /* We would like to use php_stream_eof here, but certain streams (notably php://memory)
      * are not actually capable of EOF, so we get to do it the hard way */
-    size_t length = 0, pos = 0;
+    int64_t length = 0;
+    int64_t pos = 0;
     s_php_stream_get_length(stream, &length);
     pos = php_stream_tell(stream);
     out_status->is_end_of_stream = pos == length;
@@ -219,7 +220,7 @@ static void s_php_stream_destroy(void *user_data) {
 PHP_FUNCTION(aws_crt_input_stream_new) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -236,7 +237,7 @@ PHP_FUNCTION(aws_crt_input_stream_new) {
 PHP_FUNCTION(aws_crt_input_stream_release) {
     zend_ulong php_stream = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_stream) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_stream) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -249,7 +250,7 @@ PHP_FUNCTION(aws_crt_input_stream_seek) {
     zend_ulong offset = 0;
     zend_ulong basis = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &php_stream, &offset, &basis) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &php_stream, &offset, &basis) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -261,21 +262,21 @@ PHP_FUNCTION(aws_crt_input_stream_read) {
     zend_ulong php_stream = 0;
     zend_ulong length = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_stream, &length) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &php_stream, &length) == FAILURE) {
         RETURN_NULL();
     }
 
     aws_crt_input_stream *stream = (void *)php_stream;
     uint8_t *buf = emalloc(length);
     int ret = aws_crt_input_stream_read(stream, buf, length);
-    AWS_RETURN_STRINGL(buf, length);
+    AWS_RETURN_STRINGL((const char*)buf, length);
     efree(buf);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_eof) {
     zend_ulong php_stream = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_stream) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_stream) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -288,12 +289,12 @@ PHP_FUNCTION(aws_crt_input_stream_eof) {
 PHP_FUNCTION(aws_crt_input_stream_get_length) {
     zend_ulong php_stream = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_stream) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_stream) == FAILURE) {
         RETURN_NULL();
     }
 
     aws_crt_input_stream *stream = (void *)php_stream;
-    size_t length = 0;
+    int64_t length = 0;
     aws_crt_input_stream_get_length(stream, &length);
     RETURN_LONG(length);
 }
@@ -345,7 +346,7 @@ PHP_FUNCTION(aws_crt_credentials_options_new) {
 PHP_FUNCTION(aws_crt_credentials_options_release) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -358,7 +359,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_access_key_id) {
     const char *access_key_id = NULL;
     size_t access_key_id_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &access_key_id, &access_key_id_len) ==
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &access_key_id, &access_key_id_len) ==
         FAILURE) {
         RETURN_NULL();
     }
@@ -373,7 +374,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_secret_access_key) {
     size_t secret_access_key_len = 0;
 
     if (zend_parse_parameters(
-            ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
+            ZEND_NUM_ARGS(), "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -386,7 +387,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
     const char *session_token = NULL;
     size_t session_token_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &session_token, &session_token_len) ==
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &session_token, &session_token_len) ==
         FAILURE) {
         RETURN_NULL();
     }
@@ -398,7 +399,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_session_token) {
 PHP_FUNCTION(aws_crt_credentials_options_set_expiration_timepoint_seconds) {
     zend_ulong php_options = 0;
     zend_ulong expiration_timepoint_seconds = 0;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &php_options, &expiration_timepoint_seconds) ==
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &php_options, &expiration_timepoint_seconds) ==
         FAILURE) {
         RETURN_NULL();
     }
@@ -410,7 +411,7 @@ PHP_FUNCTION(aws_crt_credentials_options_set_expiration_timepoint_seconds) {
 PHP_FUNCTION(aws_crt_credentials_new) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -422,7 +423,7 @@ PHP_FUNCTION(aws_crt_credentials_new) {
 PHP_FUNCTION(aws_crt_credentials_release) {
     zend_ulong php_credentials = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_credentials) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_credentials) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -433,7 +434,7 @@ PHP_FUNCTION(aws_crt_credentials_release) {
 PHP_FUNCTION(aws_crt_credentials_provider_release) {
     zend_ulong php_creds_provider = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_creds_provider) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_creds_provider) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -449,7 +450,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_new) {
 PHP_FUNCTION(aws_crt_credentials_provider_static_options_release) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -462,7 +463,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_access_key_id) {
     const char *access_key_id = NULL;
     size_t access_key_id_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &access_key_id, &access_key_id_len) ==
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &access_key_id, &access_key_id_len) ==
         FAILURE) {
         RETURN_NULL();
     }
@@ -477,7 +478,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_secret_access_key) 
     size_t secret_access_key_len = 0;
 
     if (zend_parse_parameters(
-            ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
+            ZEND_NUM_ARGS(), "ls", &php_options, &secret_access_key, &secret_access_key_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -491,7 +492,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_session_token) {
     const char *session_token = NULL;
     size_t session_token_len = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &php_options, &session_token, &session_token_len) ==
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &php_options, &session_token, &session_token_len) ==
         FAILURE) {
         RETURN_NULL();
     }
@@ -503,7 +504,7 @@ PHP_FUNCTION(aws_crt_credentials_provider_static_options_set_session_token) {
 PHP_FUNCTION(aws_crt_credentials_provider_static_new) {
     zend_ulong php_options = 0;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_options) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &php_options) == FAILURE) {
         RETURN_NULL();
     }
 
