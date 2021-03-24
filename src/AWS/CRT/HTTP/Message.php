@@ -34,9 +34,14 @@ abstract class Message extends NativeResource {
     }
 
     protected static function _unmarshall($buf, $class=Message::class) {
-        $method = Encoding::decodeString($buf);
-        $path_and_query = Encoding::decodeString($buf);
-        list($path, $query) = split($path_and_query, "?", 2);
+        $method = Encoding::readString($buf);
+        $path_and_query = Encoding::readString($buf);
+        if (strchr($path_and_query, "?")) {
+            list($path, $query) = preg_split("?", $path_and_query, 2);
+        } else {
+            list($path, $query) = [$path_and_query, ""];
+        }
+
         $headers = Headers::unmarshall($buf);
 
         // Turn query params back into a dictionary

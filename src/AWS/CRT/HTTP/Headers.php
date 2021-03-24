@@ -23,7 +23,7 @@ final class Headers {
     public static function unmarshall($buf) {
         $strings = Encoding::readStrings($buf);
         $headers = [];
-        for ($idx = 0; idx < count($strings);) {
+        for ($idx = 0; $idx < count($strings);) {
             $headers[$strings[$idx++]] = $strings[$idx++];
         }
         return new Headers($headers);

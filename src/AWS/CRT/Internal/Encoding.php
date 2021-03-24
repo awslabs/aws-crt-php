@@ -4,7 +4,7 @@ namespace AWS\CRT\Internal;
 
 final class Encoding {
     public static function readString(&$buffer) {
-        list($str, $len) = self::decodeString($buffer);
+        list($len, $str) = self::decodeString($buffer);
         // Advance by sizeof(length) + strlen(str)
         $buffer = substr($buffer, 4 + $len);
         return $str;
@@ -19,10 +19,12 @@ final class Encoding {
     }
 
     public static function decodeString($buffer) {
-        return unpack("N/c*", $buffer);
+        $len = unpack("N", $buffer)[1];
+        $str = unpack("a${len}", $buffer, 4)[1];
+        return [$len, $str];
     }
 
     public static function encodeString($str) {
-        return pack("Nc*", strlen($str), $str);
+        return pack("Na*", strlen($str), $str);
     }
 }
