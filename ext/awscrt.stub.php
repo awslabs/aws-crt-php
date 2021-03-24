@@ -38,6 +38,12 @@ function aws_crt_input_stream_eof(int $stream): bool {}
 
 function aws_crt_input_stream_get_length(int $stream): int {}
 
+function aws_crt_http_message_new_from_blob(string $blob): int {}
+
+function aws_crt_http_message_to_blob(int $message): string {}
+
+function aws_crt_http_message_release(int $message): void {}
+
 function aws_crt_credentials_options_new(): object {}
 
 function aws_crt_credentials_options_release(object $options): void {}

@@ -298,6 +298,45 @@ PHP_FUNCTION(aws_crt_input_stream_get_length) {
     RETURN_LONG(length);
 }
 
+PHP_FUNCTION(aws_crt_http_message_new_from_blob) {
+    const char *blob = NULL;
+    size_t blob_len = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &blob, &blob_len) ==
+        FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_http_message *message = aws_crt_http_message_new_from_blob((uint8_t*)blob, blob_len);
+    RETURN_LONG((zend_ulong)message);
+}
+
+PHP_FUNCTION(aws_crt_http_message_to_blob) {
+    zend_ulong php_msg = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_msg) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_http_message *message = (void *)php_msg;
+    uint8_t *blob = NULL;
+    size_t blob_len = 0;
+    aws_crt_http_message_to_blob(message, &blob, &blob_len);
+    AWS_RETURN_STRINGL(blob, blob_len);
+    aws_crt_mem_release(blob);
+}
+
+PHP_FUNCTION(aws_crt_http_message_release) {
+    zend_ulong php_msg = 0;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &php_msg) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    aws_crt_http_message *message = (void *)php_msg;
+    aws_crt_http_message_release(message);
+}
+
 PHP_FUNCTION(aws_crt_credentials_options_new) {
     aws_crt_credentials_options *options = aws_crt_credentials_options_new();
     RETURN_LONG((zend_ulong)options);
