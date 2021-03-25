@@ -3,7 +3,6 @@
 namespace AWS\CRT\HTTP;
 
 use AWS\CRT\NativeResource;
-
 use AWS\CRT\Internal\Encoding;
 
 abstract class Message extends NativeResource {
@@ -12,11 +11,11 @@ abstract class Message extends NativeResource {
     private $query;
     private $headers;
 
-    public function __construct($method, $path, $query = [], $headers = null) {
+    public function __construct($method, $path, $query = [], $headers = []) {
         $this->method = $method;
         $this->path = $path;
         $this->query = $query;
-        $this->headers = !is_null($headers) ? $headers : new Headers();
+        $this->headers = new Headers($headers);
         $this->acquire(self::$crt->http_message_new_from_blob(self::marshall($this)));
     }
 
@@ -54,7 +53,7 @@ abstract class Message extends NativeResource {
             $query = [];
         }
 
-        return new $class($method, $path, $query, $headers);
+        return new $class($method, $path, $query, $headers->toArray());
     }
 
     public function pathAndQuery() {
