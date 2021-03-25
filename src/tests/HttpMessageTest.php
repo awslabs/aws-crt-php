@@ -10,7 +10,7 @@ require_once('common.inc');
 final class HttpMessageTest extends CrtTestCase {
     public function testHeaders() {
         $headers = new Headers();
-        $this->assertEquals(0, $headers->count());
+        $this->assertSame(0, $headers->count());
     }
 
     public function testHeadersMarshalling() {
@@ -19,21 +19,21 @@ final class HttpMessageTest extends CrtTestCase {
             "test" => "this is a test header value"
         ];
         $headers = new Headers($headers_array);
-        $this->assertEquals(2, $headers->count());
-        $this->assertEquals($headers_array['host'], $headers->get('host'));
-        $this->assertEquals($headers_array['test'], $headers->get('test'));
+        $this->assertSame(2, $headers->count());
+        $this->assertSame($headers_array['host'], $headers->get('host'));
+        $this->assertSame($headers_array['test'], $headers->get('test'));
         $buffer = Headers::marshall($headers);
         $headers_copy = Headers::unmarshall($buffer);
-        $this->assertEquals(2, $headers_copy->count());
-        $this->assertEquals($headers_array['host'], $headers_copy->get('host'));
-        $this->assertEquals($headers_array['test'], $headers_copy->get('test'));
+        $this->assertSame(2, $headers_copy->count());
+        $this->assertSame($headers_array['host'], $headers_copy->get('host'));
+        $this->assertSame($headers_array['test'], $headers_copy->get('test'));
     }
 
     private function assertMessagesMatch($a, $b) {
-        $this->assertEquals($a->method(), $b->method());
-        $this->assertEquals($a->path(), $b->path());
-        $this->assertEquals($a->query(), $b->query());
-        $this->assertEquals($a->headers()->toArray(), $b->headers()->toArray());
+        $this->assertSame($a->method(), $b->method());
+        $this->assertSame($a->path(), $b->path());
+        $this->assertSame($a->query(), $b->query());
+        $this->assertSame($a->headers()->toArray(), $b->headers()->toArray());
     }
 
     public function testRequestMarshalling() {
@@ -62,9 +62,9 @@ final class HttpMessageTest extends CrtTestCase {
         $method = "GET";
         $path = "/index.php";
         $query = [
-            'request' => 1,
-            'test' => true,
-            'answer' => 42,
+            'request' => '1',
+            'test' => 'true',
+            'answer' => '42',
             'foo' => 'bar',
         ];
 
@@ -84,7 +84,7 @@ final class HttpMessageTest extends CrtTestCase {
         $method = "GET";
         $path = "/index.php";
         $query = [
-            'response' => 1
+            'response' => '1'
         ];
 
         $msg = new Response($method, $path, $query, $headers, 400);

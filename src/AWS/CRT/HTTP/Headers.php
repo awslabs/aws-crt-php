@@ -5,7 +5,7 @@ namespace AWS\CRT\HTTP;
 use AWS\CRT\Internal\Encoding;
 
 final class Headers {
-    private $headers = [];
+    private $headers;
 
     public function __construct($headers = []) {
         $this->headers = $headers;

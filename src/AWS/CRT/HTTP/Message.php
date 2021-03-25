@@ -7,10 +7,10 @@ use AWS\CRT\NativeResource;
 use AWS\CRT\Internal\Encoding;
 
 abstract class Message extends NativeResource {
-    private $method = "GET";
-    private $path = "";
-    private $query = [];
-    private $headers = [];
+    private $method;
+    private $path;
+    private $query;
+    private $headers;
 
     public function __construct($method, $path, $query = [], $headers = null) {
         $this->method = $method;
@@ -36,24 +36,17 @@ abstract class Message extends NativeResource {
     protected static function _unmarshall($buf, $class=Message::class) {
         $method = Encoding::readString($buf);
         $path_and_query = Encoding::readString($buf);
-        if (strchr($path_and_query, "?")) {
-            list($path, $query) = preg_split("/\?/", $path_and_query, 2);
-        } else {
-            list($path, $query) = [$path_and_query, ""];
-        }
-
+        $parts = explode("?", $path_and_query, 2);
+        $path = isset($parts[0]) ? $parts[0] : "";
+        $query = isset($parts[1]) ? $parts[1] : "";
         $headers = Headers::unmarshall($buf);
 
         // Turn query params back into a dictionary
         if (strlen($query)) {
-            if (strchr($query, "&")) {
-                $query = preg_split("/&/", $query);
-            } else {
-                $query = [$query];
-            }
-
+            $query = rawurldecode($query);
+            $query = explode("&", $query);
             $query = array_reduce($query, function($params, $pair) {
-                list($param, $value) = preg_split( "/=/", $pair, 2);
+                list($param, $value) = explode("=", $pair, 2);
                 $params[$param] = $value;
                 return $params;
             }, []);
@@ -70,9 +63,9 @@ abstract class Message extends NativeResource {
         foreach ($this->query as $param => $value) {
             $queries []= urlencode($param) . "=" . urlencode($value);
         }
-        $query = join("&", $queries);
+        $query = implode("&", $queries);
         if (strlen($query)) {
-            $path = join("?", [$path, $query]);
+            $path = implode("?", [$path, $query]);
         }
         return $path;
     }
