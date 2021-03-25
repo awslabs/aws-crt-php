@@ -203,4 +203,12 @@ final class CRT {
     function input_stream_get_length($stream) {
         return self::$impl->aws_crt_input_stream_get_length($stream);
     }
+
+    function http_message_new_from_blob($blob) {
+        return self::$impl->aws_crt_http_message_new_from_blob($blob);
+    }
+
+    function http_message_release($message) {
+        self::$impl->aws_crt_http_message_release($message);
+    }
 }

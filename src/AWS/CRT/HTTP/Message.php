@@ -2,32 +2,87 @@
 
 namespace AWS\CRT\HTTP;
 
-abstract class Message {
-    private $path = "";
-    private $query = [];
-    private $headers = [];
+use AWS\CRT\NativeResource;
 
-    public function __construct($path, $query = [], $headers = []) {
+use AWS\CRT\Internal\Encoding;
+
+abstract class Message extends NativeResource {
+    private $method;
+    private $path;
+    private $query;
+    private $headers;
+
+    public function __construct($method, $path, $query = [], $headers = null) {
+        $this->method = $method;
         $this->path = $path;
         $this->query = $query;
-        $this->headers = $headers;
+        $this->headers = !is_null($headers) ? $headers : new Headers();
+        $this->acquire(self::$crt->http_message_new_from_blob(self::marshall($this)));
     }
-}
 
-class Request extends Message {
-    private $body_stream = null;
-
-    public function __construct($path, $query = [], $headers = [], $body_stream = null) {
-        parent::__construct($path, $query, $headers);
-        $this->body_stream = $body_stream;
+    public function __destruct() {
+        self::$crt->http_message_release($this->release());
+        parent::__destruct();
     }
-}
 
-class Response extends Message {
-    private $status_code;
+    protected static function marshall($msg) {
+        $buf = "";
+        $buf .= Encoding::encodeString($msg->method);
+        $buf .= Encoding::encodeString($msg->pathAndQuery());
+        $buf .= Headers::marshall($msg->headers);
+        return $buf;
+    }
 
-    public function __construct($path, $headers, $status_code) {
-        parent::__construct($path, [], $headers);
-        $this->status_code = $status_code;
+    protected static function _unmarshall($buf, $class=Message::class) {
+        $method = Encoding::readString($buf);
+        $path_and_query = Encoding::readString($buf);
+        $parts = explode("?", $path_and_query, 2);
+        $path = isset($parts[0]) ? $parts[0] : "";
+        $query = isset($parts[1]) ? $parts[1] : "";
+        $headers = Headers::unmarshall($buf);
+
+        // Turn query params back into a dictionary
+        if (strlen($query)) {
+            $query = rawurldecode($query);
+            $query = explode("&", $query);
+            $query = array_reduce($query, function($params, $pair) {
+                list($param, $value) = explode("=", $pair, 2);
+                $params[$param] = $value;
+                return $params;
+            }, []);
+        } else {
+            $query = [];
+        }
+
+        return new $class($method, $path, $query, $headers);
+    }
+
+    public function pathAndQuery() {
+        $path = $this->path;
+        $queries = [];
+        foreach ($this->query as $param => $value) {
+            $queries []= urlencode($param) . "=" . urlencode($value);
+        }
+        $query = implode("&", $queries);
+        if (strlen($query)) {
+            $path = implode("?", [$path, $query]);
+        }
+        return $path;
+    }
+
+    public function method() {
+        return $this->method;
+    }
+
+    public function path() {
+        return $this->path;
+    }
+
+    public function query() {
+        return $this->query;
+    }
+
+    public function headers() {
+        return $this->headers;
     }
 }

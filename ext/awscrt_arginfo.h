@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 5549e1214a9a419075f5cb561adb2d7a340c5916 */
+ * Stub hash: bd274f6b280b27aa5fb7d3be2ce85ad065936943 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -68,6 +68,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_get_length,
 	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_http_message_new_from_blob, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, blob, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_http_message_to_blob, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, message, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_http_message_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, message, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 #define arginfo_aws_crt_credentials_options_new arginfo_aws_crt_input_stream_options_new
 
 #define arginfo_aws_crt_credentials_options_release arginfo_aws_crt_input_stream_options_release
@@ -133,6 +145,9 @@ ZEND_FUNCTION(aws_crt_input_stream_seek);
 ZEND_FUNCTION(aws_crt_input_stream_read);
 ZEND_FUNCTION(aws_crt_input_stream_eof);
 ZEND_FUNCTION(aws_crt_input_stream_get_length);
+ZEND_FUNCTION(aws_crt_http_message_new_from_blob);
+ZEND_FUNCTION(aws_crt_http_message_to_blob);
+ZEND_FUNCTION(aws_crt_http_message_release);
 ZEND_FUNCTION(aws_crt_credentials_options_new);
 ZEND_FUNCTION(aws_crt_credentials_options_release);
 ZEND_FUNCTION(aws_crt_credentials_options_set_access_key_id);
@@ -169,6 +184,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_input_stream_read, arginfo_aws_crt_input_stream_read)
 	ZEND_FE(aws_crt_input_stream_eof, arginfo_aws_crt_input_stream_eof)
 	ZEND_FE(aws_crt_input_stream_get_length, arginfo_aws_crt_input_stream_get_length)
+	ZEND_FE(aws_crt_http_message_new_from_blob, arginfo_aws_crt_http_message_new_from_blob)
+	ZEND_FE(aws_crt_http_message_to_blob, arginfo_aws_crt_http_message_to_blob)
+	ZEND_FE(aws_crt_http_message_release, arginfo_aws_crt_http_message_release)
 	ZEND_FE(aws_crt_credentials_options_new, arginfo_aws_crt_credentials_options_new)
 	ZEND_FE(aws_crt_credentials_options_release, arginfo_aws_crt_credentials_options_release)
 	ZEND_FE(aws_crt_credentials_options_set_access_key_id, arginfo_aws_crt_credentials_options_set_access_key_id)
