@@ -53,7 +53,7 @@ abstract class Message extends NativeResource {
             $query = [];
         }
 
-        return new $class($method, $path, $query, $headers);
+        return new $class($method, $path, $query, $headers->toArray());
     }
 
     public function pathAndQuery() {
