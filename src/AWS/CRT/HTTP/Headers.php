@@ -42,6 +42,6 @@ final class Headers {
     }
 
     public function toArray() {
-        return array_merge($this->headers);
+        return $this->headers;
     }
 }

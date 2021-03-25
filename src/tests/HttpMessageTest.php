@@ -37,11 +37,10 @@ final class HttpMessageTest extends CrtTestCase {
     }
 
     public function testRequestMarshalling() {
-        $headers_array = [
+        $headers = [
             "host" => "s3.amazonaws.com",
             "test" => "this is a test header value"
         ];
-        $headers = new Headers($headers_array);
         $method = "GET";
         $path = "/index.php";
         $query = [];
@@ -54,11 +53,10 @@ final class HttpMessageTest extends CrtTestCase {
     }
 
     public function testRequestMarshallingWithQueryParams() {
-        $headers_array = [
+        $headers = [
             "host" => "s3.amazonaws.com",
             "test" => "this is a test header value"
         ];
-        $headers = new Headers($headers_array);
         $method = "GET";
         $path = "/index.php";
         $query = [
@@ -76,18 +74,17 @@ final class HttpMessageTest extends CrtTestCase {
     }
 
     public function testResponseMarshalling() {
-        $headers_array = [
+        $headers = [
             "content-length" => "42",
             "test" => "this is a test header value"
         ];
-        $headers = new Headers($headers_array);
         $method = "GET";
         $path = "/index.php";
         $query = [
             'response' => '1'
         ];
 
-        $msg = new Response($method, $path, $query, $headers, 400);
+        $msg = new Response($method, $path, $query, $headers, 200);
         $msg_buf = Request::marshall($msg);
         $msg_copy = Request::unmarshall($msg_buf);
 
