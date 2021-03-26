@@ -1,6 +1,9 @@
 <?php
 
-/** @generate-class-entries */
+/**
+ * @generate-class-entries
+ * @generate-function-entries
+*/
 
 function aws_crt_last_error(): int {}
 
