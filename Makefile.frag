@@ -45,7 +45,7 @@ $(GEN_STUB):
 ext/awscrt_arginfo.h: ext/awscrt.stub.php $(GEN_STUB)
 ifeq ($(AT_LEAST_PHP7),1)
 	# generate awscrt_arginfo.h
-	php $(GEN_STUB) ext/awscrt.stub.php
+	php $(GEN_STUB) --force-regneration ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
