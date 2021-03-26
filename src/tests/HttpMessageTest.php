@@ -1,6 +1,5 @@
 <?php
 
-use AWS\CRT\HTTP\Message;
 use AWS\CRT\HTTP\Headers;
 use AWS\CRT\HTTP\Request;
 use AWS\CRT\HTTP\Response;

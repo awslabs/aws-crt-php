@@ -12,6 +12,7 @@ abstract class Message extends NativeResource {
     private $headers;
 
     public function __construct($method, $path, $query = [], $headers = []) {
+        parent::__construct();
         $this->method = $method;
         $this->path = $path;
         $this->query = $query;
