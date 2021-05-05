@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
 namespace AWS\CRT;
 
 use AWS\CRT\Internal\Extension;
@@ -102,7 +105,7 @@ final class CRT {
      * @param object $elg Pointer to the event loop group to release
      */
     function event_loop_group_release($elg) {
-        return self::$impl->aws_crt_event_loop_group_release($elg);
+        self::$impl->aws_crt_event_loop_group_release($elg);
     }
 
     /**

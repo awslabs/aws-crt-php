@@ -27,13 +27,8 @@
             "src/"
         ]
     },
-    "autoload-dev": {
-        "classmap": [
-            "src/tests/"
-        ]
-    },
     "scripts": {
-        "test": "@php -d extension=modules/awscrt.so vendor/bin/phpunit src/tests"
+        "test": "@php -d extension=modules/awscrt.so vendor/bin/phpunit tests"
     },
     "license": "Apache-2.0"
 }
