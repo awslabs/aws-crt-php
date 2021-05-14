@@ -72,25 +72,6 @@
         }                                                                                                              \
     } while (0)
 
-/* counts args for aws_php_invoke_callback */
-static size_t s_count_args(const char *arg_types) {
-    size_t num_args = 0;
-    const char *arg = &arg_types[0];
-    while (*arg != '\0') {
-        switch (*arg++) {
-            /* multi-arg types */
-            case 'p':
-            case 's':
-                num_args += 2;
-                break;
-            default:
-                num_args += 1;
-                break;
-        }
-    }
-    return num_args;
-}
-
 /**
  * generic dispatch mechanism to call a callback provided as a zval with arguments
  * that are converted to zvals based on the arg_types format string
@@ -106,7 +87,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     }
 
     /* Allocate the stack frame of zval arguments and fill them in */
-    const size_t num_args = s_count_args(arg_types);
+    const size_t num_args = strlen(arg_types);
     zval *stack = alloca(sizeof(zval) * num_args);
     zval *retval = NULL;
     int arg_idx = 0;
