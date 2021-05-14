@@ -131,7 +131,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
             case 's': {
                 const char *buf = va_arg(va, const char *);
                 const size_t len = va_arg(va, size_t);
-#if defined(AWS_PHP_AT_LEAST_7)
+#if AWS_PHP_AT_LEAST_7
                 ZVAL_STRINGL(&stack[arg_idx], buf, len);
 #else
                 ZVAL_STRINGL(&stack[arg_idx], buf, len, 0);
@@ -174,7 +174,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     va_end(va);
 
     /* set up the stack for the call */
-#if defined(AWS_PHP_AT_LEAST_7)
+#if AWS_PHP_AT_LEAST_7
     zend_fcall_info_argp(&fci, num_args, stack);
 #else
     zval **args = alloca(sizeof(zval*) * num_args);
@@ -185,7 +185,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
 #endif
 
     /* PHP5 requires us to have a retval on the stack that zend fills out */
-#if !defined(AWS_PHP_AT_LEAST_7)
+#if !AWS_PHP_AT_LEAST_7
     fci.retval_ptr_ptr = &retval;
 #endif
 
@@ -194,7 +194,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     }
 
     /* PHP7+ allocates its own retval, so we need to copy it out */
-#if defined(AWS_PHP_AT_LEAST_7)
+#if AWS_PHP_AT_LEAST_7
     retval = fci.retval;
 #endif
 
