@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 use AWS\CRT\Auth\SigningConfigAWS as SigningConfigAWS;
+use AWS\CRT\Auth\Signable as Signable;
+use AWS\CRT\HTTP\Request as Request;
 
 require_once('common.inc');
 
@@ -22,5 +24,32 @@ final class SigningTest extends CrtTestCase {
         $config = new SigningConfigAWS($options);
         $this->assertNotNull($config, "Failed to create SigningConfigAWS with custom options");
         $config = null;
+    }
+
+    public function testSignableFromHttpRequestLifetime() {
+        $this->markTestSkipped('Not expected to work yet');
+        $request = new Request('GET', '/');
+        $signable = Signable::fromHttpRequest($request);
+        $this->assertNotNull($signable, "Failed to create Signable from HTTP::Request");
+        $signable = null;
+    }
+
+    public function testSignableFromChunkLifetime() {
+        $this->markTestSkipped('Not expected to work yet');
+        $chunk = "THIS IS A TEST CHUNK IT CONTAINS MULTITUDES";
+        $stream = fopen("php://memory", 'r+');
+        fputs($stream, $chunk);
+        rewind($stream);
+        $signable = Signable::fromChunk($stream);
+        $this->assertNotNull($signable, "Failed to create Signable from chunk stream");
+        $signable = null;
+    }
+
+    public function testSignableFromCanonicalRequestLifetime() {
+        $this->markTestSkipped('Not expected to work yet');
+        $canonical_request = "THIS IS A CANONICAL_REQUEST. IT IS DEEPLY CANONICAL";
+        $signable = Signable::fromCanonicalRequest($canonical_request);
+        $this->assertNotNull($signable, "Failed to create Signable from canonical request");
+        $signable = null;
     }
 }

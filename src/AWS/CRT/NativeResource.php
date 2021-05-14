@@ -16,7 +16,7 @@ abstract class NativeResource {
     protected static $resources = [];
     protected $native = null;
 
-    function __construct() {
+    protected function __construct() {
         if (is_null(self::$crt)) {
             self::$crt = new CRT();
         }

@@ -279,6 +279,10 @@ final class CRT {
         return self::$impl->aws_crt_signable_new_from_canonical_request($canonical_request);
     }
 
+    function signable_release($signable) {
+        self::$impl->aws_crt_signable_release($signable);
+    }
+
     function sign_request_aws($signable, $signing_config, $on_complete) {
         return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete);
     }
