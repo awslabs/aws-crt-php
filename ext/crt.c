@@ -131,7 +131,11 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
             case 's': {
                 const char *buf = va_arg(va, const char *);
                 const size_t len = va_arg(va, size_t);
+#if defined(AWS_PHP_AT_LEAST_7)
                 ZVAL_STRINGL(&stack[arg_idx], buf, len);
+#else
+                ZVAL_STRINGL(&stack[arg_idx], buf, len, 0);
+#endif
                 break;
             }
             /* other primitives */
@@ -160,15 +164,25 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
             case 'H':
             case 'O':
                 aws_php_throw_exception("Unsupported argument type to aws_php_invoke_callback: %c", arg_type);
+                break;
             default:
                 aws_php_throw_exception("Unsupported argument type to aws_php_invoke_callback: %c", arg_type);
+                break;
         }
         ++arg_idx;
     }
     va_end(va);
 
     /* set up the stack for the call */
+#if defined(AWS_PHP_AT_LEAST_7)
     zend_fcall_info_argp(&fci, num_args, stack);
+#else
+    zval **args = alloca(sizeof(zval*) * num_args);
+    for (int arg_idx = 0; arg_idx < num_args; ++arg_idx) {
+        args[arg_idx] = &stack[arg_idx];
+    }
+    zend_fcall_info_argp(&fci, num_args, &args);
+#endif
 
     /* PHP5 requires us to have a retval on the stack that zend fills out */
 #if !defined(AWS_PHP_AT_LEAST_7)
