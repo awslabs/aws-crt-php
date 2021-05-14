@@ -186,7 +186,6 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
         zval_ptr_dtor(args[arg_idx]);
 #endif
         zval_ptr_dtor(&stack[arg_idx]);
-
     }
 
     return retval;
