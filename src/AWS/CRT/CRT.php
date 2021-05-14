@@ -214,4 +214,72 @@ final class CRT {
     function http_message_release($message) {
         self::$impl->aws_crt_http_message_release($message);
     }
+
+    function signing_config_aws_new() {
+        return self::$impl->aws_crt_signing_config_aws_new();
+    }
+
+    function signing_config_aws_release($signing_config) {
+        return self::$impl->aws_crt_signing_config_aws_release($signing_config);
+    }
+
+    function signing_config_aws_set_algorithm($signing_config, $algorithm) {
+        self::$impl->aws_crt_signing_config_aws_set_algorithm($signing_config, (int)$algorithm);
+    }
+
+    function signing_config_aws_set_signature_type($signing_config, $signature_type) {
+        self::$impl->aws_crt_signing_config_aws_set_signature_type($signing_config, (int)$signature_type);
+    }
+
+    function signing_config_aws_set_credentials_provider($signing_config, $credentials_provider) {
+        self::$impl->aws_crt_signing_config_aws_set_credentials_provider($signing_config, $credentials_provider);
+    }
+
+    function signing_config_aws_set_region($signing_config, $region) {
+        self::$impl->aws_crt_signing_config_aws_set_region($signing_config, $region);
+    }
+
+    function signing_config_aws_set_service($signing_config, $service) {
+        self::$impl->aws_crt_signing_config_aws_set_service($signing_config, $service);
+    }
+
+    function signing_config_aws_set_use_double_uri_encode($signing_config, $use_double_uri_encode) {
+        self::$impl->aws_crt_signing_config_aws_set_use_double_uri_encode($signing_config, $use_double_uri_encode);
+    }
+
+    function signing_config_aws_set_should_normalize_uri_path($signing_config, $should_normalize_uri_path) {
+        self::$impl->aws_crt_signing_config_aws_set_should_normalize_uri_path($signing_config, $should_normalize_uri_path);
+    }
+
+    function signing_config_aws_set_omit_session_token($signing_config, $omit_session_token) {
+        self::$impl->aws_crt_signing_config_aws_set_omit_session_token($signing_config, $omit_session_token);
+    }
+
+    function signing_config_aws_set_signed_body_value($signing_config, $signed_body_value) {
+        self::$impl->aws_crt_signing_config_aws_set_signed_body_value($signing_config, $signed_body_value);
+    }
+
+    function signing_config_aws_set_signed_body_header_type($signing_config, $signed_body_header_type) {
+        self::$impl->aws_crt_signing_config_aws_set_signed_body_header_type($signing_config, $signed_body_header_type);
+    }
+
+    function signing_config_aws_set_expiration_in_seconds($signing_config, $expiration_in_seconds) {
+        self::$impl->aws_crt_signing_config_aws_set_expiration_in_seconds($signing_config, $expiration_in_seconds);
+    }
+
+    function signable_new_from_http_request($http_message) {
+        return self::$impl->aws_crt_signable_new_from_http_request($http_message);
+    }
+
+    function signable_new_from_chunk($chunk_stream, $previous_signature) {
+        return self::$impl->aws_crt_signable_new_from_chunk($chunk_stream, $previous_signature);
+    }
+
+    function signable_new_from_canonical_request($canonical_request) {
+        return self::$impl->aws_crt_signable_new_from_canonical_request($canonical_request);
+    }
+
+    function sign_request_aws($signable, $signing_config, $on_complete) {
+        return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete);
+    }
 }

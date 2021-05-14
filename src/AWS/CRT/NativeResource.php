@@ -25,7 +25,7 @@ abstract class NativeResource {
     }
 
     protected function acquire($handle) {
-        $this->native = $handle;
+        return $this->native = $handle;
     }
 
     protected function release() {
