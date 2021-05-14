@@ -177,7 +177,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
 #if AWS_PHP_AT_LEAST_7
     zend_fcall_info_argp(&fci, num_args, stack);
 #else
-    zval **args = alloca(sizeof(zval*) * num_args);
+    zval **args = alloca(sizeof(zval *) * num_args);
     for (int arg_idx = 0; arg_idx < num_args; ++arg_idx) {
         args[arg_idx] = &stack[arg_idx];
     }
