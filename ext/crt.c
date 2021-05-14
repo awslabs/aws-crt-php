@@ -19,39 +19,57 @@
  * libuv extension: https://github.com/amphp/ext-uv/blob/master/php_uv.c
  */
 
-ZEND_DECLARE_MODULE_GLOBALS(awscrt);
+/* Macros borrowed from aws-c-common */
+#define GLUE(x, y) x y
 
-PHP_INI_BEGIN()
-STD_PHP_INI_ENTRY(
-    "awscrt.log_level",
-    "",
-    PHP_INI_ALL,
-    OnUpdateLongGEZero,
-    log_level,
-    zend_awscrt_globals,
-    awscrt_globals)
-PHP_INI_END()
+#define RETURN_ARG_COUNT(_1_, _2_, _3_, _4_, _5_, count, ...) count
+#define EXPAND_ARGS(args) RETURN_ARG_COUNT args
+#define COUNT_ARGS_MAX5(...) EXPAND_ARGS((__VA_ARGS__, 5, 4, 3, 2, 1, 0))
 
-static PHP_MINIT_FUNCTION(awscrt) {
-    REGISTER_INI_ENTRIES();
+#define OVERLOAD_MACRO2(name, count) name##count
+#define OVERLOAD_MACRO1(name, count) OVERLOAD_MACRO2(name, count)
+#define OVERLOAD_MACRO(name, count) OVERLOAD_MACRO1(name, count)
 
-    aws_crt_init();
-    return SUCCESS;
-}
+#define CALL_OVERLOAD(name, ...) GLUE(OVERLOAD_MACRO(name, COUNT_ARGS_MAX5(__VA_ARGS__)), (__VA_ARGS__))
 
-static PHP_MSHUTDOWN_FUNCTION(awscrt) {
-    UNREGISTER_INI_ENTRIES();
-    aws_crt_clean_up();
-    return SUCCESS;
-}
+#define VARIABLE_LENGTH_ARRAY(type, name, length) type *name = alloca(sizeof(type) * (length))
 
-static PHP_GINIT_FUNCTION(awscrt) {
-#if defined(COMPILE_DL_ASTKIT) && defined(ZTS)
-    ZEND_TSRMLS_CACHE_UPDATE();
-#endif
-    awscrt_globals->log_level = 0;
-}
+/*
+ * Exception throwing mechanism, will never return
+ */
+#define aws_php_throw_exception(...) CALL_OVERLOAD(_AWS_PHP_THROW_EXCEPTION, __VA_ARGS__);
+#define _AWS_PHP_THROW_EXCEPTION5(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
+#define _AWS_PHP_THROW_EXCEPTION4(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
+#define _AWS_PHP_THROW_EXCEPTION3(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
+#define _AWS_PHP_THROW_EXCEPTION2(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
+#define _AWS_PHP_THROW_EXCEPTION1(format) zend_error_noreturn(E_ERROR, format)
 
+/**
+ * throws an exception resulting from argument parsing, notes the current function name in the exception
+ */
+#define aws_php_argparse_fail() do { \
+    aws_php_throw_exception("Failed to parse arguments to %s", __func__); \
+} while (0)
+
+/**
+ * calls zend_parse_parameters() with the arguments and throws an exception if parsing fails
+ */
+#define aws_php_parse_parameters(type_spec, ...) do { \
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) { \
+        aws_php_argparse_fail(); \
+    } \
+} while (0)
+
+/**
+ * calls zend_parse_parameters_none() and throws an exception if parsing fails
+ */
+#define aws_php_parse_parameters_none() do { \
+    if (zend_parse_parameters_none() == FAILURE) { \
+        aws_php_argparse_fail(); \
+    } \
+} while (0)
+
+/* counts args for aws_php_invoke_callback */
 static size_t s_count_args(const char *arg_types) {
     size_t num_args = 0;
     const char *arg = &arg_types[0];
@@ -70,61 +88,12 @@ static size_t s_count_args(const char *arg_types) {
     return num_args;
 }
 
-#ifndef AWS_COMMON_MACROS_H
-#define GLUE(x, y) x y
-
-#define RETURN_ARG_COUNT(_1_, _2_, _3_, _4_, _5_, count, ...) count
-#define EXPAND_ARGS(args) RETURN_ARG_COUNT args
-#define COUNT_ARGS_MAX5(...) EXPAND_ARGS((__VA_ARGS__, 5, 4, 3, 2, 1, 0))
-
-#define OVERLOAD_MACRO2(name, count) name##count
-#define OVERLOAD_MACRO1(name, count) OVERLOAD_MACRO2(name, count)
-#define OVERLOAD_MACRO(name, count) OVERLOAD_MACRO1(name, count)
-
-#define CALL_OVERLOAD(name, ...) GLUE(OVERLOAD_MACRO(name, COUNT_ARGS_MAX5(__VA_ARGS__)), (__VA_ARGS__))
-
-#define VARIABLE_LENGTH_ARRAY(type, name, length) type *name = alloca(sizeof(type) * (length))
-#endif
-
-/*
- * Exception throwing mechanism, will never return
- */
-#define _AWS_PHP_THROW_EXCEPTION5(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
-#define _AWS_PHP_THROW_EXCEPTION4(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
-#define _AWS_PHP_THROW_EXCEPTION3(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
-#define _AWS_PHP_THROW_EXCEPTION2(format, ...) zend_error_noreturn(E_ERROR, format, __VA_ARGS__)
-#define _AWS_PHP_THROW_EXCEPTION1(format) zend_error_noreturn(E_ERROR, format)
-
-#define aws_php_throw_exception(...) CALL_OVERLOAD(_AWS_PHP_THROW_EXCEPTION, __VA_ARGS__);
-
-/* throws an exception resulting from argument parsing, notes the current function name in the exception */
-#define aws_php_argparse_fail() do { \
-    aws_php_throw_exception("Failed to parse arguments to %s", __func__); \
-} while (0)
-
-/* calls zend_parse_parameters() with the arguments and throws an exception if parsing fails */
-#define aws_php_parse_parameters(type_spec, ...) do { \
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) { \
-        aws_php_argparse_fail(); \
-    } \
-} while (0)
-
-/* calls zend_parse_parameters_none() and throws an exception if parsing fails */
-#define aws_php_parse_parameters_none() do { \
-    if (zend_parse_parameters_none() == FAILURE) { \
-        aws_php_argparse_fail(); \
-    } \
-} while (0)
-
-/*
+/**
  * generic dispatch mechanism to call a callback provided as a zval with arguments
  * that are converted to zvals based on the arg_types format string
+ * Uses the same format string as zend_parse_parameters
  */
 static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
-    if (!zend_is_callable(callback, IS_CALLABLE_CHECK_SYNTAX_ONLY, NULL) &&
-        !zend_make_callable(callback, NULL)) {
-        aws_php_throw_exception("callback provided is not a callable and is not convertible to a callable");
-    }
 
     char *error = NULL;
     zend_fcall_info fci = {0};
@@ -221,6 +190,38 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     return retval;
 }
 
+ZEND_DECLARE_MODULE_GLOBALS(awscrt);
+
+PHP_INI_BEGIN()
+STD_PHP_INI_ENTRY(
+    "awscrt.log_level",
+    "",
+    PHP_INI_ALL,
+    OnUpdateLongGEZero,
+    log_level,
+    zend_awscrt_globals,
+    awscrt_globals)
+PHP_INI_END()
+
+static PHP_MINIT_FUNCTION(awscrt) {
+    REGISTER_INI_ENTRIES();
+
+    aws_crt_init();
+    return SUCCESS;
+}
+
+static PHP_MSHUTDOWN_FUNCTION(awscrt) {
+    UNREGISTER_INI_ENTRIES();
+    aws_crt_clean_up();
+    return SUCCESS;
+}
+
+static PHP_GINIT_FUNCTION(awscrt) {
+#if defined(COMPILE_DL_ASTKIT) && defined(ZTS)
+    ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+    awscrt_globals->log_level = 0;
+}
 
 /* aws_crt_last_error() */
 PHP_FUNCTION(aws_crt_last_error) {
