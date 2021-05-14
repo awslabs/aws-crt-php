@@ -47,27 +47,30 @@
 /**
  * throws an exception resulting from argument parsing, notes the current function name in the exception
  */
-#define aws_php_argparse_fail() do { \
-    aws_php_throw_exception("Failed to parse arguments to %s", __func__); \
-} while (0)
+#define aws_php_argparse_fail()                                                                                        \
+    do {                                                                                                               \
+        aws_php_throw_exception("Failed to parse arguments to %s", __func__);                                          \
+    } while (0)
 
 /**
  * calls zend_parse_parameters() with the arguments and throws an exception if parsing fails
  */
-#define aws_php_parse_parameters(type_spec, ...) do { \
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) { \
-        aws_php_argparse_fail(); \
-    } \
-} while (0)
+#define aws_php_parse_parameters(type_spec, ...)                                                                       \
+    do {                                                                                                               \
+        if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) {                               \
+            aws_php_argparse_fail();                                                                                   \
+        }                                                                                                              \
+    } while (0)
 
 /**
  * calls zend_parse_parameters_none() and throws an exception if parsing fails
  */
-#define aws_php_parse_parameters_none() do { \
-    if (zend_parse_parameters_none() == FAILURE) { \
-        aws_php_argparse_fail(); \
-    } \
-} while (0)
+#define aws_php_parse_parameters_none()                                                                                \
+    do {                                                                                                               \
+        if (zend_parse_parameters_none() == FAILURE) {                                                                 \
+            aws_php_argparse_fail();                                                                                   \
+        }                                                                                                              \
+    } while (0)
 
 /* counts args for aws_php_invoke_callback */
 static size_t s_count_args(const char *arg_types) {
@@ -119,14 +122,14 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
             case 'o':
             case 'r':
             case 'z': {
-                zval *zval_val = va_arg(va, zval*);
+                zval *zval_val = va_arg(va, zval *);
                 ZVAL_ZVAL(&stack[arg_idx], zval_val, 0, 0);
                 break;
             }
             /* buffers/strings (char *, size_t) */
             case 'p':
             case 's': {
-                const char *buf = va_arg(va, const char*);
+                const char *buf = va_arg(va, const char *);
                 const size_t len = va_arg(va, size_t);
                 ZVAL_STRINGL(&stack[arg_idx], buf, len);
                 break;
@@ -630,7 +633,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_release) {
 
     aws_php_parse_parameters("l", &php_signing_config);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_config_aws_release(signing_config);
 }
 
@@ -640,7 +643,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_algorithm) {
 
     aws_php_parse_parameters("ll", &php_signing_config, &php_algorithm);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_algorithm algorithm = php_algorithm;
     aws_crt_signing_config_aws_set_algorithm(signing_config, algorithm);
 }
@@ -651,7 +654,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_signature_type) {
 
     aws_php_parse_parameters("ll", &php_signing_config, &php_signature_type);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signature_type signature_type = php_signature_type;
     aws_crt_signing_config_aws_set_signature_type(signing_config, signature_type);
 }
@@ -662,8 +665,8 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_credentials_provider) {
 
     aws_php_parse_parameters("ll", &php_signing_config, &php_credentials_provider);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
-    aws_crt_credentials_provider *credentials_provider = (void*)php_credentials_provider;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
+    aws_crt_credentials_provider *credentials_provider = (void *)php_credentials_provider;
     aws_crt_signing_config_aws_set_credentials_provider(signing_config, credentials_provider);
 }
 
@@ -674,8 +677,8 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_region) {
 
     aws_php_parse_parameters("ls", &php_signing_config, &region, &region_len);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
-    aws_crt_signing_config_aws_set_region(signing_config, (uint8_t*)region, region_len);
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
+    aws_crt_signing_config_aws_set_region(signing_config, (uint8_t *)region, region_len);
 }
 
 PHP_FUNCTION(aws_crt_signing_config_aws_set_service) {
@@ -685,8 +688,8 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_service) {
 
     aws_php_parse_parameters("ls", &php_signing_config, &service, &service_len);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
-    aws_crt_signing_config_aws_set_service(signing_config, (uint8_t*)service, service_len);
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
+    aws_crt_signing_config_aws_set_service(signing_config, (uint8_t *)service, service_len);
 }
 
 PHP_FUNCTION(aws_crt_signing_config_aws_set_use_double_uri_encode) {
@@ -695,7 +698,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_use_double_uri_encode) {
 
     aws_php_parse_parameters("lb", &php_signing_config, &php_use_double_uri_encode);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_config_aws_set_use_double_uri_encode(signing_config, php_use_double_uri_encode);
 }
 
@@ -705,7 +708,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_should_normalize_uri_path) {
 
     aws_php_parse_parameters("lb", &php_signing_config, &php_should_normalize_uri_path);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_config_aws_set_should_normalize_uri_path(signing_config, php_should_normalize_uri_path);
 }
 
@@ -715,7 +718,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_omit_session_token) {
 
     aws_php_parse_parameters("lb", &php_signing_config, &php_omit_session_token);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_config_aws_set_omit_session_token(signing_config, php_omit_session_token);
 }
 
@@ -726,8 +729,9 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_signed_body_value) {
 
     aws_php_parse_parameters("ls", &php_signing_config, &signed_body_value, &signed_body_value_len);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
-    aws_crt_signing_config_aws_set_signed_body_value(signing_config, (uint8_t*)signed_body_value, signed_body_value_len);
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
+    aws_crt_signing_config_aws_set_signed_body_value(
+        signing_config, (uint8_t *)signed_body_value, signed_body_value_len);
 }
 
 PHP_FUNCTION(aws_crt_signing_config_aws_set_signed_body_header_type) {
@@ -736,7 +740,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_signed_body_header_type) {
 
     aws_php_parse_parameters("ll", &php_signing_config, &php_signed_body_header_type);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signed_body_header_type signed_body_header_type = php_signed_body_header_type;
     aws_crt_signing_config_aws_set_signed_body_header_type(signing_config, signed_body_header_type);
 }
@@ -747,14 +751,14 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_expiration_in_seconds) {
 
     aws_php_parse_parameters("ll", &php_signing_config, &php_expiration_in_seconds);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_config_aws_set_expiration_in_seconds(signing_config, php_expiration_in_seconds);
 }
 
 PHP_FUNCTION(aws_crt_signable_new_from_http_request) {
     zend_ulong php_http_message = 0;
 
-    const aws_crt_http_message *http_message = (void*)php_http_message;
+    const aws_crt_http_message *http_message = (void *)php_http_message;
     aws_crt_signable *signable = aws_crt_signable_new_from_http_request(http_message);
     RETURN_LONG((zend_ulong)signable);
 }
@@ -766,8 +770,9 @@ PHP_FUNCTION(aws_crt_signable_new_from_chunk) {
 
     aws_php_parse_parameters("ls", &php_input_stream, &previous_signature, &previous_signature_len);
 
-    aws_crt_input_stream *input_stream = (void*)php_input_stream;
-    aws_crt_signable *signable = aws_crt_signable_new_from_chunk(input_stream, (uint8_t*)previous_signature, previous_signature_len);
+    aws_crt_input_stream *input_stream = (void *)php_input_stream;
+    aws_crt_signable *signable =
+        aws_crt_signable_new_from_chunk(input_stream, (uint8_t *)previous_signature, previous_signature_len);
     RETURN_LONG((zend_ulong)signable);
 }
 
@@ -775,7 +780,8 @@ PHP_FUNCTION(aws_crt_signable_new_from_canonical_request) {
     const char *canonical_request = NULL;
     size_t canonical_request_len = 0;
 
-    aws_crt_signable *signable = aws_crt_signable_new_from_canonical_request((uint8_t*)canonical_request, canonical_request_len);
+    aws_crt_signable *signable =
+        aws_crt_signable_new_from_canonical_request((uint8_t *)canonical_request, canonical_request_len);
     RETURN_LONG((zend_ulong)signable);
 }
 
@@ -784,7 +790,7 @@ PHP_FUNCTION(aws_crt_signable_release) {
 
     aws_php_parse_parameters("l", &php_signable);
 
-    aws_crt_signable *signable = (void*)php_signable;
+    aws_crt_signable *signable = (void *)php_signable;
     aws_crt_signable_release(signable);
 }
 
@@ -801,8 +807,8 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
 
     aws_php_parse_parameters("llz", &php_signable, &php_signing_config, &php_on_complete);
 
-    aws_crt_signable *signable = (void*)php_signable;
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signable *signable = (void *)php_signable;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, php_on_complete);
     RETURN_LONG(ret);
 }
