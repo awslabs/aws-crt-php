@@ -3,9 +3,14 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-use AWS\CRT\Auth\SigningConfigAWS as SigningConfigAWS;
-use AWS\CRT\Auth\Signable as Signable;
-use AWS\CRT\HTTP\Request as Request;
+
+use AWS\CRT\Auth\SignatureType;
+use AWS\CRT\Auth\SigningAlgorithm;
+use AWS\CRT\Auth\SigningConfigAWS;
+use AWS\CRT\Auth\Signing;
+use AWS\CRT\Auth\Signable;
+use AWS\CRT\Auth\StaticCredentialsProvider;
+use AWS\CRT\HTTP\Request;
 
 require_once('common.inc');
 
@@ -48,5 +53,35 @@ final class SigningTest extends CrtTestCase {
         $signable = Signable::fromCanonicalRequest($canonical_request);
         $this->assertNotNull($signable, "Failed to create Signable from canonical request");
         $signable = null;
+    }
+
+    const SIGV4TEST_ACCESS_KEY_ID = 'AKIDEXAMPLE';
+    const SIGV4TEST_SECRET_ACCESS_KEY = 'wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY';
+    const SIGV4TEST_SESSION_TOKEN = null;
+    const SIGV4TEST_SERVICE = 'service';
+    const SIGV4TEST_REGION = 'us-east-1';
+    public function testSigv4HeaderSigning() {
+        $this->markTestSkipped('WIP');
+        $date = mktime(12, 36, 0, 8, 30, 2015);
+        $credentials_provider = new StaticCredentialsProvider([
+            'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
+            'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
+            'session_token' => self::SIGV4TEST_SESSION_TOKEN,
+        ]);
+        $signing_config = new SigningConfigAWS([
+            'algorithm' => SigningAlgorithm::SIGv4,
+            'signature_type' => SignatureType::HTTP_REQUEST_HEADERS,
+            'credentials_provider' => $credentials_provider,
+            'region' => self::SIGV4TEST_REGION,
+            'service' => self::SIGV4TEST_SERVICE,
+        ]);
+        $http_request = new Request('GET', '/', [], ['Host' => 'example.amazonaws.com']);
+        $this->assertNotNull($http_request, "Unable to create HttpRequest for signing");
+        $signable = Signable::fromHttpRequest($http_request);
+        $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
+
+        Signing::signRequestAws($signable, $signing_config, function() {
+
+        });
     }
 }

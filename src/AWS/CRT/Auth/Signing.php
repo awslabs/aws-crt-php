@@ -5,6 +5,10 @@
  */
 namespace AWS\CRT\Auth;
 
-class Signing {
+use AWS\CRT\NativeResource;
 
+abstract class Signing extends NativeResource {
+    static function signRequestAws($signable, $signing_config, $on_complete) {
+        return self::$crt->sign_request_aws($signable, $signing_config, $on_complete);
+    }
 }
