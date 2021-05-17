@@ -27,7 +27,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSignableFromHttpRequestLifetime() {
-        $this->markTestSkipped('Not expected to work yet');
         $request = new Request('GET', '/');
         $signable = Signable::fromHttpRequest($request);
         $this->assertNotNull($signable, "Failed to create Signable from HTTP::Request");
@@ -35,7 +34,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSignableFromChunkLifetime() {
-        $this->markTestSkipped('Not expected to work yet');
         $chunk = "THIS IS A TEST CHUNK IT CONTAINS MULTITUDES";
         $stream = fopen("php://memory", 'r+');
         fputs($stream, $chunk);
@@ -46,7 +44,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSignableFromCanonicalRequestLifetime() {
-        $this->markTestSkipped('Not expected to work yet');
         $canonical_request = "THIS IS A CANONICAL_REQUEST. IT IS DEEPLY CANONICAL";
         $signable = Signable::fromCanonicalRequest($canonical_request);
         $this->assertNotNull($signable, "Failed to create Signable from canonical request");

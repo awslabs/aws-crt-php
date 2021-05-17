@@ -756,6 +756,8 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_expiration_in_seconds) {
 PHP_FUNCTION(aws_crt_signable_new_from_http_request) {
     zend_ulong php_http_message = 0;
 
+    aws_php_parse_parameters("l", &php_http_message);
+
     const aws_crt_http_message *http_message = (void *)php_http_message;
     aws_crt_signable *signable = aws_crt_signable_new_from_http_request(http_message);
     RETURN_LONG((zend_ulong)signable);

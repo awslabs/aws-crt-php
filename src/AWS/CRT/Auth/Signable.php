@@ -5,19 +5,23 @@
  */
 namespace AWS\CRT\Auth;
 
+use AWS\CRT\IO\InputStream;
 use AWS\CRT\NativeResource as NativeResource;
 
 class Signable extends NativeResource {
 
     public static function fromHttpRequest($http_message) {
         return new Signable(function() use ($http_message) {
-            return self::$crt->signable_new_from_http_request($http_message);
+            return self::$crt->signable_new_from_http_request($http_message->native);
         });
     }
 
     public static function fromChunk($chunk_stream, $previous_signature="") {
+        if (!($chunk_stream instanceof InputStream)) {
+            $chunk_stream = new InputStream($chunk_stream);
+        }
         return new Signable(function() use($chunk_stream, $previous_signature) {
-            return self::$crt->signable_new_from_chunk($chunk_stream, $previous_signature);
+            return self::$crt->signable_new_from_chunk($chunk_stream->native, $previous_signature);
         });
     }
 
