@@ -5,15 +5,46 @@
  */
 namespace AWS\CRT;
 
-final class Options {
-    private $options = [];
+final class OptionValue {
+    private $value;
+    function __construct($value) {
+        $this->value = $value;
+    }
 
-    public function __construct($opts = []) {
-        $this->options = $opts;
+    public function asObject() {
+        return $this->value;
+    }
+
+    public function asMixed() {
+        return $this->value;
+    }
+
+    public function asInt() {
+        return empty($this->value) ? 0 : (int)$this->value;
+    }
+
+    public function asBool() {
+        return boolval($this->value);
+    }
+
+    public function asString() {
+        return !empty($this->value) ? strval($this->value) : "";
+    }
+
+    public function asArray() {
+        return is_array($this->value) ? $this->value : (!empty($this->value) ? [$this->value] : []);
+    }
+}
+
+final class Options {
+    private $options;
+
+    public function __construct($opts = [], $defaults = []) {
+        $this->options = array_replace($defaults, empty($opts) ? [] : $opts);
     }
 
     public function __get($name) {
-        return (isset($this->options[$name])) ? $this->options[$name] : null;
+        return $this->get($name);
     }
 
     public function asArray() {
@@ -24,12 +55,19 @@ final class Options {
         return array_merge_recursive([], $this->options);
     }
 
+    public function get($name) {
+        return new OptionValue($this->options[$name]);
+    }
+
     public function getInt($name) {
-        $val = $this->$name;
-        return (is_null($val)) ? 0 : (int)$val;
+        return $this->get($name)->asInt();
     }
 
     public function getString($name) {
-        return !empty($this->options[$name]) ? strval($this->options[$name]) : "";
+        return $this->get($name)->asString();
+    }
+
+    public function getBool($name) {
+        return $this->get($name)->asBool();
     }
 }

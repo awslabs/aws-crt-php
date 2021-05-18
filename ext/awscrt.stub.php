@@ -76,3 +76,39 @@ function aws_crt_credentials_provider_static_options_set_secret_access_key(objec
 function aws_crt_credentials_provider_static_options_set_session_token(object $options, string $session_token): void {}
 
 function aws_crt_credentials_provider_static_new(object $options): object {}
+
+function aws_crt_signing_config_aws_new(): int {}
+
+function aws_crt_signing_config_aws_release(int $config): void {}
+
+function aws_crt_signing_config_aws_set_algorithm(int $config, int $algorithm): void {}
+
+function aws_crt_signing_config_aws_set_signature_type(int $config, int $signature_type): void {}
+
+function aws_crt_signing_config_aws_set_credentials_provider(int $config, int $credentials_provider): void {}
+
+function aws_crt_signing_config_aws_set_region(int $config, string $region): void {}
+
+function aws_crt_signing_config_aws_set_service(int $config, string $service): void {}
+
+function aws_crt_signing_config_aws_set_use_double_uri_encode(int $config, bool $use_double_uri_encode): void {}
+
+function aws_crt_signing_config_aws_set_should_normalize_uri_path(int $config, bool $should_normalize_uri_path): void {}
+
+function aws_crt_signing_config_aws_set_omit_session_token(int $config, bool $omit_session_token): void {}
+
+function aws_crt_signing_config_aws_set_signed_body_value(int $config, string $signed_body_value): void {}
+
+function aws_crt_signing_config_aws_set_signed_body_header_type(int $config, int $signed_body_header_type): void {}
+
+function aws_crt_signing_config_aws_set_expiration_in_seconds(int $config, int $expiration_in_seconds): void {}
+
+function aws_crt_signable_new_from_http_request(int $http_message): int {}
+
+function aws_crt_signable_new_from_chunk(int $input_stream, string $previous_signature): int {}
+
+function aws_crt_signable_new_from_canonical_request(string $request): int {}
+
+function aws_crt_signable_release(int $signable): void {}
+
+function aws_crt_sign_request_aws(int $signable, int $signing_config, object $on_complete, object $user_data): int {}

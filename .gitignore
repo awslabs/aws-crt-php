@@ -82,7 +82,7 @@ _deps
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
+.idea/
 # Generated files
 .idea/**/contentModel.xml
 
@@ -195,3 +195,5 @@ config.nice
 Makefile*
 !Makefile.am
 /vendor/
+.idea/
+.DS_Store

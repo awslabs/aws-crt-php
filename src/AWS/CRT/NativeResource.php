@@ -16,7 +16,7 @@ abstract class NativeResource {
     protected static $resources = [];
     protected $native = null;
 
-    function __construct() {
+    protected function __construct() {
         if (is_null(self::$crt)) {
             self::$crt = new CRT();
         }
@@ -25,7 +25,7 @@ abstract class NativeResource {
     }
 
     protected function acquire($handle) {
-        $this->native = $handle;
+        return $this->native = $handle;
     }
 
     protected function release() {

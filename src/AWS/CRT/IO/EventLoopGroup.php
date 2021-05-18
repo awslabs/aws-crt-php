@@ -18,17 +18,14 @@ use AWS\CRT\Options as Options;
 final class EventLoopGroup extends NativeResource {
 
     static function defaults() {
-        return array(
+        return [
             'max_threads' => 0,
-        );
+        ];
     }
 
     function __construct(array $options = []) {
         parent::__construct();
-        if (count($options) == 0) {
-            $options = self::defaults();
-        }
-        $options = new Options($options);
+        $options = new Options($options, self::defaults());
         $elg_options = self::$crt->event_loop_group_options_new();
         self::$crt->event_loop_group_options_set_max_threads($elg_options, $options->getInt('max_threads'));
         $this->acquire(self::$crt->event_loop_group_new($elg_options));

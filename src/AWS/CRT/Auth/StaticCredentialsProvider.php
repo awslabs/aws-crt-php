@@ -15,15 +15,7 @@ namespace AWS\CRT\Auth;
  */
 final class StaticCredentialsProvider extends CredentialsProvider {
 
-    static function defaults() {
-        return array(
-            'access_key_id' => '',
-            'secret_access_key' => '',
-            'session_token' => '',
-        );
-    }
-
-    private $credentials = null;
+    private $credentials;
 
     public function __get($name) {
         return $this->$name;
@@ -31,9 +23,6 @@ final class StaticCredentialsProvider extends CredentialsProvider {
 
     function __construct(array $options = []) {
         parent::__construct();
-        if (count($options) == 0) {
-            $options = self::defaults();
-        }
         $this->credentials = new AwsCredentials($options);
 
         $provider_options = self::$crt->credentials_provider_static_options_new();
