@@ -11,7 +11,7 @@ use AWS\CRT\Options as Options;
 class SigningConfigAWS extends NativeResource {
 
     public static function defaults() {
-        return array(
+        return [
             'algorithm' => SigningAlgorithm::SIGv4,
             'signature_type' => SignatureType::HTTP_REQUEST_HEADERS,
             'credentials_provider' => null,
@@ -23,17 +23,14 @@ class SigningConfigAWS extends NativeResource {
             'signed_body_value' => null,
             'signed_body_header_type' => SignedBodyHeaderType::NONE,
             'expiration_in_seconds' => 0,
-        );
+        ];
     }
 
     private $options;
 
-    public function __construct($options = []) {
+    public function __construct(array $options = []) {
         parent::__construct();
-        if (count($options) == 0) {
-            $options = self::defaults();
-        }
-        $this->options = $options = new Options($options);
+        $this->options = $options = new Options($options, self::defaults());
         $sc = $this->acquire(self::$crt->signing_config_aws_new());
         self::$crt->signing_config_aws_set_algorithm($sc, $options->algorithm->asInt());
         self::$crt->signing_config_aws_set_signature_type($sc, $options->signature_type->asInt());

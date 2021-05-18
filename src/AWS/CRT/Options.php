@@ -32,15 +32,15 @@ final class OptionValue {
     }
 
     public function asArray() {
-        return is_array($this->value) ? $this->value : [];
+        return is_array($this->value) ? $this->value : (!empty($this->value) ? [$this->value] : []);
     }
 }
 
 final class Options {
     private $options;
 
-    public function __construct($opts = []) {
-        $this->options = $opts;
+    public function __construct($opts = [], $defaults = []) {
+        $this->options = array_replace($defaults, empty($opts) ? [] : $opts);
     }
 
     public function __get($name) {

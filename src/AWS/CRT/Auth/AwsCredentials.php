@@ -20,12 +20,12 @@ use AWS\CRT\Options as Options;
 final class AwsCredentials extends NativeResource {
 
     static function defaults() {
-        return array(
+        return [
             'access_key_id' => '',
             'secret_access_key' => '',
             'session_token' => '',
             'expiration_timepoint_seconds' => 0,
-        );
+        ];
     }
 
     private $access_key_id;
@@ -37,16 +37,14 @@ final class AwsCredentials extends NativeResource {
         return $this->$name;
     }
 
-    function __construct($options = []) {
+    function __construct(array $options = []) {
         parent::__construct();
-        if (count($options) == 0) {
-            $options = self::defaults();
-        }
-        $options = new Options($options);
-        $this->access_key_id = $options->getString('access_key_id');
-        $this->secret_access_key = $options->getString('secret_access_key');
-        $this->session_token = $options->getString('session_token');
-        $this->expiration_timepoint_seconds = $options->getInt('expiration_timepoint_seconds');
+
+        $options = new Options($options, self::defaults());
+        $this->access_key_id = $options->access_key_id->asString();
+        $this->secret_access_key = $options->secret_access_key->asString();
+        $this->session_token = $options->session_token ? $options->session_token->asString() : null;
+        $this->expiration_timepoint_seconds = $options->expiration_timepoint_seconds->asInt();
 
         if (strlen($this->access_key_id) == 0) {
             throw new \InvalidArgumentException("access_key_id must be provided");
