@@ -20,7 +20,7 @@ final class OptionValue {
     }
 
     public function asInt() {
-        return is_null($this->value) ? 0 : (int)$this->value;
+        return empty($this->value) ? 0 : (int)$this->value;
     }
 
     public function asBool() {
