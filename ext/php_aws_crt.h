@@ -15,6 +15,9 @@
 
 #include "Zend/zend_extensions.h" /* for ZEND_EXTENSION_API_NO */
 
+#include <stdbool.h>
+#include <inttypes.h>
+
 #if ZEND_EXTENSION_API_NO < 220131226
 #    error "PHP >= 5.6 is required"
 #endif
