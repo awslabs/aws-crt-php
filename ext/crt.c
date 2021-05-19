@@ -168,7 +168,7 @@ static zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) 
 #endif
 
     zval retval;
-    /* PHP5 requires us to have a retval on the stack that zend fills out */
+    /* PHP5 allocates its own return value, 7+ uses an existing one we provide */
 #if !AWS_PHP_AT_LEAST_7
     zval *retval5 = NULL;
     fci.retval_ptr_ptr = &retval5;
@@ -180,14 +180,11 @@ static zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) 
         aws_php_throw_exception("zend_call_function failed in aws_php_invoke_callback");
     }
 
-    /* PHP7+ allocates its own retval, so we need to copy it out */
 #if !AWS_PHP_AT_LEAST_7
+    /* initialize the local retval from the retval in retval_ptr_ptr above */
     if (retval5) {
         ZVAL_ZVAL(&retval, retval5, 1, 1);
     }
-#else
-    /* copy the retval off the stack and destroy the stack ref */
-    ZVAL_ZVAL(&retval, fci.retval, 1, 1);
 #endif
 
     /* Clean up arguments */
