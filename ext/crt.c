@@ -170,7 +170,7 @@ static zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) 
     zval retval;
     /* PHP5 requires us to have a retval on the stack that zend fills out */
 #if !AWS_PHP_AT_LEAST_7
-    zval *retval5 = NULl;
+    zval *retval5 = NULL;
     fci.retval_ptr_ptr = &retval5;
 #else
     fci.retval = &retval;
