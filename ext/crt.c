@@ -242,6 +242,9 @@ void aws_php_thread_queue_push(aws_php_thread_queue *queue, aws_php_task task) {
 }
 
 bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
+    assert(
+        queue->thread_id == aws_crt_current_thread_id() &&
+        "thread queue cannot be drained from a thread other than its home");
     aws_php_task drain_queue[AWS_PHP_THREAD_QUEUE_MAX_DEPTH];
     aws_crt_mutex_lock(queue->mutex);
     /* copy any queued tasks into the drain queue, then reset the queue */
