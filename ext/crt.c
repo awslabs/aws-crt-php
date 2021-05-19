@@ -983,9 +983,8 @@ static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int e
 
     /*
      * Must execute PHP callback before this function returns, or signing_result will be killed
-     * so it is queued back to the main thread along with a promise for this function to wait on
+     * so the callback is queued back to the main thread and will have run when yield returns
      */
-
     aws_php_task complete_callback_task = {
         .callback = s_sign_aws_complete,
         .data = state,
