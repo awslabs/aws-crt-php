@@ -160,11 +160,14 @@ static zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) 
     zend_fcall_info_argp(&fci, num_args, stack);
 #else
     /* PHP5.6 may mutate the arguments due to coercion */
-    zval **args = alloca(sizeof(zval *) * num_args);
+    zval **arg_ptrs = alloca(sizeof(zval *) * num_args);
+    zval ***args = alloca(sizeof(zval **) * num_args);
     for (int arg_idx = 0; arg_idx < num_args; ++arg_idx) {
-        args[arg_idx] = &stack[arg_idx];
+        arg_ptrs[arg_idx] = &stack[arg_idx];
+        args[arg_idx] = &arg_ptrs[arg_idx];
     }
-    zend_fcall_info_argp(&fci, num_args, &args);
+    fci.param_count = num_args;
+    fci.params = args;
 #endif
 
     zval retval;
@@ -191,8 +194,9 @@ static zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) 
     for (int arg_idx = 0; arg_idx < num_args; ++arg_idx) {
 #if !AWS_PHP_AT_LEAST_7
         zval_ptr_dtor(args[arg_idx]);
-#endif
+#else
         zval_ptr_dtor(&stack[arg_idx]);
+#endif
     }
 
     return retval;
