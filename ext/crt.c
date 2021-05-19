@@ -5,9 +5,7 @@
  */
 
 #include "php_aws_crt.h"
-
 #include "api.h"
-
 #include "awscrt_arginfo.h"
 
 /* Helpful references for this file:
@@ -81,7 +79,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
 
     char *error = NULL;
     zend_fcall_info fci = {0};
-    zend_fcall_info_cache fcc = {0};
+    zend_fcall_info_cache fcc = empty_fcall_info_cache;
     if (zend_fcall_info_init(callback, IS_CALLABLE_CHECK_SYNTAX_ONLY, &fci, &fcc, NULL, &error) == FAILURE) {
         aws_php_throw_exception("Unable to initialize callback from callable via zend_fcall_info_init: %s", error);
     }
@@ -171,7 +169,7 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     fci.retval_ptr_ptr = &retval;
 #endif
 
-    if (zend_call_function(&fci, &fcc) == FAILURE) {
+    if (zend_call_function(&fci, NULL) == FAILURE) {
         aws_php_throw_exception("zend_call_function failed in aws_php_invoke_callback");
     }
 
@@ -817,9 +815,13 @@ PHP_FUNCTION(aws_crt_signing_result_apply_to_http_request) {
 }
 
 static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int error_code, void *user_data) {
-    zval *on_complete = user_data;
+    aws_crt_promise *promise = user_data;
+    if (error_code) {
+        aws_crt_promise_fail(promise, error_code);
+        return;
+    }
 
-    aws_php_invoke_callback(on_complete, "ll", (zend_ulong)result, (zend_ulong)error_code);
+    aws_crt_promise_complete(promise, result);
 }
 
 PHP_FUNCTION(aws_crt_sign_request_aws) {
@@ -831,7 +833,19 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
 
     aws_crt_signable *signable = (void *)php_signable;
     aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
-    int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, php_on_complete);
+
+    aws_crt_promise *promise = aws_crt_promise_new();
+    int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, promise);
+    if (ret != 0) {
+        aws_crt_promise_fail(promise, aws_crt_last_error());
+    }
+
+    /* wait for signing to complete, then invoke callback to PHP */
+    aws_crt_promise_wait(promise);
+    aws_php_invoke_callback(php_on_complete, "ll", (zend_ulong)aws_crt_promise_value(promise), (zend_ulong)aws_crt_promise_error_code(promise));
+
+done:
+    aws_crt_promise_delete(promise);
     RETURN_LONG(ret);
 }
 

@@ -61,7 +61,6 @@ final class SigningTest extends CrtTestCase {
     const SIGV4TEST_SERVICE = 'service';
     const SIGV4TEST_REGION = 'us-east-1';
     public function testSigv4HeaderSigning() {
-        $this->markTestSkipped('WIP');
         $date = mktime(12, 36, 0, 8, 30, 2015);
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
@@ -74,6 +73,7 @@ final class SigningTest extends CrtTestCase {
             'credentials_provider' => $credentials_provider,
             'region' => self::SIGV4TEST_REGION,
             'service' => self::SIGV4TEST_SERVICE,
+            'date' => $date,
         ]);
         $http_request = new Request('GET', '/', [], ['Host' => 'example.amazonaws.com']);
         $this->assertNotNull($http_request, "Unable to create HttpRequest for signing");
