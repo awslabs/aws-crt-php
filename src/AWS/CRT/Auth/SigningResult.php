@@ -6,6 +6,7 @@
 namespace AWS\CRT\Auth;
 
 use AWS\CRT\NativeResource;
+use AWS\CRT\HTTP\Request;
 
 class SigningResult extends NativeResource {
     protected function __construct($native) {
@@ -24,7 +25,9 @@ class SigningResult extends NativeResource {
         return new SigningResult($ptr);
     }
 
-    public function applyToHttpRequest($http_request) {
+    public function applyToHttpRequest(&$http_request) {
         self::$crt->signing_result_apply_to_http_request($this->native, $http_request->native);
+        // Update http_request from native
+        $http_request = Request::unmarshall($http_request->toBlob());
     }
 }

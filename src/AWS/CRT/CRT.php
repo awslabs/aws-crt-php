@@ -211,6 +211,10 @@ final class CRT {
         return self::$impl->aws_crt_http_message_new_from_blob($blob);
     }
 
+    function http_message_to_blob($message) {
+        return self::$impl->aws_crt_http_message_to_blob($message);
+    }
+
     function http_message_release($message) {
         self::$impl->aws_crt_http_message_release($message);
     }
@@ -265,6 +269,10 @@ final class CRT {
 
     function signing_config_aws_set_expiration_in_seconds($signing_config, $expiration_in_seconds) {
         self::$impl->aws_crt_signing_config_aws_set_expiration_in_seconds($signing_config, $expiration_in_seconds);
+    }
+
+    function signing_config_aws_set_date($signing_config, $timestamp) {
+        self::$impl->aws_crt_signing_config_aws_set_date($signing_config, $timestamp);
     }
 
     function signable_new_from_http_request($http_message) {

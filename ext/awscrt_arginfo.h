@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 0a4bbdf5c361a5a5d62bdc07f238e997db1bd823 */
+ * Stub hash: 8ee94b778eb6d2eeabc8c2695aaded9fb18de88f */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -187,6 +187,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_e
 	ZEND_ARG_TYPE_INFO(0, expiration_in_seconds, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_date, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, timestamp, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signable_new_from_http_request, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, http_message, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -270,6 +275,7 @@ ZEND_FUNCTION(aws_crt_signing_config_aws_set_omit_session_token);
 ZEND_FUNCTION(aws_crt_signing_config_aws_set_signed_body_value);
 ZEND_FUNCTION(aws_crt_signing_config_aws_set_signed_body_header_type);
 ZEND_FUNCTION(aws_crt_signing_config_aws_set_expiration_in_seconds);
+ZEND_FUNCTION(aws_crt_signing_config_aws_set_date);
 ZEND_FUNCTION(aws_crt_signable_new_from_http_request);
 ZEND_FUNCTION(aws_crt_signable_new_from_chunk);
 ZEND_FUNCTION(aws_crt_signable_new_from_canonical_request);
@@ -329,6 +335,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_signing_config_aws_set_signed_body_value, arginfo_aws_crt_signing_config_aws_set_signed_body_value)
 	ZEND_FE(aws_crt_signing_config_aws_set_signed_body_header_type, arginfo_aws_crt_signing_config_aws_set_signed_body_header_type)
 	ZEND_FE(aws_crt_signing_config_aws_set_expiration_in_seconds, arginfo_aws_crt_signing_config_aws_set_expiration_in_seconds)
+	ZEND_FE(aws_crt_signing_config_aws_set_date, arginfo_aws_crt_signing_config_aws_set_date)
 	ZEND_FE(aws_crt_signable_new_from_http_request, arginfo_aws_crt_signable_new_from_http_request)
 	ZEND_FE(aws_crt_signable_new_from_chunk, arginfo_aws_crt_signable_new_from_chunk)
 	ZEND_FE(aws_crt_signable_new_from_canonical_request, arginfo_aws_crt_signable_new_from_canonical_request)

@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
+/* clang-format: off */
 #include "api.h"
+#include "php_aws_crt.h" /* must precede arginfo header or PHP macros won't be defined */
 #include "awscrt_arginfo.h"
-#include "php_aws_crt.h"
+/* clang-format: on */
 
 /* Helpful references for this file:
  * zend_parse_parameters and friends -
@@ -213,6 +215,7 @@ typedef struct _aws_php_thread_queue {
     aws_crt_mutex *mutex;
     aws_php_task queue[AWS_PHP_THREAD_QUEUE_MAX_DEPTH];
     size_t write_slot;
+    void *thread_id;
 } aws_php_thread_queue;
 
 static aws_php_thread_queue s_main_thread_queue;
@@ -221,6 +224,7 @@ void aws_php_thread_queue_init(aws_php_thread_queue *queue) {
     queue->mutex = aws_crt_mutex_new();
     memset(queue->queue, 0, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
     queue->write_slot = 0;
+    queue->thread_id = aws_crt_current_thread_id();
 }
 
 void aws_php_thread_queue_clean_up(aws_php_thread_queue *queue) {
@@ -248,7 +252,7 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
     bool did_work = false;
     for (int idx = 0; idx < AWS_PHP_THREAD_QUEUE_MAX_DEPTH; ++idx) {
         aws_php_task *task = &drain_queue[idx];
-        if (!task) {
+        if (!task->callback) {
             break;
         }
         did_work = true;
@@ -256,7 +260,6 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
         if (task->dtor) {
             task->dtor(task->data);
         }
-        aws_crt_mem_release(task);
     }
 
     return did_work;
@@ -847,6 +850,16 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_expiration_in_seconds) {
     aws_crt_signing_config_aws_set_expiration_in_seconds(signing_config, php_expiration_in_seconds);
 }
 
+PHP_FUNCTION(aws_crt_signing_config_aws_set_date) {
+    zend_ulong php_signing_config = 0;
+    zend_ulong php_timestamp = 0;
+
+    aws_php_parse_parameters("ll", &php_signing_config, &php_timestamp);
+
+    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws_set_date(signing_config, php_timestamp);
+}
+
 PHP_FUNCTION(aws_crt_signable_new_from_http_request) {
     zend_ulong php_http_message = 0;
 
@@ -910,7 +923,7 @@ PHP_FUNCTION(aws_crt_signing_result_apply_to_http_request) {
     }
 }
 
-struct _signing_state {
+typedef struct _signing_state {
     aws_crt_promise *promise;
     zval *on_complete;
     aws_crt_signing_result *signing_result;
@@ -948,17 +961,20 @@ static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int e
         .callback = s_sign_aws_complete,
         .data = state,
     };
-
-    aws_crt_promise *callback_delivered = aws_crt_promise_new();
-    aws_php_task callback_delivered_task = {
-        .callback = s_complete_promise,
-        .data = callback_delivered,
-    };
-
     aws_php_thread_queue_push(&s_main_thread_queue, complete_callback_task);
-    aws_php_thread_queue_push(&s_main_thread_queue, callback_delivered_task);
-    aws_crt_promise_wait(callback_delivered);
-    aws_crt_promise_delete(callback_delivered);
+
+    if (s_main_thread_queue.thread_id == aws_crt_current_thread_id()) {
+        aws_php_thread_queue_drain(&s_main_thread_queue);
+    } else {
+        aws_crt_promise *callback_delivered = aws_crt_promise_new();
+        aws_php_task callback_delivered_task = {
+            .callback = s_complete_promise,
+            .data = callback_delivered,
+        };
+        aws_php_thread_queue_push(&s_main_thread_queue, callback_delivered_task);
+        aws_crt_promise_wait(callback_delivered);
+        aws_crt_promise_delete(callback_delivered);
+    }
 
     if (error_code) {
         aws_crt_promise_fail(promise, error_code);
@@ -980,6 +996,7 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
     aws_crt_promise *promise = aws_crt_promise_new();
     signing_state state = {
         .promise = promise,
+        .on_complete = php_on_complete,
     };
     int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, &state);
     if (ret != 0) {

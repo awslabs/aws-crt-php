@@ -46,6 +46,7 @@ class SigningConfigAWS extends NativeResource {
         self::$crt->signing_config_aws_set_signed_body_value($sc, $options->signed_body_value->asString());
         self::$crt->signing_config_aws_set_signed_body_header_type($sc, $options->signed_body_header_type->asInt());
         self::$crt->signing_config_aws_set_expiration_in_seconds($sc, $options->expiration_in_seconds->asInt());
+        self::$crt->signing_config_aws_set_date($sc, $options->date->asInt());
     }
 
     function __destruct()

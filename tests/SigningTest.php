@@ -80,7 +80,7 @@ final class SigningTest extends CrtTestCase {
         $signable = Signable::fromHttpRequest($http_request);
         $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
 
-        Signing::signRequestAws($signable, $signing_config, function($signing_result, $error_code) use ($http_request) {
+        Signing::signRequestAws($signable, $signing_config, function($signing_result, $error_code) use (&$http_request) {
             $this->assertEquals(0, $error_code);
             $signing_result->applyToHttpRequest($http_request);
         });

@@ -28,6 +28,10 @@ abstract class Message extends NativeResource {
         parent::__destruct();
     }
 
+    public function toBlob() {
+        return self::$crt->http_message_to_blob($this->native);
+    }
+
     protected static function marshall($msg) {
         $buf = "";
         $buf .= Encoding::encodeString($msg->method);
