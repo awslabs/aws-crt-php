@@ -794,6 +794,27 @@ PHP_FUNCTION(aws_crt_signable_release) {
     aws_crt_signable_release(signable);
 }
 
+PHP_FUNCTION(aws_crt_signing_result_release) {
+    zend_ulong php_signing_result = 0;
+
+    aws_php_parse_parameters("l", &php_signing_result);
+    aws_crt_signing_result *result = (void*)php_signing_result;
+    aws_crt_signing_result_release(result);
+}
+
+PHP_FUNCTION(aws_crt_signing_result_apply_to_http_request) {
+    zend_ulong php_signing_result = 0;
+    zend_ulong php_http_request = 0;
+
+    aws_php_parse_parameters("ll", &php_signing_result, &php_http_request);
+    aws_crt_signing_result *result = (void*)php_signing_result;
+    aws_crt_http_message *request = (void*)php_http_request;
+
+    if (aws_crt_signing_result_apply_to_http_request(result, request)) {
+        aws_php_throw_exception("Failed to apply signing result to HTTP request: %s", aws_crt_error_name(aws_crt_last_error()));
+    }
+}
+
 static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int error_code, void *user_data) {
     zval *on_complete = user_data;
 

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8694d01fdcf4c8ffa26a6462b6c4546671ce7aa5 */
+ * Stub hash: 0a4bbdf5c361a5a5d62bdc07f238e997db1bd823 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -204,6 +204,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signable_release, 0, 1, 
 	ZEND_ARG_TYPE_INFO(0, signable, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_result_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, signing_result, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_result_apply_to_http_request, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, signing_result, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, http_request, IS_OBJECT, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_sign_request_aws, 0, 4, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, signable, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, signing_config, IS_LONG, 0)
@@ -265,6 +274,8 @@ ZEND_FUNCTION(aws_crt_signable_new_from_http_request);
 ZEND_FUNCTION(aws_crt_signable_new_from_chunk);
 ZEND_FUNCTION(aws_crt_signable_new_from_canonical_request);
 ZEND_FUNCTION(aws_crt_signable_release);
+ZEND_FUNCTION(aws_crt_signing_result_release);
+ZEND_FUNCTION(aws_crt_signing_result_apply_to_http_request);
 ZEND_FUNCTION(aws_crt_sign_request_aws);
 
 
@@ -322,6 +333,8 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_signable_new_from_chunk, arginfo_aws_crt_signable_new_from_chunk)
 	ZEND_FE(aws_crt_signable_new_from_canonical_request, arginfo_aws_crt_signable_new_from_canonical_request)
 	ZEND_FE(aws_crt_signable_release, arginfo_aws_crt_signable_release)
+	ZEND_FE(aws_crt_signing_result_release, arginfo_aws_crt_signing_result_release)
+	ZEND_FE(aws_crt_signing_result_apply_to_http_request, arginfo_aws_crt_signing_result_apply_to_http_request)
 	ZEND_FE(aws_crt_sign_request_aws, arginfo_aws_crt_sign_request_aws)
 	ZEND_FE_END
 };

@@ -80,8 +80,13 @@ final class SigningTest extends CrtTestCase {
         $signable = Signable::fromHttpRequest($http_request);
         $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
 
-        Signing::signRequestAws($signable, $signing_config, function() {
-
+        Signing::signRequestAws($signable, $signing_config, function($signing_result, $error_code) use ($http_request) {
+            $this->assertEquals(0, $error_code);
+            $signing_result->applyToHttpRequest($http_request);
         });
+
+        $headers = $http_request->headers();
+        $this->assertEquals('AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31', $headers->get('Authorization'));
+        $this->assertEquals('20150830T123600Z', $headers->get('X-Amz-Date'));
     }
 }
