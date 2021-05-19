@@ -283,6 +283,14 @@ final class CRT {
         self::$impl->aws_crt_signable_release($signable);
     }
 
+    function signing_result_release($signing_result) {
+        self::$impl->aws_crt_signing_result_release($signing_result);
+    }
+
+    function signing_result_apply_to_http_request($signing_result, $http_message) {
+        return self::$impl->aws_crt_signing_result_apply_to_http_request($signing_result, $http_message);
+    }
+
     function sign_request_aws($signable, $signing_config, $on_complete) {
         return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete);
     }

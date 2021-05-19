@@ -4,14 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-#include "php_aws_crt.h"
 #include "api.h"
 #include "awscrt_arginfo.h"
+#include "php_aws_crt.h"
 
 /* Helpful references for this file:
  * zend_parse_parameters and friends -
  * https://git.php.net/?p=php-src.git;a=blob;f=docs/parameter-parsing-api.md;h=c962fc6ee58cc756aaac9e65759b7d5ea5c18fc4;hb=HEAD
  * https://git.php.net/?p=php-src.git;a=blob;f=docs/self-contained-extensions.md;h=47f4c636baca8ca195118e2cc234ac7fd2842c1b;hb=HEAD
+ * Threads:
+ * http://blog.jpauli.tech/2017-01-12-threads-and-php-html/
  * Examples:
  * Curl extension: https://github.com/php/php-src/blob/PHP-5.6/ext/curl/interface.c
  * libuv extension: https://github.com/amphp/ext-uv/blob/master/php_uv.c
@@ -75,7 +77,7 @@
  * that are converted to zvals based on the arg_types format string
  * Uses the same format string as zend_parse_parameters
  */
-static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
+static zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
 
     char *error = NULL;
     zend_fcall_info fci = {0};
@@ -87,7 +89,6 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     /* Allocate the stack frame of zval arguments and fill them in */
     const size_t num_args = strlen(arg_types);
     zval *stack = alloca(sizeof(zval) * num_args);
-    zval *retval = NULL;
     int arg_idx = 0;
     va_list va;
     va_start(va, arg_types);
@@ -164,18 +165,27 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     zend_fcall_info_argp(&fci, num_args, &args);
 #endif
 
+    zval retval;
     /* PHP5 requires us to have a retval on the stack that zend fills out */
 #if !AWS_PHP_AT_LEAST_7
-    fci.retval_ptr_ptr = &retval;
+    zval *retval5 = NULl;
+    fci.retval_ptr_ptr = &retval5;
+#else
+    fci.retval = &retval;
 #endif
 
-    if (zend_call_function(&fci, NULL) == FAILURE) {
+    if (zend_call_function(&fci, &fcc) == FAILURE) {
         aws_php_throw_exception("zend_call_function failed in aws_php_invoke_callback");
     }
 
     /* PHP7+ allocates its own retval, so we need to copy it out */
-#if AWS_PHP_AT_LEAST_7
-    retval = fci.retval;
+#if !AWS_PHP_AT_LEAST_7
+    if (retval5) {
+        ZVAL_ZVAL(&retval, retval5, 1, 1);
+    }
+#else
+    /* copy the retval off the stack and destroy the stack ref */
+    ZVAL_ZVAL(&retval, fci.retval, 1, 1);
 #endif
 
     /* Clean up arguments */
@@ -187,6 +197,69 @@ static zval *aws_php_invoke_callback(zval *callback, const char *arg_types, ...)
     }
 
     return retval;
+}
+
+/* maximum number of queued callbacks to execute at once. Since this is to support single-threaded usage,
+ * this can be a fairly small number, as how many callbacks could we reasonably be stacking up?! */
+#define AWS_PHP_THREAD_QUEUE_MAX_DEPTH 32
+
+typedef struct _aws_php_task {
+    void (*callback)(void *); /* task function */
+    void (*dtor)(void *);     /* deletes task_data, if non-null */
+    void *data;
+} aws_php_task;
+
+typedef struct _aws_php_thread_queue {
+    aws_crt_mutex *mutex;
+    aws_php_task queue[AWS_PHP_THREAD_QUEUE_MAX_DEPTH];
+    size_t write_slot;
+} aws_php_thread_queue;
+
+static aws_php_thread_queue s_main_thread_queue;
+
+void aws_php_thread_queue_init(aws_php_thread_queue *queue) {
+    queue->mutex = aws_crt_mutex_new();
+    memset(queue->queue, 0, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
+    queue->write_slot = 0;
+}
+
+void aws_php_thread_queue_clean_up(aws_php_thread_queue *queue) {
+    assert(queue->write_slot == 0 && "aws_php_thread_queue cannot be cleaned up while queue is not empty");
+    aws_crt_mutex_delete(queue->mutex);
+    queue->mutex = NULL;
+}
+
+void aws_php_thread_queue_push(aws_php_thread_queue *queue, aws_php_task task) {
+    aws_crt_mutex_lock(queue->mutex);
+    assert(queue->write_slot < AWS_PHP_THREAD_QUEUE_MAX_DEPTH && "thread queue is full");
+    queue->queue[queue->write_slot++] = task;
+    aws_crt_mutex_unlock(queue->mutex);
+}
+
+bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
+    aws_php_task drain_queue[AWS_PHP_THREAD_QUEUE_MAX_DEPTH];
+    aws_crt_mutex_lock(queue->mutex);
+    /* copy any queued tasks into the drain queue, then reset the queue */
+    memcpy(drain_queue, queue->queue, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
+    memset(queue->queue, 0, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
+    queue->write_slot = 0;
+    aws_crt_mutex_unlock(queue->mutex);
+
+    bool did_work = false;
+    for (int idx = 0; idx < AWS_PHP_THREAD_QUEUE_MAX_DEPTH; ++idx) {
+        aws_php_task *task = &drain_queue[idx];
+        if (!task) {
+            break;
+        }
+        did_work = true;
+        task->callback(task->data);
+        if (task->dtor) {
+            task->dtor(task->data);
+        }
+        aws_crt_mem_release(task);
+    }
+
+    return did_work;
 }
 
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
@@ -206,11 +279,13 @@ static PHP_MINIT_FUNCTION(awscrt) {
     REGISTER_INI_ENTRIES();
 
     aws_crt_init();
+    aws_php_thread_queue_init(&s_main_thread_queue);
     return SUCCESS;
 }
 
 static PHP_MSHUTDOWN_FUNCTION(awscrt) {
     UNREGISTER_INI_ENTRIES();
+    aws_php_thread_queue_clean_up(&s_main_thread_queue);
     aws_crt_clean_up();
     return SUCCESS;
 }
@@ -221,6 +296,27 @@ static PHP_GINIT_FUNCTION(awscrt) {
 #endif
     awscrt_globals->log_level = 0;
 }
+
+zend_module_entry awscrt_module_entry = {
+    STANDARD_MODULE_HEADER,
+    "awscrt",
+    ext_functions, /* functions */
+    PHP_MINIT(awscrt),
+    PHP_MSHUTDOWN(awscrt),
+    NULL, /* RINIT */
+    NULL, /* RSHUTDOWN */
+    NULL, /* MINFO */
+    NO_VERSION_YET,
+    PHP_MODULE_GLOBALS(awscrt),
+    PHP_GINIT(awscrt),
+    NULL, /* GSHUTDOWN */
+    NULL, /* RPOSTSHUTDOWN */
+    STANDARD_MODULE_PROPERTIES_EX,
+};
+
+#ifdef COMPILE_DL_AWSCRT
+ZEND_GET_MODULE(awscrt)
+#endif
 
 /* aws_crt_last_error() */
 PHP_FUNCTION(aws_crt_last_error) {
@@ -814,14 +910,61 @@ PHP_FUNCTION(aws_crt_signing_result_apply_to_http_request) {
     }
 }
 
+struct _signing_state {
+    aws_crt_promise *promise;
+    zval *on_complete;
+    aws_crt_signing_result *signing_result;
+    int error_code;
+} signing_state;
+
+/* called on main thread to deliver result to php */
+static void s_sign_aws_complete(void *data) {
+    signing_state *state = data;
+    aws_crt_promise *promise = state->promise;
+    zval *on_complete = state->on_complete;
+    aws_php_invoke_callback(on_complete, "ll", (zend_ulong)state->signing_result, (zend_ulong)state->error_code);
+}
+
+/* called on main thread after delivery */
+static void s_complete_promise(void *data) {
+    aws_crt_promise *promise = data;
+    aws_crt_promise_complete(promise, NULL, NULL);
+}
+
+/* called from signing process in aws_sign_request_aws */
 static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int error_code, void *user_data) {
-    aws_crt_promise *promise = user_data;
+    signing_state *state = user_data;
+    aws_crt_promise *promise = state->promise;
+
+    state->signing_result = result;
+    state->error_code = error_code;
+
+    /*
+     * Must execute PHP callback before this function returns, or signing_result will be killed
+     * so it is queued back to the main thread along with a promise for this function to wait on
+     */
+
+    aws_php_task complete_callback_task = {
+        .callback = s_sign_aws_complete,
+        .data = state,
+    };
+
+    aws_crt_promise *callback_delivered = aws_crt_promise_new();
+    aws_php_task callback_delivered_task = {
+        .callback = s_complete_promise,
+        .data = callback_delivered,
+    };
+
+    aws_php_thread_queue_push(&s_main_thread_queue, complete_callback_task);
+    aws_php_thread_queue_push(&s_main_thread_queue, callback_delivered_task);
+    aws_crt_promise_wait(callback_delivered);
+    aws_crt_promise_delete(callback_delivered);
+
     if (error_code) {
         aws_crt_promise_fail(promise, error_code);
-        return;
+    } else {
+        aws_crt_promise_complete(promise, result, NULL);
     }
-
-    aws_crt_promise_complete(promise, result);
 }
 
 PHP_FUNCTION(aws_crt_sign_request_aws) {
@@ -835,37 +978,22 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
     aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
 
     aws_crt_promise *promise = aws_crt_promise_new();
-    int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, promise);
+    signing_state state = {
+        .promise = promise,
+    };
+    int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, &state);
     if (ret != 0) {
-        aws_crt_promise_fail(promise, aws_crt_last_error());
+        int last_error = aws_crt_last_error();
+        aws_crt_promise_fail(promise, last_error);
+        aws_php_throw_exception(
+            "aws_crt_sign_request_aws: error starting signing process: %s", aws_crt_error_name(last_error));
     }
 
-    /* wait for signing to complete, then invoke callback to PHP */
-    aws_crt_promise_wait(promise);
-    aws_php_invoke_callback(php_on_complete, "ll", (zend_ulong)aws_crt_promise_value(promise), (zend_ulong)aws_crt_promise_error_code(promise));
+    while (!aws_crt_promise_completed(promise)) {
+        aws_php_thread_queue_drain(&s_main_thread_queue);
+    }
 
 done:
     aws_crt_promise_delete(promise);
     RETURN_LONG(ret);
 }
-
-zend_module_entry awscrt_module_entry = {
-    STANDARD_MODULE_HEADER,
-    "awscrt",
-    ext_functions, /* functions */
-    PHP_MINIT(awscrt),
-    PHP_MSHUTDOWN(awscrt),
-    NULL, /* RINIT */
-    NULL, /* RSHUTDOWN */
-    NULL, /* MINFO */
-    NO_VERSION_YET,
-    PHP_MODULE_GLOBALS(awscrt),
-    PHP_GINIT(awscrt),
-    NULL, /* GSHUTDOWN */
-    NULL, /* RPOSTSHUTDOWN */
-    STANDARD_MODULE_PROPERTIES_EX,
-};
-
-#ifdef COMPILE_DL_AWSCRT
-ZEND_GET_MODULE(awscrt)
-#endif
