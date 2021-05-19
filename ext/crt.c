@@ -5,8 +5,8 @@
  */
 
 /* clang-format off */
+#include "php_aws_crt.h" /* must precede api.h and arginfo or int types and PHP macros won't be defined */
 #include "api.h"
-#include "php_aws_crt.h" /* must precede arginfo header or PHP macros won't be defined */
 #include "awscrt_arginfo.h"
 /* clang-format on */
 
