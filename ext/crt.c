@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-/* clang-format: off */
+/* clang-format off */
 #include "api.h"
 #include "php_aws_crt.h" /* must precede arginfo header or PHP macros won't be defined */
 #include "awscrt_arginfo.h"
-/* clang-format: on */
+/* clang-format on */
 
 /* Helpful references for this file:
  * zend_parse_parameters and friends -
@@ -856,7 +856,7 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_date) {
 
     aws_php_parse_parameters("ll", &php_signing_config, &php_timestamp);
 
-    aws_crt_signing_config_aws *signing_config = (void*)php_signing_config;
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
     aws_crt_signing_config_aws_set_date(signing_config, php_timestamp);
 }
 
