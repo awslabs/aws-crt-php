@@ -217,6 +217,10 @@ typedef struct _aws_php_thread_queue {
 
 static aws_php_thread_queue s_main_thread_queue;
 
+bool aws_php_is_main_thread(void) {
+    return s_main_thread_queue.thread_id == aws_crt_current_thread_id();
+}
+
 void aws_php_thread_queue_init(aws_php_thread_queue *queue) {
     queue->mutex = aws_crt_mutex_new();
     memset(queue->queue, 0, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
@@ -260,6 +264,37 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
     }
 
     return did_work;
+}
+
+/* called on main thread after delivery */
+static void s_thread_queue_complete_promise(void *data) {
+    aws_crt_promise *promise = data;
+    aws_crt_promise_complete(promise, NULL, NULL);
+}
+
+/* called from worker thread to wait for the main thread to execute any queued work in PHP */
+void aws_php_thread_queue_yield(aws_php_thread_queue *queue) {
+    /* If on the main thread, then just drain the queue */
+    if (aws_php_is_main_thread()) {
+        aws_php_thread_queue_drain(queue);
+    } else {
+        /* push a task onto the end of the queue, we will return once this task completes our promise */
+        aws_crt_promise *queue_drained = aws_crt_promise_new();
+        aws_php_task queue_drained_task = {
+            .callback = s_thread_queue_complete_promise,
+            .data = queue_drained,
+        };
+        aws_php_thread_queue_push(queue, queue_drained_task);
+        aws_crt_promise_wait(queue_drained);
+        aws_crt_promise_delete(queue_drained);
+    }
+}
+
+/* called from PHP thread to wait on async queued jobs, one of which should complete the promise */
+void aws_php_thread_queue_wait(aws_php_thread_queue *queue, aws_crt_promise *promise) {
+    while (!aws_crt_promise_completed(promise)) {
+        aws_php_thread_queue_drain(queue);
+    }
 }
 
 ZEND_DECLARE_MODULE_GLOBALS(awscrt);
@@ -935,12 +970,6 @@ static void s_sign_aws_complete(void *data) {
     aws_php_invoke_callback(on_complete, "ll", (zend_ulong)state->signing_result, (zend_ulong)state->error_code);
 }
 
-/* called on main thread after delivery */
-static void s_complete_promise(void *data) {
-    aws_crt_promise *promise = data;
-    aws_crt_promise_complete(promise, NULL, NULL);
-}
-
 /* called from signing process in aws_sign_request_aws */
 static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int error_code, void *user_data) {
     signing_state *state = user_data;
@@ -959,19 +988,7 @@ static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int e
         .data = state,
     };
     aws_php_thread_queue_push(&s_main_thread_queue, complete_callback_task);
-
-    if (s_main_thread_queue.thread_id == aws_crt_current_thread_id()) {
-        aws_php_thread_queue_drain(&s_main_thread_queue);
-    } else {
-        aws_crt_promise *callback_delivered = aws_crt_promise_new();
-        aws_php_task callback_delivered_task = {
-            .callback = s_complete_promise,
-            .data = callback_delivered,
-        };
-        aws_php_thread_queue_push(&s_main_thread_queue, callback_delivered_task);
-        aws_crt_promise_wait(callback_delivered);
-        aws_crt_promise_delete(callback_delivered);
-    }
+    aws_php_thread_queue_yield(&s_main_thread_queue);
 
     if (error_code) {
         aws_crt_promise_fail(promise, error_code);
@@ -1003,9 +1020,7 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
             "aws_crt_sign_request_aws: error starting signing process: %s", aws_crt_error_name(last_error));
     }
 
-    while (!aws_crt_promise_completed(promise)) {
-        aws_php_thread_queue_drain(&s_main_thread_queue);
-    }
+    aws_php_thread_queue_wait(&s_main_thread_queue, promise);
 
 done:
     aws_crt_promise_delete(promise);
