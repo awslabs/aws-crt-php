@@ -23,7 +23,7 @@ if test "$PHP_AWSCRT" != "no"; then
     PHP_SUBST(AWSCRT_SHARED_LIBADD)
 
     # Sources for the PHP extension itself
-    AWSCRT_SOURCES=ext/*.c
+    AWSCRT_SOURCES=ext/credentials.c ext/crt.c ext/event_loop.c ext/http.c ext/signing.c ext/stream.c
     PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
 fi
 
