@@ -11,33 +11,33 @@
  */
 
 PHP_FUNCTION(aws_crt_input_stream_options_new) {
-        if (zend_parse_parameters_none() == FAILURE) {
-            aws_php_argparse_fail();
-        }
+    if (zend_parse_parameters_none() == FAILURE) {
+        aws_php_argparse_fail();
+    }
 
-        aws_crt_input_stream_options *options = aws_crt_input_stream_options_new();
-        RETURN_LONG((zend_ulong)options);
+    aws_crt_input_stream_options *options = aws_crt_input_stream_options_new();
+    RETURN_LONG((zend_ulong)options);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_options_release) {
-        zend_ulong php_options = 0;
+    zend_ulong php_options = 0;
 
-        aws_php_parse_parameters("l", &php_options);
+    aws_php_parse_parameters("l", &php_options);
 
-        aws_crt_input_stream_options *options = (void *)php_options;
-        aws_crt_input_stream_options_release(options);
+    aws_crt_input_stream_options *options = (void *)php_options;
+    aws_crt_input_stream_options_release(options);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_options_set_user_data) {
-        zend_ulong php_options = 0;
-        zval *user_data = NULL;
+    zend_ulong php_options = 0;
+    zval *user_data = NULL;
 
-        aws_php_parse_parameters("lz", &php_options, &user_data);
+    aws_php_parse_parameters("lz", &php_options, &user_data);
 
-        aws_crt_input_stream_options *options = (void *)php_options;
-        php_stream *stream = NULL;
-        AWS_PHP_STREAM_FROM_ZVAL(stream, user_data);
-        aws_crt_input_stream_options_set_user_data(options, stream);
+    aws_crt_input_stream_options *options = (void *)php_options;
+    php_stream *stream = NULL;
+    AWS_PHP_STREAM_FROM_ZVAL(stream, user_data);
+    aws_crt_input_stream_options_set_user_data(options, stream);
 }
 
 static int s_php_stream_seek(void *user_data, int64_t offset, aws_crt_input_stream_seek_basis basis) {
@@ -78,71 +78,71 @@ static void s_php_stream_destroy(void *user_data) {
 }
 
 PHP_FUNCTION(aws_crt_input_stream_new) {
-        zend_ulong php_options = 0;
+    zend_ulong php_options = 0;
 
-        aws_php_parse_parameters("l", &php_options);
+    aws_php_parse_parameters("l", &php_options);
 
-        aws_crt_input_stream_options *options = (void *)php_options;
-        aws_crt_input_stream_options_set_seek(options, s_php_stream_seek);
-        aws_crt_input_stream_options_set_read(options, s_php_stream_read);
-        aws_crt_input_stream_options_set_get_status(options, s_php_stream_get_status);
-        aws_crt_input_stream_options_set_get_length(options, s_php_stream_get_length);
-        aws_crt_input_stream_options_set_destroy(options, s_php_stream_destroy);
-        aws_crt_input_stream *stream = aws_crt_input_stream_new(options);
-        RETURN_LONG((zend_ulong)stream);
+    aws_crt_input_stream_options *options = (void *)php_options;
+    aws_crt_input_stream_options_set_seek(options, s_php_stream_seek);
+    aws_crt_input_stream_options_set_read(options, s_php_stream_read);
+    aws_crt_input_stream_options_set_get_status(options, s_php_stream_get_status);
+    aws_crt_input_stream_options_set_get_length(options, s_php_stream_get_length);
+    aws_crt_input_stream_options_set_destroy(options, s_php_stream_destroy);
+    aws_crt_input_stream *stream = aws_crt_input_stream_new(options);
+    RETURN_LONG((zend_ulong)stream);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_release) {
-        zend_ulong php_stream = 0;
+    zend_ulong php_stream = 0;
 
-        aws_php_parse_parameters("l", &php_stream);
+    aws_php_parse_parameters("l", &php_stream);
 
-        aws_crt_input_stream *stream = (void *)php_stream;
-        aws_crt_input_stream_release(stream);
+    aws_crt_input_stream *stream = (void *)php_stream;
+    aws_crt_input_stream_release(stream);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_seek) {
-        zend_ulong php_stream = 0;
-        zend_ulong offset = 0;
-        zend_ulong basis = 0;
+    zend_ulong php_stream = 0;
+    zend_ulong offset = 0;
+    zend_ulong basis = 0;
 
-        aws_php_parse_parameters("lll", &php_stream, &offset, &basis);
+    aws_php_parse_parameters("lll", &php_stream, &offset, &basis);
 
-        aws_crt_input_stream *stream = (void *)php_stream;
-        RETURN_LONG(aws_crt_input_stream_seek(stream, offset, basis));
+    aws_crt_input_stream *stream = (void *)php_stream;
+    RETURN_LONG(aws_crt_input_stream_seek(stream, offset, basis));
 }
 
 PHP_FUNCTION(aws_crt_input_stream_read) {
-        zend_ulong php_stream = 0;
-        zend_ulong length = 0;
+    zend_ulong php_stream = 0;
+    zend_ulong length = 0;
 
-        aws_php_parse_parameters("ll", &php_stream, &length);
+    aws_php_parse_parameters("ll", &php_stream, &length);
 
-        aws_crt_input_stream *stream = (void *)php_stream;
-        uint8_t *buf = emalloc(length);
-        int ret = aws_crt_input_stream_read(stream, buf, length);
-        AWS_RETURN_STRINGL((const char *)buf, length);
-        efree(buf);
+    aws_crt_input_stream *stream = (void *)php_stream;
+    uint8_t *buf = emalloc(length);
+    int ret = aws_crt_input_stream_read(stream, buf, length);
+    AWS_RETURN_STRINGL((const char *)buf, length);
+    efree(buf);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_eof) {
-        zend_ulong php_stream = 0;
+    zend_ulong php_stream = 0;
 
-        aws_php_parse_parameters("l", &php_stream);
+    aws_php_parse_parameters("l", &php_stream);
 
-        aws_crt_input_stream *stream = (void *)php_stream;
-        aws_crt_input_stream_status status = {0};
-        aws_crt_input_stream_get_status(stream, &status);
-        RETURN_BOOL(status.is_end_of_stream);
+    aws_crt_input_stream *stream = (void *)php_stream;
+    aws_crt_input_stream_status status = {0};
+    aws_crt_input_stream_get_status(stream, &status);
+    RETURN_BOOL(status.is_end_of_stream);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_get_length) {
-        zend_ulong php_stream = 0;
+    zend_ulong php_stream = 0;
 
-        aws_php_parse_parameters("l", &php_stream);
+    aws_php_parse_parameters("l", &php_stream);
 
-        aws_crt_input_stream *stream = (void *)php_stream;
-        int64_t length = 0;
-        aws_crt_input_stream_get_length(stream, &length);
-        RETURN_LONG(length);
+    aws_crt_input_stream *stream = (void *)php_stream;
+    int64_t length = 0;
+    aws_crt_input_stream_get_length(stream, &length);
+    RETURN_LONG(length);
 }
