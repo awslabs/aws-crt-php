@@ -32,10 +32,12 @@ $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a: $(BUILD_DIR)/aws-crt-ffi-stati
 	$(CMAKE_BUILD) build/aws-crt-ffi-static $(CMAKE_TARGET)
 
 # PHP extension target
-extension: ext/crt.lo
+awscrt: modules/awscrt.la
 
 # Force the crt object target to depend on the CRT static library
-ext/crt.lo: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
+ext/awscrt.lo: ext/awscrt.c
+
+ext/awscrt.c: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
 # borrow the gen_stub script from PHP's build process
 GEN_STUB=build/gen_stub.php
@@ -56,14 +58,16 @@ src/api.h: crt/aws-crt-ffi/src/api.h
 ext/api.h : src/api.h
 	cp -v src/api.h ext/api.h
 
+ext/php_aws_crt.h: ext/awscrt_arginfo.h ext/api.h
+
 # FFI target
 ffi: src/libaws-crt-ffi.so
 
 # copy the lib into the src folder
-src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
-	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/libaws-crt-ffi.so
+modules/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
+	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so modules/libaws-crt-ffi.so
 
 # Use PHPUnit to run tests
-test: ext/api.h ext/awscrt_arginfo.h ext/crt.lo
+test: ext/api.h ext/awscrt_arginfo.h modules/awscrt.la
 	composer update
 	composer run test

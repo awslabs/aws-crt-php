@@ -3,7 +3,8 @@ dnl * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 dnl * SPDX-License-Identifier: Apache-2.0.
 dnl
 
-PHP_ARG_WITH(awscrt)
+PHP_ARG_WITH(awscrt, for AWS Common Runtime support,
+    [  --with-awscrt         Include awscrt support])
 
 if test "$PHP_AWSCRT" != "no"; then
     # force lib paths to be absolute, or PHP will mangle them
@@ -23,8 +24,7 @@ if test "$PHP_AWSCRT" != "no"; then
     PHP_SUBST(AWSCRT_SHARED_LIBADD)
 
     # Sources for the PHP extension itself
-    AWSCRT_SOURCES=ext/credentials.c ext/crt.c ext/event_loop.c ext/http.c ext/signing.c ext/stream.c
+    AWSCRT_SOURCES=ext/awscrt.c
     PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
+    PHP_ADD_MAKEFILE_FRAGMENT
 fi
-
-PHP_ADD_MAKEFILE_FRAGMENT
