@@ -49,6 +49,13 @@ final class CRT {
     }
 
     /**
+     * @return bool whether or not the CRT is currently loaded with an active backend
+     */
+    public static function isLoaded() {
+        return !is_null(self::$impl);
+    }
+
+    /**
      * @return bool whether or not the CRT is available via one of the possible backends
      */
     public static function isAvailable() {

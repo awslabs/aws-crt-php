@@ -6,6 +6,15 @@
 use AWS\CRT\CRT as CRT;
 
 abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
+    private static $crt = null;
+    public static function setUpBeforeClass() {
+        self::$crt = new CRT();
+    }
+
+    public static function tearDownAfterClass() {
+        self::$crt = null;
+    }
+
     // Ensure that after every test there are no errors in the CRT itself
     protected function assertPostConditions() {
         if (CRT::last_error()) {
