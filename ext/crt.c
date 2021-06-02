@@ -143,40 +143,39 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
 aws_php_thread_queue s_aws_php_main_thread_queue;
 
 bool aws_php_is_main_thread(void) {
-    return s_aws_php_main_thread_queue.thread_id == aws_crt_current_thread_id();
+    return s_aws_php_main_thread_queue.thread_id == aws_thread_current_thread_id();
 }
 
 void aws_php_thread_queue_init(aws_php_thread_queue *queue) {
-    queue->mutex = aws_crt_mutex_new();
+    aws_mutex_init(&queue->mutex);
     memset(queue->queue, 0, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
     queue->write_slot = 0;
-    queue->thread_id = aws_crt_current_thread_id();
+    queue->thread_id = aws_thread_current_thread_id();
 }
 
 void aws_php_thread_queue_clean_up(aws_php_thread_queue *queue) {
     assert(queue->write_slot == 0 && "aws_php_thread_queue cannot be cleaned up while queue is not empty");
-    aws_crt_mutex_delete(queue->mutex);
-    queue->mutex = NULL;
+    aws_mutex_clean_up(&queue->mutex);
 }
 
 void aws_php_thread_queue_push(aws_php_thread_queue *queue, aws_php_task task) {
-    aws_crt_mutex_lock(queue->mutex);
+    aws_mutex_lock(&queue->mutex);
     assert(queue->write_slot < AWS_PHP_THREAD_QUEUE_MAX_DEPTH && "thread queue is full");
     queue->queue[queue->write_slot++] = task;
-    aws_crt_mutex_unlock(queue->mutex);
+    aws_mutex_unlock(&queue->mutex);
 }
 
 bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
     assert(
-        queue->thread_id == aws_crt_current_thread_id() &&
+        queue->thread_id == aws_thread_current_thread_id() &&
         "thread queue cannot be drained from a thread other than its home");
     aws_php_task drain_queue[AWS_PHP_THREAD_QUEUE_MAX_DEPTH];
-    aws_crt_mutex_lock(queue->mutex);
+    aws_mutex_lock(&queue->mutex);
     /* copy any queued tasks into the drain queue, then reset the queue */
     memcpy(drain_queue, queue->queue, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
     memset(queue->queue, 0, sizeof(aws_php_task) * AWS_PHP_THREAD_QUEUE_MAX_DEPTH);
     queue->write_slot = 0;
-    aws_crt_mutex_unlock(queue->mutex);
+    aws_mutex_unlock(&queue->mutex);
 
     bool did_work = false;
     for (int idx = 0; idx < AWS_PHP_THREAD_QUEUE_MAX_DEPTH; ++idx) {

@@ -15,8 +15,9 @@
 
 #include "Zend/zend_extensions.h" /* for ZEND_EXTENSION_API_NO */
 
-#include <stdbool.h>
-#include <inttypes.h>
+#include <aws/common/common.h>
+#include <aws/common/mutex.h>
+#include <aws/common/thread.h>
 
 #if ZEND_EXTENSION_API_NO < 220131226
 #    error "PHP >= 5.6 is required"
@@ -125,10 +126,10 @@ typedef struct _aws_php_task {
 #define AWS_PHP_THREAD_QUEUE_MAX_DEPTH 32
 
 typedef struct _aws_php_thread_queue {
-    aws_crt_mutex *mutex;
+    struct aws_mutex mutex;
     aws_php_task queue[AWS_PHP_THREAD_QUEUE_MAX_DEPTH];
     size_t write_slot;
-    void *thread_id;
+    aws_thread_id_t thread_id;
 } aws_php_thread_queue;
 
 extern aws_php_thread_queue s_aws_php_main_thread_queue;
