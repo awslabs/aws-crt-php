@@ -49,6 +49,18 @@ final class CRT {
     }
 
     /**
+     * @return bool whether or not the CRT is available via one of the possible backends
+     */
+    public static function isAvailable() {
+        try {
+            new CRT();
+            return true;
+        } catch (RuntimeException $ex) {
+            return false;
+        }
+    }
+
+    /**
      * @return integer last error code reported within the CRT
      */
     public static function last_error() {
