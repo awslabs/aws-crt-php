@@ -215,7 +215,7 @@ PHP_FUNCTION(aws_crt_signing_result_apply_to_http_request) {
 }
 
 typedef struct _signing_state {
-    aws_crt_promise *promise;
+    struct aws_promise *promise;
     zval *on_complete;
     aws_crt_signing_result *signing_result;
     int error_code;
@@ -224,7 +224,6 @@ typedef struct _signing_state {
 /* called on main thread to deliver result to php */
 static void s_sign_aws_complete(void *data) {
     signing_state *state = data;
-    aws_crt_promise *promise = state->promise;
     zval *on_complete = state->on_complete;
     aws_php_invoke_callback(on_complete, "ll", (zend_ulong)state->signing_result, (zend_ulong)state->error_code);
 }
@@ -232,7 +231,7 @@ static void s_sign_aws_complete(void *data) {
 /* called from signing process in aws_sign_request_aws */
 static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int error_code, void *user_data) {
     signing_state *state = user_data;
-    aws_crt_promise *promise = state->promise;
+    struct aws_promise *promise = state->promise;
 
     state->signing_result = result;
     state->error_code = error_code;
@@ -249,9 +248,9 @@ static void s_on_sign_request_aws_complete(aws_crt_signing_result *result, int e
     aws_php_thread_queue_yield(&s_aws_php_main_thread_queue);
 
     if (error_code) {
-        aws_crt_promise_fail(promise, error_code);
+        aws_promise_fail(promise, error_code);
     } else {
-        aws_crt_promise_complete(promise, result, NULL);
+        aws_promise_complete(promise, result, NULL);
     }
 }
 
@@ -265,7 +264,7 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
     aws_crt_signable *signable = (void *)php_signable;
     aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
 
-    aws_crt_promise *promise = aws_crt_promise_new();
+    struct aws_promise *promise = aws_promise_new(aws_crt_default_allocator());
     signing_state state = {
         .promise = promise,
         .on_complete = php_on_complete,
@@ -273,7 +272,7 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
     int ret = aws_crt_sign_request_aws(signable, signing_config, s_on_sign_request_aws_complete, &state);
     if (ret != 0) {
         int last_error = aws_crt_last_error();
-        aws_crt_promise_fail(promise, last_error);
+        aws_promise_fail(promise, last_error);
         aws_php_throw_exception(
             "aws_crt_sign_request_aws: error starting signing process: %s", aws_crt_error_name(last_error));
     }
@@ -281,6 +280,6 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
     aws_php_thread_queue_wait(&s_aws_php_main_thread_queue, promise);
 
 done:
-    aws_crt_promise_delete(promise);
+    aws_promise_release(promise);
     RETURN_LONG(ret);
 }

@@ -195,8 +195,8 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
 
 /* called on main thread after delivery */
 static void s_thread_queue_complete_promise(void *data) {
-    aws_crt_promise *promise = data;
-    aws_crt_promise_complete(promise, NULL, NULL);
+    struct aws_promise *promise = data;
+    aws_promise_complete(promise, NULL, NULL);
 }
 
 /* called from worker thread to wait for the main thread to execute any queued work in PHP */
@@ -206,20 +206,20 @@ void aws_php_thread_queue_yield(aws_php_thread_queue *queue) {
         aws_php_thread_queue_drain(queue);
     } else {
         /* push a task onto the end of the queue, we will return once this task completes our promise */
-        aws_crt_promise *queue_drained = aws_crt_promise_new();
+        struct aws_promise *queue_drained = aws_promise_new(aws_crt_default_allocator());
         aws_php_task queue_drained_task = {
             .callback = s_thread_queue_complete_promise,
             .data = queue_drained,
         };
         aws_php_thread_queue_push(queue, queue_drained_task);
-        aws_crt_promise_wait(queue_drained);
-        aws_crt_promise_delete(queue_drained);
+        aws_promise_wait(queue_drained);
+        aws_promise_release(queue_drained);
     }
 }
 
 /* called from PHP thread to wait on async queued jobs, one of which should complete the promise */
-void aws_php_thread_queue_wait(aws_php_thread_queue *queue, aws_crt_promise *promise) {
-    while (!aws_crt_promise_completed(promise)) {
+void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_promise *promise) {
+    while (!aws_promise_is_complete(promise)) {
         aws_php_thread_queue_drain(queue);
     }
 }

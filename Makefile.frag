@@ -32,7 +32,7 @@ $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a: $(BUILD_DIR)/aws-crt-ffi-stati
 	$(CMAKE_BUILD) build/aws-crt-ffi-static $(CMAKE_TARGET)
 
 # PHP extension target
-awscrt: modules/awscrt.la
+awscrt: ext/awscrt.lo
 
 # Force the crt object target to depend on the CRT static library
 ext/awscrt.lo: ext/awscrt.c
@@ -68,6 +68,6 @@ modules/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src
 	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so modules/libaws-crt-ffi.so
 
 # Use PHPUnit to run tests
-test: ext/api.h ext/awscrt_arginfo.h modules/awscrt.la
+test: ext/api.h ext/awscrt_arginfo.h ext/awscrt.lo
 	composer update
 	composer run test

@@ -17,6 +17,7 @@
 
 #include <aws/common/common.h>
 #include <aws/common/mutex.h>
+#include <aws/common/promise.h>
 #include <aws/common/thread.h>
 
 #if ZEND_EXTENSION_API_NO < 220131226
@@ -144,7 +145,7 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue);
 void aws_php_thread_queue_yield(aws_php_thread_queue *queue);
 
 /* called from PHP thread to wait on async queued jobs, one of which MUST complete the promise */
-void aws_php_thread_queue_wait(aws_php_thread_queue *queue, aws_crt_promise *promise);
+void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_promise *promise);
 
 /**
  * generic dispatch mechanism to call a callback provided as a zval with arguments
