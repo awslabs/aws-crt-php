@@ -45,7 +45,6 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
-
 #if AWS_PHP_AT_LEAST_7_2
 /* PHP 7 removed the string duplicate parameter */
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s)
@@ -57,16 +56,15 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
 
-#if !AWS_PHP_AT_LEAST_7
+#    undef ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
 /* definitions for ZEND API macros taken from PHP7 and backported to 5.5-7.1 */
 #    define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)       \
         static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0, 0},
-#endif
 
 /* PHP5 doesn't really handle type hints well, so elide them */
 #    undef ZEND_ARG_TYPE_INFO
 #    define ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)                                               \
-        {#name, sizeof(#name) - 1, NULL, 0, 0, pass_by_ref, allow_null },
+        {#name, sizeof(#name) - 1, NULL, 0, 0, pass_by_ref, allow_null},
 #endif
 
 #include "api.h"
