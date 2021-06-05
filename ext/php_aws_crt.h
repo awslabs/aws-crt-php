@@ -51,7 +51,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l)
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
-#else /* PHP 5.5-5.6 */
+#else /* PHP 5.5-5.6, 7.0-7.1 */
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
@@ -59,7 +59,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    undef ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
 /* definitions for ZEND API macros taken from PHP7 and backported to 5.5-7.1 */
 #    define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)       \
-        static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0, 0},
+        static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0 },
 
 /* PHP5 doesn't really handle type hints well, so elide them */
 #    undef ZEND_ARG_TYPE_INFO
