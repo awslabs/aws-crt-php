@@ -20,8 +20,8 @@
 #include <aws/common/promise.h>
 #include <aws/common/thread.h>
 
-#if ZEND_EXTENSION_API_NO < 220131226
-#    error "PHP >= 5.6 is required"
+#if ZEND_EXTENSION_API_NO < 220121212
+#    error "PHP >= 5.5 is required"
 #endif
 
 #define AWS_PHP_AT_LEAST_7 (ZEND_EXTENSION_API_NO >= 320151012)
