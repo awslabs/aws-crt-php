@@ -3,7 +3,7 @@ BUILD_DIR=$(shell pwd)/build
 DEPS_DIR=$(BUILD_DIR)/deps
 INT_DIR=$(BUILD_DIR)/install
 INSTALL_DIR=$(shell pwd)
-AT_LEAST_PHP7=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7)
+AT_LEAST_PHP7=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
