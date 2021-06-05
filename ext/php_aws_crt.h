@@ -20,11 +20,22 @@
 #include <aws/common/promise.h>
 #include <aws/common/thread.h>
 
-#if ZEND_EXTENSION_API_NO < 220121212
+/* ZEND_EXTENSION_API_NO from each branch of the PHP source */
+#define AWS_PHP_EXTENSION_API_5_5 220121212
+#define AWS_PHP_EXTENSION_API_5_6 220131226
+#define AWS_PHP_EXTENSION_API_7_0 320151012
+#define AWS_PHP_EXTENSION_API_7_1 320160303
+#define AWS_PHP_EXTENSION_API_7_2 320170718
+#define AWS_PHP_EXTENSION_API_7_3 320180731
+#define AWS_PHP_EXTENSION_API_7_4 320190902
+#define AWS_PHP_EXTENSION_API_8_0 420200930
+
+#if ZEND_EXTENSION_API_NO < AWS_PHP_EXTENSION_API_5_5
 #    error "PHP >= 5.5 is required"
 #endif
 
-#define AWS_PHP_AT_LEAST_7 (ZEND_EXTENSION_API_NO >= 320151012)
+#define AWS_PHP_AT_LEAST_7 (ZEND_EXTENSION_API_NO >= AWS_PHP_EXTENSION_API_7_0)
+#define AWS_PHP_AT_LEAST_7_2 (ZEND_EXTENSION_API_NO >= AWS_PHP_EXTENSION_API_7_2)
 
 ZEND_BEGIN_MODULE_GLOBALS(awscrt)
 long log_level;
@@ -35,7 +46,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
 
-#if AWS_PHP_AT_LEAST_7
+#if AWS_PHP_AT_LEAST_7_2
 /* PHP 7 removed the string duplicate parameter */
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l)
@@ -46,7 +57,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
 
-/* definitions for ZEND API macros taken from PHP7 and backported to 5.6 */
+/* definitions for ZEND API macros taken from PHP7 and backported to 5.5-7.1 */
 #    define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)       \
         static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0, 0},
 
