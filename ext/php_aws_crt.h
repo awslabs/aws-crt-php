@@ -45,12 +45,20 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
+#ifndef IS_VOID
+#    define IS_VOID IS_UNDEF
+#endif
+
 #if AWS_PHP_AT_LEAST_7_2
 /* PHP 7 removed the string duplicate parameter */
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l)
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
+
+/* arginfo shims */
+#    define AWS_PHP_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(...) ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(__VA_ARGS__)
+
 #else /* PHP 5.5-5.6, 7.0-7.1 */
 #    define AWS_RETURN_STRING(s) RETURN_STRING(s, 1)
 #    define AWS_RETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
@@ -58,19 +66,15 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 #    undef ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
 #    if AWS_PHP_AT_LEAST_7
+/* arginfo shims */
 /* shim the definition for ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX so we can use the generated stubs from 7.3+ */
-#        define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(                                                               \
+#        define AWS_PHP_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(                                                            \
             name, return_reference, required_num_args, type, /* class_name, */ allow_null)                             \
-            static const zend_internal_arg_info name[] = {                                                             \
-                {(const char *)(zend_uintptr_t)(required_num_args),                                                    \
-                 NULL /* class_name */,                                                                                \
-                 type,                                                                                                 \
-                 return_reference,                                                                                     \
-                 allow_null,                                                                                           \
-                 0},
+            ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, NULL, allow_null)
 #    else /* PHP 5.x */
-/* definitions for ZEND API macros taken from PHP7 and backported to 5.x */
-#        define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null)   \
+/* 5.x doesn't have ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX, so shim it */
+#        define AWS_PHP_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(                                                            \
+            name, return_reference, required_num_args, type, allow_null)                                               \
             static const zend_arg_info name[] = {{NULL, 0, NULL, required_num_args, return_reference, 0},
 
 /* PHP5 doesn't really handle type hints well, so elide them */
