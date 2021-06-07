@@ -24,7 +24,7 @@ PHP_FUNCTION(aws_crt_http_message_to_blob) {
     uint8_t *blob = NULL;
     size_t blob_len = 0;
     aws_crt_http_message_to_blob(message, &blob, &blob_len);
-    AWS_RETURN_STRINGL((const char *)blob, blob_len);
+    RETURN_STRINGL((const char *)blob, blob_len);
     aws_crt_mem_release(blob);
 }
 
