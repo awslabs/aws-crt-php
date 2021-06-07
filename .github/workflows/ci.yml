@@ -16,6 +16,7 @@ env:
 
 jobs:
   php-5_5-linux-x64:
+    name: php-linux-x64 (5.5)
     runs-on: ubuntu-latest
     steps:
     - name: Setup PHP with Xdebug
