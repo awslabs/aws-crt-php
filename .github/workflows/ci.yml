@@ -15,13 +15,36 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
+  php-5.5-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup PHP with Xdebug
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: xdebug
+        php-version: ${{ matrix.php-versions }}
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      - with:
+        submodules: true
+
+    - name: Install ancient PHPUnit
+      run: composer require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
+
+    - name: Install depedencies
+      run: composer update --no-interaction
+
+    - name: Run tests
+      run: make test
+
   php-linux-x64:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         version:
-          - "5.5"
           - "5.6"
           - "7.0"
           - "7.1"
