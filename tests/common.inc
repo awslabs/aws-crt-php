@@ -21,4 +21,9 @@ abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
             $this->fail("Test left an error on the stack: " . CRT::error_name(CRT::last_error()));
         }
     }
+
+    // shim expectException -> setExpectedException for PHPUnit 4.8.x
+    public function expectException($exceptionName) {
+        $this->setExpectedException($exceptionName)
+    }
 }
