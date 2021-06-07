@@ -22,7 +22,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         coverage: xdebug
-        php-version: ${{ matrix.php-versions }}
+        php-version: 5.5
         ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
     - name: Checkout
