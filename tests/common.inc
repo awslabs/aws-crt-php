@@ -24,6 +24,6 @@ abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
 
     // shim expectException -> setExpectedException for PHPUnit 4.8.x
     public function expectException($exceptionName) {
-        $this->setExpectedException($exceptionName)
+        $this->setExpectedException($exceptionName);
     }
 }
