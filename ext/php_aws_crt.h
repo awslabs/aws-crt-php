@@ -45,7 +45,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 
 #define AWSCRT_GLOBAL(v) ZEND_MODULE_GLOBALS_ACCESSOR(awscrt, v)
 
-#if AWS_PHP_AT_LEAST_7_2
+#if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
 #else /* PHP 5.5-5.6, 7.0-7.1 */
