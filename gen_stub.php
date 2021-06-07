@@ -57,7 +57,7 @@ function processStubFile(string $stubFile, Context $context): ?FileInfo {
 
         initPhpParser();
         $fileInfo = parseStubFile($stubCode);
-        $arginfoCode = generateArgInfoCode($fileInfo, $stubHash);
+        $arginfoCode = generateArgInfoCode($fileInfo, $stubHash, $context->minimalArgInfo);
         if (($context->forceRegeneration || $stubHash !== $oldStubHash) && file_put_contents($arginfoFile, $arginfoCode)) {
             echo "Saved $arginfoFile\n";
         }
@@ -66,7 +66,7 @@ function processStubFile(string $stubFile, Context $context): ?FileInfo {
             foreach ($fileInfo->getAllFuncInfos() as $funcInfo) {
                 $funcInfo->discardInfoForOldPhpVersions();
             }
-            $arginfoCode = generateArgInfoCode($fileInfo, $stubHash);
+            $arginfoCode = generateArgInfoCode($fileInfo, $stubHash, $context->minimalArgInfo);
             if (($context->forceRegeneration || $stubHash !== $oldStubHash) && file_put_contents($legacyFile, $arginfoCode)) {
                 echo "Saved $legacyFile\n";
             }
@@ -101,6 +101,8 @@ class Context {
     public $forceParse = false;
     /** @var bool */
     public $forceRegeneration = false;
+    /** @var bool */
+    public $minimalArgInfo = false;
 }
 
 class SimpleType {
@@ -1357,96 +1359,108 @@ function parseStubFile(string $code): FileInfo {
     return $fileInfo;
 }
 
-function funcInfoToCode(FuncInfo $funcInfo): string {
+function funcInfoToCode(FuncInfo $funcInfo, bool $minimal): string {
     $code = '';
-    $returnType = $funcInfo->return->type;
-    if ($returnType !== null) {
-        if (null !== $simpleReturnType = $returnType->tryToSimpleType()) {
-            if ($simpleReturnType->isBuiltin) {
-                $code .= sprintf(
-                    "AWS_PHP_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)\n",
-                    $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
-                    $funcInfo->numRequiredArgs,
-                    $simpleReturnType->toTypeCode(), $returnType->isNullable()
-                );
-            } else {
-                $code .= sprintf(
-                    "ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(%s, %d, %d, %s, %d)\n",
-                    $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
-                    $funcInfo->numRequiredArgs,
-                    $simpleReturnType->toEscapedName(), $returnType->isNullable()
-                );
-            }
-        } else {
-            $arginfoType = $returnType->toArginfoType();
-            if ($arginfoType->hasClassType()) {
-                $code .= sprintf(
-                    "ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(%s, %d, %d, %s, %s)\n",
-                    $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
-                    $funcInfo->numRequiredArgs,
-                    $arginfoType->toClassTypeString(), $arginfoType->toTypeMask()
-                );
-            } else {
-                $code .= sprintf(
-                    "ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)\n",
-                    $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
-                    $funcInfo->numRequiredArgs,
-                    $arginfoType->toTypeMask()
-                );
-            }
+
+    // Generate the minimal, most compatible arginfo across PHP versions
+    if ($minimal) {
+        $code .= sprintf("ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)\n",
+            $funcInfo->getArgInfoName(),
+            $funcInfo->return->byRef,
+            $funcInfo->numRequiredArgs);
+        foreach ($funcInfo->args as $argInfo) {
+            $code .= sprintf("\tZEND_ARG_INFO(0, %s)\n", $argInfo->name);
         }
     } else {
-        $code .= sprintf(
-            "ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)\n",
-            $funcInfo->getArgInfoName(), $funcInfo->return->byRef, $funcInfo->numRequiredArgs
-        );
-    }
-
-    foreach ($funcInfo->args as $argInfo) {
-        $argKind = $argInfo->isVariadic ? "ARG_VARIADIC" : "ARG";
-        $argDefaultKind = $argInfo->hasProperDefaultValue() ? "_WITH_DEFAULT_VALUE" : "";
-        $argType = $argInfo->type;
-        if ($argType !== null) {
-            if (null !== $simpleArgType = $argType->tryToSimpleType()) {
-                if ($simpleArgType->isBuiltin) {
+        $returnType = $funcInfo->return->type;
+        if ($returnType !== null) {
+            if (null !== $simpleReturnType = $returnType->tryToSimpleType()) {
+                if ($simpleReturnType->isBuiltin) {
                     $code .= sprintf(
-                        "\tZEND_%s_TYPE_INFO%s(%s, %s, %s, %d%s)\n",
-                        $argKind, $argDefaultKind, $argInfo->getSendByString(), $argInfo->name,
-                        $simpleArgType->toTypeCode(), $argType->isNullable(),
-                        $argInfo->hasProperDefaultValue() ? ", " . $argInfo->getDefaultValueAsArginfoString() : ""
+                        "AWS_PHP_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)\n",
+                        $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
+                        $funcInfo->numRequiredArgs,
+                        $simpleReturnType->toTypeCode(), $returnType->isNullable()
                     );
                 } else {
                     $code .= sprintf(
-                        "\tZEND_%s_OBJ_INFO%s(%s, %s, %s, %d%s)\n",
-                        $argKind,$argDefaultKind, $argInfo->getSendByString(), $argInfo->name,
-                        $simpleArgType->toEscapedName(), $argType->isNullable(),
-                        $argInfo->hasProperDefaultValue() ? ", " . $argInfo->getDefaultValueAsArginfoString() : ""
+                        "ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(%s, %d, %d, %s, %d)\n",
+                        $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
+                        $funcInfo->numRequiredArgs,
+                        $simpleReturnType->toEscapedName(), $returnType->isNullable()
                     );
                 }
             } else {
-                $arginfoType = $argType->toArginfoType();
+                $arginfoType = $returnType->toArginfoType();
                 if ($arginfoType->hasClassType()) {
                     $code .= sprintf(
-                        "\tZEND_%s_OBJ_TYPE_MASK(%s, %s, %s, %s, %s)\n",
-                        $argKind, $argInfo->getSendByString(), $argInfo->name,
-                        $arginfoType->toClassTypeString(), $arginfoType->toTypeMask(),
-                        $argInfo->getDefaultValueAsArginfoString()
+                        "ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(%s, %d, %d, %s, %s)\n",
+                        $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
+                        $funcInfo->numRequiredArgs,
+                        $arginfoType->toClassTypeString(), $arginfoType->toTypeMask()
                     );
                 } else {
                     $code .= sprintf(
-                        "\tZEND_%s_TYPE_MASK(%s, %s, %s, %s)\n",
-                        $argKind, $argInfo->getSendByString(), $argInfo->name,
-                        $arginfoType->toTypeMask(),
-                        $argInfo->getDefaultValueAsArginfoString()
+                        "ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)\n",
+                        $funcInfo->getArgInfoName(), $funcInfo->return->byRef,
+                        $funcInfo->numRequiredArgs,
+                        $arginfoType->toTypeMask()
                     );
                 }
             }
         } else {
             $code .= sprintf(
-                "\tZEND_%s_INFO%s(%s, %s%s)\n",
-                $argKind, $argDefaultKind, $argInfo->getSendByString(), $argInfo->name,
-                $argInfo->hasProperDefaultValue() ? ", " . $argInfo->getDefaultValueAsArginfoString() : ""
+                "ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)\n",
+                $funcInfo->getArgInfoName(), $funcInfo->return->byRef, $funcInfo->numRequiredArgs
             );
+        }
+
+        foreach ($funcInfo->args as $argInfo) {
+            $argKind = $argInfo->isVariadic ? "ARG_VARIADIC" : "ARG";
+            $argDefaultKind = $argInfo->hasProperDefaultValue() ? "_WITH_DEFAULT_VALUE" : "";
+            $argType = $argInfo->type;
+            if ($argType !== null) {
+                if (null !== $simpleArgType = $argType->tryToSimpleType()) {
+                    if ($simpleArgType->isBuiltin) {
+                        $code .= sprintf(
+                            "\tZEND_%s_TYPE_INFO%s(%s, %s, %s, %d%s)\n",
+                            $argKind, $argDefaultKind, $argInfo->getSendByString(), $argInfo->name,
+                            $simpleArgType->toTypeCode(), $argType->isNullable(),
+                            $argInfo->hasProperDefaultValue() ? ", " . $argInfo->getDefaultValueAsArginfoString() : ""
+                        );
+                    } else {
+                        $code .= sprintf(
+                            "\tZEND_%s_OBJ_INFO%s(%s, %s, %s, %d%s)\n",
+                            $argKind,$argDefaultKind, $argInfo->getSendByString(), $argInfo->name,
+                            $simpleArgType->toEscapedName(), $argType->isNullable(),
+                            $argInfo->hasProperDefaultValue() ? ", " . $argInfo->getDefaultValueAsArginfoString() : ""
+                        );
+                    }
+                } else {
+                    $arginfoType = $argType->toArginfoType();
+                    if ($arginfoType->hasClassType()) {
+                        $code .= sprintf(
+                            "\tZEND_%s_OBJ_TYPE_MASK(%s, %s, %s, %s, %s)\n",
+                            $argKind, $argInfo->getSendByString(), $argInfo->name,
+                            $arginfoType->toClassTypeString(), $arginfoType->toTypeMask(),
+                            $argInfo->getDefaultValueAsArginfoString()
+                        );
+                    } else {
+                        $code .= sprintf(
+                            "\tZEND_%s_TYPE_MASK(%s, %s, %s, %s)\n",
+                            $argKind, $argInfo->getSendByString(), $argInfo->name,
+                            $arginfoType->toTypeMask(),
+                            $argInfo->getDefaultValueAsArginfoString()
+                        );
+                    }
+                }
+            } else {
+                $code .= sprintf(
+                    "\tZEND_%s_INFO%s(%s, %s%s)\n",
+                    $argKind, $argDefaultKind, $argInfo->getSendByString(), $argInfo->name,
+                    $argInfo->hasProperDefaultValue() ? ", " . $argInfo->getDefaultValueAsArginfoString() : ""
+                );
+            }
         }
     }
 
@@ -1486,13 +1500,13 @@ function generateCodeWithConditions(
     return $code;
 }
 
-function generateArgInfoCode(FileInfo $fileInfo, string $stubHash): string {
+function generateArgInfoCode(FileInfo $fileInfo, string $stubHash, bool $minimal): string {
     $code = "/* This is a generated file, edit the .stub.php file instead.\n"
           . " * Stub hash: $stubHash */\n";
     $generatedFuncInfos = [];
     $code .= generateCodeWithConditions(
         $fileInfo->getAllFuncInfos(), "\n",
-        function (FuncInfo $funcInfo) use(&$generatedFuncInfos) {
+        function (FuncInfo $funcInfo) use(&$generatedFuncInfos, $minimal) {
             /* If there already is an equivalent arginfo structure, only emit a #define */
             if ($generatedFuncInfo = findEquivalentFuncInfo($generatedFuncInfos, $funcInfo)) {
                 $code = sprintf(
@@ -1500,7 +1514,7 @@ function generateArgInfoCode(FileInfo $fileInfo, string $stubHash): string {
                     $funcInfo->getArgInfoName(), $generatedFuncInfo->getArgInfoName()
                 );
             } else {
-                $code = funcInfoToCode($funcInfo);
+                $code = funcInfoToCode($funcInfo, $minimal);
             }
 
             $generatedFuncInfos[] = $funcInfo;
@@ -1810,7 +1824,14 @@ function initPhpParser() {
 }
 
 $optind = null;
-$options = getopt("fh", ["force-regeneration", "parameter-stats", "help", "verify", "generate-methodsynopses", "replace-methodsynopses"], $optind);
+$options = getopt("fh", [
+    "force-regeneration",
+    "parameter-stats",
+    "help",
+    "verify",
+    "generate-methodsynopses",
+    "replace-methodsynopses",
+    "minimal-arginfo"], $optind);
 
 $context = new Context;
 $printParameterStats = isset($options["parameter-stats"]);
@@ -1819,6 +1840,7 @@ $generateMethodSynopses = isset($options["generate-methodsynopses"]);
 $replaceMethodSynopses = isset($options["replace-methodsynopses"]);
 $context->forceRegeneration = isset($options["f"]) || isset($options["force-regeneration"]);
 $context->forceParse = $context->forceRegeneration || $printParameterStats || $verify || $generateMethodSynopses || $replaceMethodSynopses;
+$context->minimalArgInfo = isset($options["minimal-arginfo"]);
 $targetMethodSynopses = $argv[$optind + 1] ?? null;
 if ($replaceMethodSynopses && $targetMethodSynopses === null) {
     die("A target directory must be provided.\n");

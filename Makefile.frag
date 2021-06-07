@@ -42,7 +42,7 @@ ext/awscrt.c: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/aws
 ext/awscrt_arginfo.h: ext/awscrt.stub.php gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
 	# generate awscrt_arginfo.h
-	php gen_stub.php ext/awscrt.stub.php
+	php gen_stub.php --minimal-arginfo ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
