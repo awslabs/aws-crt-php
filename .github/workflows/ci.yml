@@ -15,7 +15,7 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  php-5.5-linux-x64:
+  php-5_5-linux-x64:
     runs-on: ubuntu-latest
     steps:
     - name: Setup PHP with Xdebug
