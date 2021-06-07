@@ -16,7 +16,7 @@ class SigningResult extends NativeResource {
     }
 
     function __destruct() {
-        // No release necessary, SigningResults are transient
+        // No destruction necessary, SigningResults are transient, just release
         $this->release();
         parent::__destruct();
     }

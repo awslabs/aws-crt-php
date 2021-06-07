@@ -315,7 +315,8 @@ final class CRT {
     }
 
     function signing_result_apply_to_http_request($signing_result, $http_message) {
-        return self::$impl->aws_crt_signing_result_apply_to_http_request($signing_result, $http_message);
+        return self::$impl->aws_crt_signing_result_apply_to_http_request(
+            $signing_result, $http_message);
     }
 
     function sign_request_aws($signable, $signing_config, $on_complete) {

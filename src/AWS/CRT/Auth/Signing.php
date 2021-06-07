@@ -11,8 +11,8 @@ abstract class Signing extends NativeResource {
     static function signRequestAws($signable, $signing_config, $on_complete) {
         return self::$crt->sign_request_aws($signable->native, $signing_config->native,
             function($result, $error_code) use ($on_complete) {
-            $signing_result = SigningResult::fromNative($result);
-            $on_complete($signing_result, $error_code);
-        });
+                $signing_result = SigningResult::fromNative($result);
+                $on_complete($signing_result, $error_code);
+            });
     }
 }
