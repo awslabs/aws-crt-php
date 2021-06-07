@@ -39,6 +39,8 @@ jobs:
 
     - name: Run tests
       run: |
+        export CC=clang
+        export CXX=clang++
         phpize
         ./configure
         make test
