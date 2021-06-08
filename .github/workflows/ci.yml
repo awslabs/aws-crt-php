@@ -7,7 +7,7 @@ on:
       - '!main'
 
 env:
-  BUILDER_VERSION: v0.8.9
+  BUILDER_VERSION: v0.8.18
   BUILDER_SOURCE: releases
   BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
   PACKAGE_NAME: aws-crt-php
@@ -15,38 +15,71 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  php7-linux-x64:
+  php-5_5-linux-x64:
+    name: php-linux-x64 (5.5)
     runs-on: ubuntu-latest
     steps:
-    - name: Build PHP 7.4 with ffi
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
-        export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php7-linux-x64:${{ env.BUILDER_VERSION }}
-        docker pull $DOCKER_IMAGE
-        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
+    - name: Setup PHP with Xdebug
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: xdebug
+        php-version: 5.5
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
-  php5-linux-x64:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install ancient PHPUnit
+      run: composer require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
+
+    - name: Install depedencies
+      run: composer update --no-interaction
+
+    - name: Run tests
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        phpize
+        ./configure
+        make test
+
+  php-linux-x64:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "5.6"
+          - "7.0"
+          - "7.1"
+          - "7.2"
+          - "7.3"
+          - "7.4"
+          - "8.0"
     steps:
-    - name: Build PHP 5.6 extension
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
-        export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php5-linux-x64:${{ env.BUILDER_VERSION }}
-        docker pull $DOCKER_IMAGE
-        docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
+      - name: PHP ${{ matrix.version}} Extension
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
+          export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php${{ matrix.version }}-linux-x64:${{ env.BUILDER_VERSION }}
+          docker pull $DOCKER_IMAGE
+          docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
 
-#   linux-arm:
-#     name: ARM (${{ matrix.arch }})
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         arch: [armv6, armv7, arm64]
-#     steps:
-#     - name: Build ${{ env.PACKAGE_NAME }}
-#       run: |
-#         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-#         chmod a+x builder
-#         ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
+
+  #   linux-arm:
+  #     name: ARM (${{ matrix.arch }})
+  #     runs-on: ubuntu-latest
+  #     strategy:
+  #       matrix:
+  #         arch: [armv6, armv7, arm64]
+  #     steps:
+  #     - name: Build ${{ env.PACKAGE_NAME }}
+  #       run: |
+  #         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+  #         chmod a+x builder
+  #         ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
 
   # windows-vc16:
   #   runs-on: windows-latest
@@ -87,8 +120,8 @@ jobs:
       matrix:
         version: [10.15]
     steps:
-    - name: Build PHP 8 extension and test
-      run: |
-        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-        chmod a+x builder
-        ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+      - name: Build PHP 8 extension and test
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+          chmod a+x builder
+          ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream

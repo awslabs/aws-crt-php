@@ -61,7 +61,6 @@ final class SigningTest extends CrtTestCase {
     const SIGV4TEST_SERVICE = 'service';
     const SIGV4TEST_REGION = 'us-east-1';
     public function testSigv4HeaderSigning() {
-        $this->markTestSkipped('WIP');
         $date = mktime(12, 36, 0, 8, 30, 2015);
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
@@ -74,14 +73,25 @@ final class SigningTest extends CrtTestCase {
             'credentials_provider' => $credentials_provider,
             'region' => self::SIGV4TEST_REGION,
             'service' => self::SIGV4TEST_SERVICE,
+            'date' => $date,
         ]);
         $http_request = new Request('GET', '/', [], ['Host' => 'example.amazonaws.com']);
         $this->assertNotNull($http_request, "Unable to create HttpRequest for signing");
         $signable = Signable::fromHttpRequest($http_request);
         $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
 
-        Signing::signRequestAws($signable, $signing_config, function() {
+        Signing::signRequestAws(
+            $signable, $signing_config,
+            function($signing_result, $error_code) use (&$http_request) {
+                $this->assertEquals(0, $error_code);
+                $signing_result->applyToHttpRequest($http_request);
+            }
+        );
 
-        });
+        $headers = $http_request->headers();
+        $this->assertEquals(
+            'AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31',
+            $headers->get('Authorization'));
+        $this->assertEquals('20150830T123600Z', $headers->get('X-Amz-Date'));
     }
 }

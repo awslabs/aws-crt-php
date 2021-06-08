@@ -23,6 +23,7 @@ class SigningConfigAWS extends NativeResource {
             'signed_body_value' => null,
             'signed_body_header_type' => SignedBodyHeaderType::NONE,
             'expiration_in_seconds' => 0,
+            'date' => time()
         ];
     }
 
@@ -34,15 +35,28 @@ class SigningConfigAWS extends NativeResource {
         $sc = $this->acquire(self::$crt->signing_config_aws_new());
         self::$crt->signing_config_aws_set_algorithm($sc, $options->algorithm->asInt());
         self::$crt->signing_config_aws_set_signature_type($sc, $options->signature_type->asInt());
-        self::$crt->signing_config_aws_set_credentials_provider($sc, $options->credentials_provider->asObject());
-        self::$crt->signing_config_aws_set_region($sc, $options->region->asString());
-        self::$crt->signing_config_aws_set_service($sc, $options->service->asString());
-        self::$crt->signing_config_aws_set_use_double_uri_encode($sc, $options->use_double_uri_encode->asBool());
-        self::$crt->signing_config_aws_set_should_normalize_uri_path($sc, $options->should_normalize_uri_path->asBool());
-        self::$crt->signing_config_aws_set_omit_session_token($sc, $options->omit_session_token->asBool());
-        self::$crt->signing_config_aws_set_signed_body_value($sc, $options->signed_body_value->asString());
-        self::$crt->signing_config_aws_set_signed_body_header_type($sc, $options->signed_body_header_type->asInt());
-        self::$crt->signing_config_aws_set_expiration_in_seconds($sc, $options->expiration_in_seconds->asInt());
+        if ($credentials_provider = $options->credentials_provider->asObject()) {
+            self::$crt->signing_config_aws_set_credentials_provider(
+                $sc,
+                $credentials_provider->native);
+        }
+        self::$crt->signing_config_aws_set_region(
+            $sc, $options->region->asString());
+        self::$crt->signing_config_aws_set_service(
+            $sc, $options->service->asString());
+        self::$crt->signing_config_aws_set_use_double_uri_encode(
+            $sc, $options->use_double_uri_encode->asBool());
+        self::$crt->signing_config_aws_set_should_normalize_uri_path(
+            $sc, $options->should_normalize_uri_path->asBool());
+        self::$crt->signing_config_aws_set_omit_session_token(
+            $sc, $options->omit_session_token->asBool());
+        self::$crt->signing_config_aws_set_signed_body_value(
+            $sc, $options->signed_body_value->asString());
+        self::$crt->signing_config_aws_set_signed_body_header_type(
+            $sc, $options->signed_body_header_type->asInt());
+        self::$crt->signing_config_aws_set_expiration_in_seconds(
+            $sc, $options->expiration_in_seconds->asInt());
+        self::$crt->signing_config_aws_set_date($sc, $options->date->asInt());
     }
 
     function __destruct()

@@ -103,6 +103,8 @@ function aws_crt_signing_config_aws_set_signed_body_header_type(int $config, int
 
 function aws_crt_signing_config_aws_set_expiration_in_seconds(int $config, int $expiration_in_seconds): void {}
 
+function aws_crt_signing_config_aws_set_date(int $config, int $timestamp): void {}
+
 function aws_crt_signable_new_from_http_request(int $http_message): int {}
 
 function aws_crt_signable_new_from_chunk(int $input_stream, string $previous_signature): int {}
@@ -110,5 +112,9 @@ function aws_crt_signable_new_from_chunk(int $input_stream, string $previous_sig
 function aws_crt_signable_new_from_canonical_request(string $request): int {}
 
 function aws_crt_signable_release(int $signable): void {}
+
+function aws_crt_signing_result_release(int $signing_result): void {}
+
+function aws_crt_signing_result_apply_to_http_request(object $signing_result, object $http_request): void {}
 
 function aws_crt_sign_request_aws(int $signable, int $signing_config, object $on_complete, object $user_data): int {}

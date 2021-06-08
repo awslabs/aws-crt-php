@@ -49,6 +49,25 @@ final class CRT {
     }
 
     /**
+     * @return bool whether or not the CRT is currently loaded with an active backend
+     */
+    public static function isLoaded() {
+        return !is_null(self::$impl);
+    }
+
+    /**
+     * @return bool whether or not the CRT is available via one of the possible backends
+     */
+    public static function isAvailable() {
+        try {
+            new CRT();
+            return true;
+        } catch (RuntimeException $ex) {
+            return false;
+        }
+    }
+
+    /**
      * @return integer last error code reported within the CRT
      */
     public static function last_error() {
@@ -211,6 +230,10 @@ final class CRT {
         return self::$impl->aws_crt_http_message_new_from_blob($blob);
     }
 
+    function http_message_to_blob($message) {
+        return self::$impl->aws_crt_http_message_to_blob($message);
+    }
+
     function http_message_release($message) {
         self::$impl->aws_crt_http_message_release($message);
     }
@@ -267,6 +290,10 @@ final class CRT {
         self::$impl->aws_crt_signing_config_aws_set_expiration_in_seconds($signing_config, $expiration_in_seconds);
     }
 
+    function signing_config_aws_set_date($signing_config, $timestamp) {
+        self::$impl->aws_crt_signing_config_aws_set_date($signing_config, $timestamp);
+    }
+
     function signable_new_from_http_request($http_message) {
         return self::$impl->aws_crt_signable_new_from_http_request($http_message);
     }
@@ -281,6 +308,15 @@ final class CRT {
 
     function signable_release($signable) {
         self::$impl->aws_crt_signable_release($signable);
+    }
+
+    function signing_result_release($signing_result) {
+        self::$impl->aws_crt_signing_result_release($signing_result);
+    }
+
+    function signing_result_apply_to_http_request($signing_result, $http_message) {
+        return self::$impl->aws_crt_signing_result_apply_to_http_request(
+            $signing_result, $http_message);
     }
 
     function sign_request_aws($signable, $signing_config, $on_complete) {

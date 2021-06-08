@@ -3,7 +3,7 @@ BUILD_DIR=$(shell pwd)/build
 DEPS_DIR=$(BUILD_DIR)/deps
 INT_DIR=$(BUILD_DIR)/install
 INSTALL_DIR=$(shell pwd)
-AT_LEAST_PHP7=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7)
+GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
@@ -32,20 +32,17 @@ $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a: $(BUILD_DIR)/aws-crt-ffi-stati
 	$(CMAKE_BUILD) build/aws-crt-ffi-static $(CMAKE_TARGET)
 
 # PHP extension target
-extension: ext/crt.lo
+awscrt: ext/awscrt.lo
 
 # Force the crt object target to depend on the CRT static library
-ext/crt.lo: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
+ext/awscrt.lo: ext/awscrt.c
 
-# borrow the gen_stub script from PHP's build process
-GEN_STUB=build/gen_stub.php
-$(GEN_STUB):
-	curl -o $(GEN_STUB) -sSL https://raw.githubusercontent.com/php/php-src/bbb86ba7e2fe8ae365294d1834c6a392570a9dcd/build/gen_stub.php
+ext/awscrt.c: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
-ext/awscrt_arginfo.h: ext/awscrt.stub.php $(GEN_STUB)
-ifeq ($(AT_LEAST_PHP7),1)
+ext/awscrt_arginfo.h: ext/awscrt.stub.php gen_stub.php
+ifeq ($(GENERATE_STUBS),1)
 	# generate awscrt_arginfo.h
-	php $(GEN_STUB) ext/awscrt.stub.php
+	php gen_stub.php --minimal-arginfo ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
@@ -56,14 +53,16 @@ src/api.h: crt/aws-crt-ffi/src/api.h
 ext/api.h : src/api.h
 	cp -v src/api.h ext/api.h
 
+ext/php_aws_crt.h: ext/awscrt_arginfo.h ext/api.h
+
 # FFI target
 ffi: src/libaws-crt-ffi.so
 
 # copy the lib into the src folder
-src/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
-	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/libaws-crt-ffi.so
+modules/libaws-crt-ffi.so: $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so src/api.h
+	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.so modules/libaws-crt-ffi.so
 
 # Use PHPUnit to run tests
-test: ext/api.h ext/awscrt_arginfo.h ext/crt.lo
+test: ext/api.h ext/awscrt_arginfo.h ext/awscrt.lo
 	composer update
 	composer run test
