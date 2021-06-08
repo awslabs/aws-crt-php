@@ -15,9 +15,10 @@
     },
     "minimum-stability": "alpha",
     "require": {
+        "php": ">=5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5"
+        "phpunit/phpunit":"^4.8.35|^5.4.3"
     },
     "conflict": {
         "phpunit/php-timer": ">=2"
