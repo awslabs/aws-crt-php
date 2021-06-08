@@ -9,13 +9,6 @@ abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
     private static $crt = null;
     public static function setUpBeforeClass() {
         self::$crt = new CRT();
-
-        // shim expectException -> setExpectedException for PHPUnit 4.8.x
-        if (!method_exists($this, 'expectException')) {
-            $this->expectException = function($exceptionName) {
-                $this->setExpectedException($exceptionName);
-            }
-        }
     }
 
     public static function tearDownAfterClass() {
@@ -26,6 +19,14 @@ abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
     protected function assertPostConditions() {
         if (CRT::last_error()) {
             $this->fail("Test left an error on the stack: " . CRT::error_name(CRT::last_error()));
+        }
+    }
+
+    // Shim missing calls in older versions of PHPUnit
+    public function __call($name, $arguments) {
+        // shim expectException -> setExpectedException for PHPUnit 4.8.x
+        if ($name == 'expectException') {
+            $this->setExpectedException($arguments[0]);
         }
     }
 }
