@@ -1,0 +1,7 @@
+// vim:ft=javascript
+
+ARG_WITH("awscrt", "Include AWS Common Runtime support", "yes");
+
+if (PHP_AWSCRT != "no") {
+    EXTENSION("awscrt", "awscrt.c", PHP_AWSCRT_SHARED);
+}

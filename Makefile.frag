@@ -1,8 +1,6 @@
 
-BUILD_DIR=$(shell pwd)/build
-DEPS_DIR=$(BUILD_DIR)/deps
+BUILD_DIR=build
 INT_DIR=$(BUILD_DIR)/install
-INSTALL_DIR=$(shell pwd)
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
@@ -47,7 +45,7 @@ endif
 
 # transform/install api.h from FFI lib
 src/api.h: crt/aws-crt-ffi/src/api.h
-	cat crt/aws-crt-ffi/src/api.h | grep -v AWS_EXTERN_C | sed -e 's/AWS_CRT_API //' | grep -ve '^#' > src/api.h
+	php gen_api.php crt/aws-crt-ffi/src/api.h > src/api.h
 
 # install api.h to ext/ as well
 ext/api.h : src/api.h
