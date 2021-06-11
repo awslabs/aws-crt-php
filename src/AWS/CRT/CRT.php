@@ -24,6 +24,14 @@ final class CRT {
         if (is_null(self::$impl)) {
             // Figure out what backends are/should be available
             $backends = ['Extension'];
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+                $backends = ['Extension', 'FFI'];
+                if (getenv('AWS_CRT_PHP_EXTENSION')) {
+                    $backends = ['Extension'];
+                } else if (getenv('AWS_CRT_PHP_FFI')) {
+                    $backends = ['FFI'];
+                }
+            }
 
             // Try to load each backend, give up if none succeed
             $exceptions = [];
@@ -31,6 +39,7 @@ final class CRT {
                 try {
                     $backend = 'AWS\\CRT\\Internal\\' . $backend;
                     self::$impl = new $backend();
+                    break;
                 } catch (RuntimeException $rex) {
                     array_push($exceptions, $rex);
                 }
