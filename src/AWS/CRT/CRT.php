@@ -24,7 +24,7 @@ final class CRT {
         if (is_null(self::$impl)) {
             // Figure out what backends are/should be available
             $backends = ['Extension'];
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            if (extension_loaded('ffi')) {
                 $backends = ['Extension', 'FFI'];
                 if (getenv('AWS_CRT_PHP_EXTENSION')) {
                     $backends = ['Extension'];
