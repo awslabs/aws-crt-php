@@ -2,8 +2,8 @@
 
 namespace AWS\CRT\Internal;
 
-use \Exception;
-use \RuntimeException;
+use Exception;
+use RuntimeException;
 
 /**
  * @internal
@@ -47,7 +47,22 @@ final class FFI {
      * occurs at the CRT wrapper.
      */
     function __call(string $name, $args) {
-        return call_user_func_array(array(self::$ffi, $name), $args);
+        // Expand strings to (string, length)
+        $ffi_args = [];
+        foreach ($args as $arg) {
+            if (is_string($arg)) {
+                $len = strlen($arg);
+                $buf = $len ? self::$ffi->new("uint8_t[".$len."]") : null;
+                if ($buf) {
+                    \FFI::memcpy($buf, $arg, $len);
+                }
+                $ffi_args []= $buf;
+                $ffi_args []= $len;
+            } else {
+                $ffi_args []= $arg;
+            }
+        }
+        return call_user_func_array(array(self::$ffi, $name), $ffi_args);
     }
 
     private static function init() {
