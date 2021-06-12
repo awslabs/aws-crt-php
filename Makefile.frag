@@ -70,7 +70,7 @@ ffi: src/api.h src/libaws-crt-ffi.$(SHLIB_SUFFIX_NAME)
 src/libaws-crt-ffi.$(SHLIB_SUFFIX_NAME): $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.$(SHLIB_SUFFIX_NAME) src/api.h
 	cp -v $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.$(SHLIB_SUFFIX_NAME) src/libaws-crt-ffi.$(SHLIB_SUFFIX_NAME)
 
-vendor/phpbin/phpunit:
+vendor/bin/phpunit:
 	composer update
 
 test-ffi: vendor/bin/phpunit ffi
@@ -78,7 +78,7 @@ ifeq ($(HAS_FFI),1)
 	AWS_CRT_PHP_FFI=1 composer run test-ffi
 endif
 
-test-extension: vendor/phpbin/phpunit extension
+test-extension: vendor/bin/phpunit extension
 	AWS_CRT_PHP_EXTENSION=1 composer run test-extension
 
 # Use PHPUnit to run tests
