@@ -77,6 +77,20 @@ final class CRT {
     }
 
     /**
+     * @return bool true if using PHP FFI (PHP 7.4+)
+     */
+    public static function isFFI() {
+        return self::isLoaded() && strstr(get_class(self::$impl), 'FFI');
+    }
+
+    /**
+     * @return bool true if using PHP Extension awscrt
+     */
+    public static function isExtension() {
+        return self::isLoaded() && strstr(get_class(self::$impl), 'Extension');
+    }
+
+    /**
      * @return integer last error code reported within the CRT
      */
     public static function last_error() {
@@ -328,7 +342,7 @@ final class CRT {
             $signing_result, $http_message);
     }
 
-    function sign_request_aws($signable, $signing_config, $on_complete) {
-        return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete);
+    function sign_request_aws($signable, $signing_config, $on_complete, $user_data) {
+        return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete, $user_data);
     }
 }

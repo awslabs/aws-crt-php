@@ -48,21 +48,28 @@ final class FFI {
      */
     function __call(string $name, $args) {
         // Expand strings to (string, length)
-        $ffi_args = [];
+        $ffi_args =[];
         foreach ($args as $arg) {
             if (is_string($arg)) {
                 $len = strlen($arg);
-                $buf = $len ? self::$ffi->new("uint8_t[".$len."]") : null;
-                if ($buf) {
+                if ($len > 0) {
+                    $uint8_t = \FFI::type('uint8_t');
+                    $uint8_array = \FFI::arrayType($uint8_t, [$len]);
+                    $buf = \FFI::new($uint8_array);
                     \FFI::memcpy($buf, $arg, $len);
+                    $ffi_args [] = $buf;
+                    $ffi_args [] = $len;
+                } else {
+                    $ffi_args [] = null;
+                    $ffi_args [] = 0;
                 }
-                $ffi_args []= $buf;
-                $ffi_args []= $len;
+            } else if (is_resource($arg)) {
+                throw new RuntimeException("Resource types are not supported for FFI");
             } else {
                 $ffi_args []= $arg;
             }
         }
-        return call_user_func_array(array(self::$ffi, $name), $ffi_args);
+        return call_user_func_array([self::$ffi, $name], $ffi_args);
     }
 
     private static function init() {
