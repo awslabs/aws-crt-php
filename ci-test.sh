@@ -2,9 +2,9 @@
 
 set -ex
 
-PHP_AT_LEAST_7=$(php --version | head -1 | cut -f 2 -d' '` \>= 7.0)
+PHP_VERSION=$(php --version | head -1 | cut -f 2 -d' ')
 
-if [[ $PHP_AT_LEAST_7 ]]; then
+if [[ $PHP_VERSION -ge 7 ]]; then
   make test-ffi
   make test-extension
 else
