@@ -4,6 +4,7 @@ DEPS_DIR=$(BUILD_DIR)/deps
 INT_DIR=$(BUILD_DIR)/install
 INSTALL_DIR=$(shell pwd)
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
+HAS_FFI=$(shell php -m | grep FFI | wc -l)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
@@ -69,7 +70,9 @@ vendor/phpbin/phpunit:
 	composer update
 
 test-ffi: vendor/bin/phpunit ffi
+ifeq ($(HAS_FFI),1)
 	AWS_CRT_PHP_FFI=1 composer run test-ffi
+endif
 
 test-extension: vendor/phpbin/phpunit extension
 	AWS_CRT_PHP_EXTENSION=1 composer run test-extension
