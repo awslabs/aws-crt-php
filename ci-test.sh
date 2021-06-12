@@ -2,7 +2,7 @@
 
 set -ex
 
-HAS_FFI=$(php -m | grep FFI | wc -l)
+HAS_FFI=$(php -m | grep FFI | wc -l | xargs)
 
 make test-extension
 

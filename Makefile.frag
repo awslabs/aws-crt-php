@@ -4,7 +4,7 @@ DEPS_DIR=$(BUILD_DIR)/deps
 INT_DIR=$(BUILD_DIR)/install
 INSTALL_DIR=$(shell pwd)
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
-HAS_FFI=$(shell php -m | grep FFI | wc -l)
+HAS_FFI=$(shell php -m | grep FFI | wc -l | xargs)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
@@ -21,11 +21,15 @@ all: extension ffi
 
 # configure for shared aws-crt-ffi.so
 $(BUILD_DIR)/aws-crt-ffi-shared/CMakeCache.txt:
+ifeq ($(HAS_FFI),1)
 	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi-shared -DBUILD_SHARED_LIBS=ON
+endif
 
 # build shared libaws-crt-ffi.so
 $(BUILD_DIR)/aws-crt-ffi-shared/libaws-crt-ffi.$(SHLIB_SUFFIX_NAME): $(BUILD_DIR)/aws-crt-ffi-shared/CMakeCache.txt
+ifeq ($(HAS_FFI),1)
 	$(CMAKE_BUILD) build/aws-crt-ffi-shared $(CMAKE_TARGET)
+endif
 
 # configure for static aws-crt-ffi.a
 $(BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt:
