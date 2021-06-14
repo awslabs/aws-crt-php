@@ -1,11 +1,11 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8ee94b778eb6d2eeabc8c2695aaded9fb18de88f */
+ * Stub hash: 36d4e512f02a12c10689eb9b0941bcd7837fbf1d */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_last_error, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_error_name, 0, 0, 1)
-	ZEND_ARG_INFO(0, error_code)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_error_name, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, error_code, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_error_str arginfo_aws_crt_error_name
@@ -14,104 +14,104 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_event_loop_group_options_new arginfo_aws_crt_last_error
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_event_loop_group_options_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, elg_options)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_options_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, elg_options, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_event_loop_group_options_set_max_threads, 0, 0, 2)
-	ZEND_ARG_INFO(0, elg_options)
-	ZEND_ARG_INFO(0, max_threads)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_options_set_max_threads, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, elg_options, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, max_threads, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_event_loop_group_new, 0, 0, 1)
-	ZEND_ARG_INFO(0, options)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_new, 0, 1, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_event_loop_group_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, event_loop_group)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_event_loop_group_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, event_loop_group, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_options_new, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_options_new, 0, 0, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_options_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, options)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_options_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_options_set_user_data, 0, 0, 2)
-	ZEND_ARG_INFO(0, options)
-	ZEND_ARG_INFO(0, user_data)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_options_set_user_data, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_input_stream_new arginfo_aws_crt_event_loop_group_new
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, stream)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_seek, 0, 0, 3)
-	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_INFO(0, offset)
-	ZEND_ARG_INFO(0, basis)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_seek, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, offset, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, basis, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_read, 0, 0, 2)
-	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_INFO(0, length)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_read, 0, 2, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, length, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_eof, 0, 0, 1)
-	ZEND_ARG_INFO(0, stream)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_eof, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_get_length, 0, 0, 1)
-	ZEND_ARG_INFO(0, stream)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_get_length, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, stream, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_http_message_new_from_blob, 0, 0, 1)
-	ZEND_ARG_INFO(0, blob)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_http_message_new_from_blob, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, blob, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_http_message_to_blob, 0, 0, 1)
-	ZEND_ARG_INFO(0, message)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_http_message_to_blob, 0, 1, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, message, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_http_message_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, message)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_http_message_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, message, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_credentials_options_new arginfo_aws_crt_input_stream_options_new
 
 #define arginfo_aws_crt_credentials_options_release arginfo_aws_crt_input_stream_options_release
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_credentials_options_set_access_key_id, 0, 0, 2)
-	ZEND_ARG_INFO(0, options)
-	ZEND_ARG_INFO(0, access_key_id)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_access_key_id, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, access_key_id, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_credentials_options_set_secret_access_key, 0, 0, 2)
-	ZEND_ARG_INFO(0, options)
-	ZEND_ARG_INFO(0, secret_access_key)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_secret_access_key, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, secret_access_key, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_credentials_options_set_session_token, 0, 0, 2)
-	ZEND_ARG_INFO(0, options)
-	ZEND_ARG_INFO(0, session_token)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_session_token, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, session_token, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds, 0, 0, 2)
-	ZEND_ARG_INFO(0, options)
-	ZEND_ARG_INFO(0, expiration_timepoint_seconds)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, options, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, expiration_timepoint_seconds, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_credentials_new arginfo_aws_crt_event_loop_group_new
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_credentials_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, credentials)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, credentials, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_credentials_provider_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, credentials)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_credentials_provider_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, credentials, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_credentials_provider_static_options_new arginfo_aws_crt_input_stream_options_new
@@ -128,102 +128,109 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_signing_config_aws_new arginfo_aws_crt_last_error
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, config)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_algorithm, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, algorithm)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_algorithm, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, algorithm, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_signature_type, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, signature_type)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_signature_type, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, signature_type, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_credentials_provider, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, credentials_provider)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_credentials_provider, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, credentials_provider, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_region, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, region)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_region, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, region, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_service, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, service)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_service, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, service, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_use_double_uri_encode, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, use_double_uri_encode)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_use_double_uri_encode, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, use_double_uri_encode, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_should_normalize_uri_path, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, should_normalize_uri_path)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_should_normalize_uri_path, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, should_normalize_uri_path, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_omit_session_token, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, omit_session_token)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_omit_session_token, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, omit_session_token, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_signed_body_value, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, signed_body_value)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_signed_body_value, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, signed_body_value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_signed_body_header_type, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, signed_body_header_type)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_signed_body_header_type, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, signed_body_header_type, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_expiration_in_seconds, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, expiration_in_seconds)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_expiration_in_seconds, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, expiration_in_seconds, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_config_aws_set_date, 0, 0, 2)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, timestamp)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_config_aws_set_date, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, timestamp, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signable_new_from_http_request, 0, 0, 1)
-	ZEND_ARG_INFO(0, http_message)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signable_new_from_http_request, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, http_message, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signable_new_from_chunk, 0, 0, 2)
-	ZEND_ARG_INFO(0, input_stream)
-	ZEND_ARG_INFO(0, previous_signature)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signable_new_from_chunk, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, input_stream, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, previous_signature, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signable_new_from_canonical_request, 0, 0, 1)
-	ZEND_ARG_INFO(0, request)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signable_new_from_canonical_request, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, request, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signable_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, signable)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signable_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, signable, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_result_release, 0, 0, 1)
-	ZEND_ARG_INFO(0, signing_result)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_result_release, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, signing_result, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_signing_result_apply_to_http_request, 0, 0, 2)
-	ZEND_ARG_INFO(0, signing_result)
-	ZEND_ARG_INFO(0, http_request)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_signing_result_apply_to_http_request, 0, 2, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, signing_result, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, http_request, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_sign_request_aws, 0, 0, 4)
-	ZEND_ARG_INFO(0, signable)
-	ZEND_ARG_INFO(0, signing_config)
-	ZEND_ARG_INFO(0, on_complete)
-	ZEND_ARG_INFO(0, user_data)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_sign_request_aws, 0, 4, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, signable, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, signing_config, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, on_complete, IS_OBJECT, 0)
+	ZEND_ARG_TYPE_INFO(0, user_data, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_crc32, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, input, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, prev, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_aws_crt_crc32c arginfo_aws_crt_crc32
 
 
 ZEND_FUNCTION(aws_crt_last_error);
@@ -283,6 +290,8 @@ ZEND_FUNCTION(aws_crt_signable_release);
 ZEND_FUNCTION(aws_crt_signing_result_release);
 ZEND_FUNCTION(aws_crt_signing_result_apply_to_http_request);
 ZEND_FUNCTION(aws_crt_sign_request_aws);
+ZEND_FUNCTION(aws_crt_crc32);
+ZEND_FUNCTION(aws_crt_crc32c);
 
 
 static const zend_function_entry ext_functions[] = {
@@ -343,5 +352,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_signing_result_release, arginfo_aws_crt_signing_result_release)
 	ZEND_FE(aws_crt_signing_result_apply_to_http_request, arginfo_aws_crt_signing_result_apply_to_http_request)
 	ZEND_FE(aws_crt_sign_request_aws, arginfo_aws_crt_sign_request_aws)
+	ZEND_FE(aws_crt_crc32, arginfo_aws_crt_crc32)
+	ZEND_FE(aws_crt_crc32c, arginfo_aws_crt_crc32c)
 	ZEND_FE_END
 };

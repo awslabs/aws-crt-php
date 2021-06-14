@@ -322,4 +322,12 @@ final class CRT {
     function sign_request_aws($signable, $signing_config, $on_complete) {
         return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete);
     }
+
+    function crc32($input, $previous) {
+        return self::$impl->aws_crt_crc32($input, $previous);
+    }
+
+    function crc32c($input, $previous) {
+        return self::$impl->aws_crt_crc32c($input, $previous);
+    }
 }

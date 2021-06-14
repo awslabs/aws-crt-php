@@ -118,3 +118,7 @@ function aws_crt_signing_result_release(int $signing_result): void {}
 function aws_crt_signing_result_apply_to_http_request(object $signing_result, object $http_request): void {}
 
 function aws_crt_sign_request_aws(int $signable, int $signing_config, object $on_complete, object $user_data): int {}
+
+function aws_crt_crc32(string $input, int $prev): int {}
+
+function aws_crt_crc32c(string $input, int $prev): int {}
