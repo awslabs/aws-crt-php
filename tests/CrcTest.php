@@ -86,5 +86,5 @@ final class CrcTest extends CrtTestCase {
         $expected = 0x14298C12;
         $this->assertEquals($output, $expected);
     }
-    
+
 }

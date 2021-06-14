@@ -1,7 +1,7 @@
 /* This is a generated file, edit the .stub.php file instead.
  * Stub hash: 36d4e512f02a12c10689eb9b0941bcd7837fbf1d */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_last_error, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_error_name, 0, 0, 1)
@@ -31,7 +31,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_event_loop_group_release, 0, 0, 1)
 ZEND_ARG_INFO(0, event_loop_group)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_options_new, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_input_stream_options_new, 0, 0, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_input_stream_options_release, 0, 0, 1)
@@ -295,86 +295,66 @@ ZEND_FUNCTION(aws_crt_sign_request_aws);
 ZEND_FUNCTION(aws_crt_crc32);
 ZEND_FUNCTION(aws_crt_crc32c);
 
-static const zend_function_entry ext_functions[] =
-    {ZEND_FE(aws_crt_last_error, arginfo_aws_crt_last_error) ZEND_FE(aws_crt_error_name, arginfo_aws_crt_error_name) ZEND_FE(
-        aws_crt_error_str,
-        arginfo_aws_crt_error_str) ZEND_FE(aws_crt_error_debug_str, arginfo_aws_crt_error_debug_str)
-         ZEND_FE(aws_crt_event_loop_group_options_new, arginfo_aws_crt_event_loop_group_options_new) ZEND_FE(
-             aws_crt_event_loop_group_options_release,
-             arginfo_aws_crt_event_loop_group_options_release) ZEND_FE(aws_crt_event_loop_group_options_set_max_threads, arginfo_aws_crt_event_loop_group_options_set_max_threads)
-             ZEND_FE(aws_crt_event_loop_group_new, arginfo_aws_crt_event_loop_group_new) ZEND_FE(
-                 aws_crt_event_loop_group_release,
-                 arginfo_aws_crt_event_loop_group_release) ZEND_FE(aws_crt_input_stream_options_new, arginfo_aws_crt_input_stream_options_new)
-                 ZEND_FE(aws_crt_input_stream_options_release, arginfo_aws_crt_input_stream_options_release) ZEND_FE(
-                     aws_crt_input_stream_options_set_user_data,
-                     arginfo_aws_crt_input_stream_options_set_user_data) ZEND_FE(aws_crt_input_stream_new, arginfo_aws_crt_input_stream_new)
-                     ZEND_FE(aws_crt_input_stream_release, arginfo_aws_crt_input_stream_release) ZEND_FE(
-                         aws_crt_input_stream_seek,
-                         arginfo_aws_crt_input_stream_seek) ZEND_FE(aws_crt_input_stream_read, arginfo_aws_crt_input_stream_read)
-                         ZEND_FE(aws_crt_input_stream_eof, arginfo_aws_crt_input_stream_eof) ZEND_FE(
-                             aws_crt_input_stream_get_length,
-                             arginfo_aws_crt_input_stream_get_length)
-                             ZEND_FE(aws_crt_http_message_new_from_blob, arginfo_aws_crt_http_message_new_from_blob) ZEND_FE(
-                                 aws_crt_http_message_to_blob,
-                                 arginfo_aws_crt_http_message_to_blob)
-                                 ZEND_FE(aws_crt_http_message_release, arginfo_aws_crt_http_message_release) ZEND_FE(
-                                     aws_crt_credentials_options_new,
-                                     arginfo_aws_crt_credentials_options_new)
-                                     ZEND_FE(aws_crt_credentials_options_release, arginfo_aws_crt_credentials_options_release) ZEND_FE(
-                                         aws_crt_credentials_options_set_access_key_id,
-                                         arginfo_aws_crt_credentials_options_set_access_key_id)
-                                         ZEND_FE(
-                                             aws_crt_credentials_options_set_secret_access_key,
-                                             arginfo_aws_crt_credentials_options_set_secret_access_key)
-                                             ZEND_FE(
-                                                 aws_crt_credentials_options_set_session_token,
-                                                 arginfo_aws_crt_credentials_options_set_session_token)
-                                                 ZEND_FE(
-                                                     aws_crt_credentials_options_set_expiration_timepoint_seconds,
-                                                     arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds)
-                                                     ZEND_FE(aws_crt_credentials_new, arginfo_aws_crt_credentials_new) ZEND_FE(
-                                                         aws_crt_credentials_release,
-                                                         arginfo_aws_crt_credentials_release)
-                                                         ZEND_FE(
-                                                             aws_crt_credentials_provider_release,
-                                                             arginfo_aws_crt_credentials_provider_release)
-                                                             ZEND_FE(
-                                                                 aws_crt_credentials_provider_static_options_new,
-                                                                 arginfo_aws_crt_credentials_provider_static_options_new)
-                                                                 ZEND_FE(
-                                                                     aws_crt_credentials_provider_static_options_release,
-                                                                     arginfo_aws_crt_credentials_provider_static_options_release)
-                                                                     ZEND_FE(
-                                                                         aws_crt_credentials_provider_static_options_set_access_key_id,
-                                                                         arginfo_aws_crt_credentials_provider_static_options_set_access_key_id)
-                                                                         ZEND_FE(
-                                                                             aws_crt_credentials_provider_static_options_set_secret_access_key,
-                                                                             arginfo_aws_crt_credentials_provider_static_options_set_secret_access_key)
-                                                                             ZEND_FE(
-                                                                                 aws_crt_credentials_provider_static_options_set_session_token,
-                                                                                 arginfo_aws_crt_credentials_provider_static_options_set_session_token)
-                                                                                 ZEND_FE(
-                                                                                     aws_crt_credentials_provider_static_new,
-                                                                                     arginfo_aws_crt_credentials_provider_static_new)
-                                                                                     ZEND_FE(
-                                                                                         aws_crt_signing_config_aws_new,
-                                                                                         arginfo_aws_crt_signing_config_aws_new)
-                                                                                         ZEND_FE(
-                                                                                             aws_crt_signing_config_aws_release,
-                                                                                             arginfo_aws_crt_signing_config_aws_release)
-                                                                                             ZEND_FE(
-                                                                                                 aws_crt_signing_config_aws_set_algorithm,
-                                                                                                 arginfo_aws_crt_signing_config_aws_set_algorithm) ZEND_FE(aws_crt_signing_config_aws_set_signature_type, arginfo_aws_crt_signing_config_aws_set_signature_type) ZEND_FE(aws_crt_signing_config_aws_set_credentials_provider, arginfo_aws_crt_signing_config_aws_set_credentials_provider) ZEND_FE(aws_crt_signing_config_aws_set_region, arginfo_aws_crt_signing_config_aws_set_region) ZEND_FE(aws_crt_signing_config_aws_set_service, arginfo_aws_crt_signing_config_aws_set_service) ZEND_FE(aws_crt_signing_config_aws_set_use_double_uri_encode, arginfo_aws_crt_signing_config_aws_set_use_double_uri_encode) ZEND_FE(aws_crt_signing_config_aws_set_should_normalize_uri_path, arginfo_aws_crt_signing_config_aws_set_should_normalize_uri_path) ZEND_FE(aws_crt_signing_config_aws_set_omit_session_token, arginfo_aws_crt_signing_config_aws_set_omit_session_token) ZEND_FE(aws_crt_signing_config_aws_set_signed_body_value, arginfo_aws_crt_signing_config_aws_set_signed_body_value) ZEND_FE(aws_crt_signing_config_aws_set_signed_body_header_type, arginfo_aws_crt_signing_config_aws_set_signed_body_header_type) ZEND_FE(aws_crt_signing_config_aws_set_expiration_in_seconds, arginfo_aws_crt_signing_config_aws_set_expiration_in_seconds) ZEND_FE(aws_crt_signing_config_aws_set_date, arginfo_aws_crt_signing_config_aws_set_date) ZEND_FE(aws_crt_signable_new_from_http_request, arginfo_aws_crt_signable_new_from_http_request) ZEND_FE(aws_crt_signable_new_from_chunk, arginfo_aws_crt_signable_new_from_chunk) ZEND_FE(aws_crt_signable_new_from_canonical_request, arginfo_aws_crt_signable_new_from_canonical_request) ZEND_FE(aws_crt_signable_release, arginfo_aws_crt_signable_release) ZEND_FE(aws_crt_signing_result_release, arginfo_aws_crt_signing_result_release)
-                                                                                                 ZEND_FE(
-                                                                                                     aws_crt_signing_result_apply_to_http_request,
-                                                                                                     arginfo_aws_crt_signing_result_apply_to_http_request)
-                                                                                                     ZEND_FE(
-                                                                                                         aws_crt_sign_request_aws,
-                                                                                                         arginfo_aws_crt_sign_request_aws)
-                                                                                                         ZEND_FE(
-                                                                                                             aws_crt_crc32,
-                                                                                                             arginfo_aws_crt_crc32)
-                                                                                                             ZEND_FE(
-                                                                                                                 aws_crt_crc32c,
-                                                                                                                 arginfo_aws_crt_crc32c)
-                                                                                                                 ZEND_FE_END};
+
+static const zend_function_entry ext_functions[] = {
+	ZEND_FE(aws_crt_last_error, arginfo_aws_crt_last_error)
+	ZEND_FE(aws_crt_error_name, arginfo_aws_crt_error_name)
+	ZEND_FE(aws_crt_error_str, arginfo_aws_crt_error_str)
+	ZEND_FE(aws_crt_error_debug_str, arginfo_aws_crt_error_debug_str)
+	ZEND_FE(aws_crt_event_loop_group_options_new, arginfo_aws_crt_event_loop_group_options_new)
+	ZEND_FE(aws_crt_event_loop_group_options_release, arginfo_aws_crt_event_loop_group_options_release)
+	ZEND_FE(aws_crt_event_loop_group_options_set_max_threads, arginfo_aws_crt_event_loop_group_options_set_max_threads)
+	ZEND_FE(aws_crt_event_loop_group_new, arginfo_aws_crt_event_loop_group_new)
+	ZEND_FE(aws_crt_event_loop_group_release, arginfo_aws_crt_event_loop_group_release)
+	ZEND_FE(aws_crt_input_stream_options_new, arginfo_aws_crt_input_stream_options_new)
+	ZEND_FE(aws_crt_input_stream_options_release, arginfo_aws_crt_input_stream_options_release)
+	ZEND_FE(aws_crt_input_stream_options_set_user_data, arginfo_aws_crt_input_stream_options_set_user_data)
+	ZEND_FE(aws_crt_input_stream_new, arginfo_aws_crt_input_stream_new)
+	ZEND_FE(aws_crt_input_stream_release, arginfo_aws_crt_input_stream_release)
+	ZEND_FE(aws_crt_input_stream_seek, arginfo_aws_crt_input_stream_seek)
+	ZEND_FE(aws_crt_input_stream_read, arginfo_aws_crt_input_stream_read)
+	ZEND_FE(aws_crt_input_stream_eof, arginfo_aws_crt_input_stream_eof)
+	ZEND_FE(aws_crt_input_stream_get_length, arginfo_aws_crt_input_stream_get_length)
+	ZEND_FE(aws_crt_http_message_new_from_blob, arginfo_aws_crt_http_message_new_from_blob)
+	ZEND_FE(aws_crt_http_message_to_blob, arginfo_aws_crt_http_message_to_blob)
+	ZEND_FE(aws_crt_http_message_release, arginfo_aws_crt_http_message_release)
+	ZEND_FE(aws_crt_credentials_options_new, arginfo_aws_crt_credentials_options_new)
+	ZEND_FE(aws_crt_credentials_options_release, arginfo_aws_crt_credentials_options_release)
+	ZEND_FE(aws_crt_credentials_options_set_access_key_id, arginfo_aws_crt_credentials_options_set_access_key_id)
+	ZEND_FE(aws_crt_credentials_options_set_secret_access_key, arginfo_aws_crt_credentials_options_set_secret_access_key)
+	ZEND_FE(aws_crt_credentials_options_set_session_token, arginfo_aws_crt_credentials_options_set_session_token)
+	ZEND_FE(aws_crt_credentials_options_set_expiration_timepoint_seconds, arginfo_aws_crt_credentials_options_set_expiration_timepoint_seconds)
+	ZEND_FE(aws_crt_credentials_new, arginfo_aws_crt_credentials_new)
+	ZEND_FE(aws_crt_credentials_release, arginfo_aws_crt_credentials_release)
+	ZEND_FE(aws_crt_credentials_provider_release, arginfo_aws_crt_credentials_provider_release)
+	ZEND_FE(aws_crt_credentials_provider_static_options_new, arginfo_aws_crt_credentials_provider_static_options_new)
+	ZEND_FE(aws_crt_credentials_provider_static_options_release, arginfo_aws_crt_credentials_provider_static_options_release)
+	ZEND_FE(aws_crt_credentials_provider_static_options_set_access_key_id, arginfo_aws_crt_credentials_provider_static_options_set_access_key_id)
+	ZEND_FE(aws_crt_credentials_provider_static_options_set_secret_access_key, arginfo_aws_crt_credentials_provider_static_options_set_secret_access_key)
+	ZEND_FE(aws_crt_credentials_provider_static_options_set_session_token, arginfo_aws_crt_credentials_provider_static_options_set_session_token)
+	ZEND_FE(aws_crt_credentials_provider_static_new, arginfo_aws_crt_credentials_provider_static_new)
+	ZEND_FE(aws_crt_signing_config_aws_new, arginfo_aws_crt_signing_config_aws_new)
+	ZEND_FE(aws_crt_signing_config_aws_release, arginfo_aws_crt_signing_config_aws_release)
+	ZEND_FE(aws_crt_signing_config_aws_set_algorithm, arginfo_aws_crt_signing_config_aws_set_algorithm)
+	ZEND_FE(aws_crt_signing_config_aws_set_signature_type, arginfo_aws_crt_signing_config_aws_set_signature_type)
+	ZEND_FE(aws_crt_signing_config_aws_set_credentials_provider, arginfo_aws_crt_signing_config_aws_set_credentials_provider)
+	ZEND_FE(aws_crt_signing_config_aws_set_region, arginfo_aws_crt_signing_config_aws_set_region)
+	ZEND_FE(aws_crt_signing_config_aws_set_service, arginfo_aws_crt_signing_config_aws_set_service)
+	ZEND_FE(aws_crt_signing_config_aws_set_use_double_uri_encode, arginfo_aws_crt_signing_config_aws_set_use_double_uri_encode)
+	ZEND_FE(aws_crt_signing_config_aws_set_should_normalize_uri_path, arginfo_aws_crt_signing_config_aws_set_should_normalize_uri_path)
+	ZEND_FE(aws_crt_signing_config_aws_set_omit_session_token, arginfo_aws_crt_signing_config_aws_set_omit_session_token)
+	ZEND_FE(aws_crt_signing_config_aws_set_signed_body_value, arginfo_aws_crt_signing_config_aws_set_signed_body_value)
+	ZEND_FE(aws_crt_signing_config_aws_set_signed_body_header_type, arginfo_aws_crt_signing_config_aws_set_signed_body_header_type)
+	ZEND_FE(aws_crt_signing_config_aws_set_expiration_in_seconds, arginfo_aws_crt_signing_config_aws_set_expiration_in_seconds)
+	ZEND_FE(aws_crt_signing_config_aws_set_date, arginfo_aws_crt_signing_config_aws_set_date)
+	ZEND_FE(aws_crt_signable_new_from_http_request, arginfo_aws_crt_signable_new_from_http_request)
+	ZEND_FE(aws_crt_signable_new_from_chunk, arginfo_aws_crt_signable_new_from_chunk)
+	ZEND_FE(aws_crt_signable_new_from_canonical_request, arginfo_aws_crt_signable_new_from_canonical_request)
+	ZEND_FE(aws_crt_signable_release, arginfo_aws_crt_signable_release)
+	ZEND_FE(aws_crt_signing_result_release, arginfo_aws_crt_signing_result_release)
+	ZEND_FE(aws_crt_signing_result_apply_to_http_request, arginfo_aws_crt_signing_result_apply_to_http_request)
+	ZEND_FE(aws_crt_sign_request_aws, arginfo_aws_crt_sign_request_aws)
+	ZEND_FE(aws_crt_crc32, arginfo_aws_crt_crc32)
+	ZEND_FE(aws_crt_crc32c, arginfo_aws_crt_crc32c)
+	ZEND_FE_END
+};
