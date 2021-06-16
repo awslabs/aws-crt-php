@@ -29,7 +29,9 @@
         ]
     },
     "scripts": {
-        "test": "@php -d extension=modules/awscrt.so vendor/bin/phpunit tests"
+        "test": "@php -d extension=modules/awscrt.so vendor/bin/phpunit tests",
+        "test-extension": "@php -d extension=modules/awscrt.so vendor/bin/phpunit tests",
+        "test-ffi": "@php vendor/bin/phpunit tests"
     },
     "license": "Apache-2.0"
 }

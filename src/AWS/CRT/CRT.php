@@ -24,6 +24,14 @@ final class CRT {
         if (is_null(self::$impl)) {
             // Figure out what backends are/should be available
             $backends = ['Extension'];
+            if (extension_loaded('ffi')) {
+                $backends = ['Extension', 'FFI'];
+                if (getenv('AWS_CRT_PHP_EXTENSION')) {
+                    $backends = ['Extension'];
+                } else if (getenv('AWS_CRT_PHP_FFI')) {
+                    $backends = ['FFI'];
+                }
+            }
 
             // Try to load each backend, give up if none succeed
             $exceptions = [];
@@ -31,6 +39,7 @@ final class CRT {
                 try {
                     $backend = 'AWS\\CRT\\Internal\\' . $backend;
                     self::$impl = new $backend();
+                    break;
                 } catch (RuntimeException $rex) {
                     array_push($exceptions, $rex);
                 }
@@ -65,6 +74,20 @@ final class CRT {
         } catch (RuntimeException $ex) {
             return false;
         }
+    }
+
+    /**
+     * @return bool true if using PHP FFI (PHP 7.4+)
+     */
+    public static function isFFI() {
+        return self::isLoaded() && strstr(get_class(self::$impl), 'FFI');
+    }
+
+    /**
+     * @return bool true if using PHP Extension awscrt
+     */
+    public static function isExtension() {
+        return self::isLoaded() && strstr(get_class(self::$impl), 'Extension');
     }
 
     /**
@@ -319,7 +342,7 @@ final class CRT {
             $signing_result, $http_message);
     }
 
-    function sign_request_aws($signable, $signing_config, $on_complete) {
-        return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete);
+    function sign_request_aws($signable, $signing_config, $on_complete, $user_data) {
+        return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete, $user_data);
     }
 }
