@@ -1,5 +1,7 @@
 
 CMAKE=cmake.exe
+COMPOSER_PHAR=C:\ProgramData\ComposerSetup\bin\composer.phar
+PHP_BINARY=$(PHP_PREFIX)\php
 
 CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(AWSCRT_DIR)\build\install -DCMAKE_PREFIX_PATH=$(AWSCRT_DIR)\build\install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
 CMAKE_BUILD = $(CMAKE) --build
@@ -29,9 +31,11 @@ $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 
 $(AWSCRT_DIR)\ext\php_aws_crt.h: $(AWSCRT_DIR)\ext\awscrt_arginfo.h $(AWSCRT_DIR)\ext\api.h
 
+clean:
+	rmdir /s /q $(AWSCRT_DIR)\build
+
 # Use PHPUnit to run tests
-test: $(AWSCRT_DIR)\ext\api.h $(AWSCRT_DIR)\ext\awscrt_arginfo.h $(AWSCRT_DIR)\ext\awscrt.dll
-	@pushd $(AWSCRT_DIR)\
-	composer update
-	composer run test
-	@popd
+test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
+	$(PHP_BINARY) -d extension=awscrt -d extension=openssl $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) update
+	$(PHP_BINARY) -d extension=awscrt -d extension=openssl $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) run test
+
