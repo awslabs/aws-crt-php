@@ -4,6 +4,7 @@
 * PHP 5.5+ on UNIX platforms, 7.2+ on Windows
 * CMake 3.x
 * GCC 4.4+, clang 3.8+ on UNIX, Visual Studio 2017 build tools on Windows
+* Tests require [Composer](https://getcomposer.org)
 
 ## Building on UNIX
 ```sh
