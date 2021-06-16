@@ -18,7 +18,7 @@ foreach ($input_lines as $line) {
     }
 
     // Strip visibility attributes
-    $line = preg_replace('/AWS_CRT_API /', '', $line);
+    $line = str_replace('AWS_CRT_API ', '', $line);
 
     echo($line);
 }
