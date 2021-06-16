@@ -1,36 +1,37 @@
 
-BUILD_DIR=build
-INT_DIR=$(BUILD_DIR)/install
+CMAKE=cmake.exe
 
-CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DCMAKE_PREFIX_PATH=$(INT_DIR) -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
+CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(AWSCRT_DIR)\build\install -DCMAKE_PREFIX_PATH=$(AWSCRT_DIR)\build\install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
 CMAKE_BUILD = $(CMAKE) --build
-CMAKE_BUILD_TYPE ?= RelWithDebInfo
+CMAKE_BUILD_TYPE = Release
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 
 # configure for static aws-crt-ffi.lib
-$(BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt:
-	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi-static -DBUILD_SHARED_LIBS=OFF
+$(AWSCRT_DIR)\build\CMakeCache.txt:
+	$(CMAKE_CONFIGURE) -H$(AWSCRT_DIR)\crt\aws-crt-ffi -B$(AWSCRT_DIR)\build -DBUILD_SHARED_LIBS=OFF
 
 # build static libaws-crt-ffi.lib
-$(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.lib: $(BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-crt-ffi-static $(CMAKE_TARGET)
+$(AWSCRT_DIR)\build\libaws-crt-ffi.lib: $(AWSCRT_DIR)\build\CMakeCache.txt
+	$(CMAKE_BUILD) $(AWSCRT_DIR)\build $(CMAKE_TARGET)
 
 # Force the crt object target to depend on the CRT static library
-ext/php_awscrt.dll: ext/awscrt.c
+$(BUILD_DIR)\php_awscrt.dll: $(AWSCRT_DIR)\ext\awscrt.c
 
-ext/awscrt.c: $(BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.lib ext/api.h ext/awscrt_arginfo.h
+$(AWSCRT_DIR)\ext\awscrt.c: $(AWSCRT_DIR)\build\libaws-crt-ffi.lib $(AWSCRT_DIR)\ext\api.h $(AWSCRT_DIR)\ext\awscrt_arginfo.h
 
-# transform/install api.h from FFI lib
-src/api.h: crt/aws-crt-ffi/src/api.h
-	php gen_api.php crt/aws-crt-ffi/src/api.h > src/api.h
+# transform\install api.h from FFI lib
+$(AWSCRT_DIR)\src\api.h: $(AWSCRT_DIR)\crt\aws-crt-ffi\src\api.h
+	php $(AWSCRT_DIR)\gen_api.php $(AWSCRT_DIR)\crt\aws-crt-ffi\src\api.h > $(AWSCRT_DIR)\src\api.h
 
 # install api.h to ext/ as well
-ext/api.h : src/api.h
-	copy src/api.h ext/api.h
+$(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
+	copy $(AWSCRT_DIR)\src\api.h $(AWSCRT_DIR)\ext\api.h
 
-ext/php_aws_crt.h: ext/awscrt_arginfo.h ext/api.h
+$(AWSCRT_DIR)\ext\php_aws_crt.h: $(AWSCRT_DIR)\ext\awscrt_arginfo.h $(AWSCRT_DIR)\ext\api.h
 
 # Use PHPUnit to run tests
-test: ext/api.h ext/awscrt_arginfo.h ext/awscrt.dll
+test: $(AWSCRT_DIR)\ext\api.h $(AWSCRT_DIR)\ext\awscrt_arginfo.h $(AWSCRT_DIR)\ext\awscrt.dll
+	@pushd $(AWSCRT_DIR)\
 	composer update
 	composer run test
+	@popd
