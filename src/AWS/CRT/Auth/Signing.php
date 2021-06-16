@@ -13,6 +13,6 @@ abstract class Signing extends NativeResource {
             function($result, $error_code) use ($on_complete) {
                 $signing_result = SigningResult::fromNative($result);
                 $on_complete($signing_result, $error_code);
-            });
+            }, null);
     }
 }

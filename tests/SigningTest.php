@@ -39,6 +39,7 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSignableFromChunkLifetime() {
+        $this->skipFFI();
         $chunk = "THIS IS A TEST CHUNK IT CONTAINS MULTITUDES";
         $stream = fopen("php://memory", 'r+');
         fputs($stream, $chunk);
@@ -61,6 +62,8 @@ final class SigningTest extends CrtTestCase {
     const SIGV4TEST_SERVICE = 'service';
     const SIGV4TEST_REGION = 'us-east-1';
     public function testSigv4HeaderSigning() {
+        $this->skipFFI();
+
         $date = mktime(12, 36, 0, 8, 30, 2015);
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,

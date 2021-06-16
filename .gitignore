@@ -199,3 +199,6 @@ Makefile*
 .DS_Store
 composer.lock
 PHP-Parser*/
+src/*.so
+src/*.dylib
+src/*.dll
