@@ -16,11 +16,11 @@ $ make && make test
 
 ## Building on Windows
 * First, ensure that you are able to build PHP on windows via the PHP SDK (this example assumes installation of the SDK to C:\php-sdk and that you've checked out the PHP source to php-src within the build directory). The following are hopeful
-** https://github.com/microsoft/php-sdk-binary-tools
-** https://medium.com/@erinus/how-to-build-php-on-windows-a7ad0a87862a
-** https://medium.com/@erinus/how-to-build-php-extension-on-windows-d1667290f809
+    * https://github.com/microsoft/php-sdk-binary-tools
+    * https://medium.com/@erinus/how-to-build-php-on-windows-a7ad0a87862a
+    * https://medium.com/@erinus/how-to-build-php-extension-on-windows-d1667290f809
 
-```cmd
+```bat
 """ From VS2017 Command Prompt
 > C:\php-sdk\phpsdk-vc15-x64.bat
 
