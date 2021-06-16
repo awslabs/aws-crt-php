@@ -16,7 +16,7 @@ $(AWSCRT_DIR)\build\CMakeCache.txt:
 $(AWSCRT_DIR)\build\libaws-crt-ffi.lib: $(AWSCRT_DIR)\build\CMakeCache.txt
 	$(CMAKE_BUILD) $(AWSCRT_DIR)\build $(CMAKE_TARGET)
 
-# Force the crt object target to depend on the CRT static library
+# Force the awscrt extension DLL target to depend on the extension src
 $(BUILD_DIR)\php_awscrt.dll: $(AWSCRT_DIR)\ext\awscrt.c
 
 $(AWSCRT_DIR)\ext\awscrt.c: $(AWSCRT_DIR)\build\libaws-crt-ffi.lib $(AWSCRT_DIR)\ext\api.h $(AWSCRT_DIR)\ext\awscrt_arginfo.h
@@ -29,13 +29,7 @@ $(AWSCRT_DIR)\src\api.h: $(AWSCRT_DIR)\crt\aws-crt-ffi\src\api.h
 $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 	copy $(AWSCRT_DIR)\src\api.h $(AWSCRT_DIR)\ext\api.h
 
-$(AWSCRT_DIR)\ext\php_aws_crt.h: $(AWSCRT_DIR)\ext\awscrt_arginfo.h $(AWSCRT_DIR)\ext\api.h
-
-clean:
-	rmdir /s /q $(AWSCRT_DIR)\build
-
 # Use PHPUnit to run tests
 test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
 	$(PHP_BINARY) -d extension=awscrt -d extension=openssl $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) update
 	$(PHP_BINARY) -d extension=awscrt -d extension=openssl $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) run test
-
