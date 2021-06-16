@@ -31,5 +31,5 @@ $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 
 # Use PHPUnit to run tests
 test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
-	$(PHP_BINARY) -d extension=awscrt -d extension=openssl $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) update
-	$(PHP_BINARY) -d extension=awscrt -d extension=openssl $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) run test
+	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) update
+	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) run test
