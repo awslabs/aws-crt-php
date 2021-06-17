@@ -194,6 +194,8 @@ config.nice
 *.la
 Makefile*
 !Makefile.am
+!Makefile.frag
+!Makefile.frag.w32
 /vendor/
 .idea/
 .DS_Store
