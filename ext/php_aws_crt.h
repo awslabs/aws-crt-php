@@ -48,8 +48,8 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
-#else /* PHP 5.5-5.6, 7.0-7.1 */
-/* PHP 7.2+ always duplicate string return values */
+#else /* PHP 5.5-5.6 */
+/* PHP 7.2+ always duplicates string return values */
 #    undef RETURN_STRING
 #    define RETURN_STRING(s)                                                                                           \
         {                                                                                                              \
@@ -63,6 +63,9 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
             return;                                                                                                    \
         }
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
+/* PHP 5.x doesn't have zend_string, so we need to shim the char* -> string zval API */
+#define ZVAL_PSTRING(z, s) ZVAL_STRING(z, s)
+#define ZVAL_PSTRINGL(z, s) ZVAL_STRINGL(z, s)
 #endif /* PHP 5.x */
 
 #include "api.h"

@@ -39,12 +39,8 @@ PHP_FUNCTION(aws_crt_hash_digest) {
         length = truncate_to;
     }
     uint8_t *output = aws_crt_hash_digest(hash, truncate_to);
-    size_t len = strlen((const char *)output) + 1;
-    char arr[len];  // Make sure there's enough space
-    strcpy(arr, (char *) output);
-    printf(arr);
     zval *php_output = NULL;
-    ZVAL_STRINGL(php_output, (const char *)output, length);
+    ZVAL_PSTRINGL(php_output, (const char *)output, length);
     aws_mem_release(aws_crt_default_allocator(), output);
     // copy false, destroy false?
     RETURN_ZVAL(php_output, false, false);
