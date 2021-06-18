@@ -353,12 +353,4 @@ final class CRT {
     public static function crc32c($input, $previous = 0) {
         return self::$impl->aws_crt_crc32c($input, $previous);
     }
-
-    public static function crc32($input, $previous = 0) {
-        return self::$impl->aws_crt_crc32($input, $previous);
-    }
-
-    public static function crc32c($input, $previous = 0) {
-        return self::$impl->aws_crt_crc32c($input, $previous);
-    }
 }
