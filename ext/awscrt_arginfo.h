@@ -225,9 +225,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_sign_request_aws, 0, 4, 
 	ZEND_ARG_TYPE_INFO(0, user_data, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
 
+<<<<<<< HEAD
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_crc32, 0, 2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, input, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, prev, IS_LONG, 0)
+=======
+ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_crc32, 0, 0, 2)
+	ZEND_ARG_INFO(0, input)
+	ZEND_ARG_INFO(0, prev)
+>>>>>>> 289fc741318103d339a8d175c3ad1bb28e097466
 ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_crc32c arginfo_aws_crt_crc32

@@ -194,8 +194,13 @@ config.nice
 *.la
 Makefile*
 !Makefile.am
+!Makefile.frag
+!Makefile.frag.w32
 /vendor/
 .idea/
 .DS_Store
 composer.lock
 PHP-Parser*/
+src/*.so
+src/*.dylib
+src/*.dll
