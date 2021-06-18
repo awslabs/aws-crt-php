@@ -11,7 +11,7 @@ final class CrcTest extends CrtTestCase {
 
     public function testCrc32ZeroesOneShot() {
         $input = implode(array_map("chr", array_fill(0, 32, 0)));
-        $output = CRT::crc32($input, 0);
+        $output = CRT::crc32($input);
         $expected = 0x190A55AD;
         $this->assertEquals($output, $expected);
     }
@@ -27,7 +27,7 @@ final class CrcTest extends CrtTestCase {
 
     public function testCrc32ValuesOneShot() {
         $input = implode(array_map("chr", range(0, 31)));
-        $output = CRT::crc32($input, 0);
+        $output = CRT::crc32($input);
         $expected = 0x91267E8A;
         $this->assertEquals($output, $expected);
     }
@@ -41,9 +41,16 @@ final class CrcTest extends CrtTestCase {
         $this->assertEquals($output, $expected);
     }
 
+    public function testCrc32LargeBuffer() {
+        $input = implode(array_map("chr", array_fill(0, 1 << 20, 0)));
+        $output = CRT::crc32($input);
+        $expected = 0xA738EA1C;
+        $this->assertEquals($output, $expected);
+    }
+
     public function testCrc32cZeroesOneShot() {
         $input = implode(array_map("chr", array_fill(0, 32, 0)));
-        $output = CRT::crc32c($input, 0);
+        $output = CRT::crc32c($input);
         $expected = 0x8A9136AA;
         $this->assertEquals($output, $expected);
     }
@@ -59,7 +66,7 @@ final class CrcTest extends CrtTestCase {
 
     public function testCrc32cValuesOneShot() {
         $input = implode(array_map("chr", range(0, 31)));
-        $output = CRT::crc32c($input, 0);
+        $output = CRT::crc32c($input);
         $expected = 0x46DD794E;
         $this->assertEquals($output, $expected);
     }
@@ -72,4 +79,12 @@ final class CrcTest extends CrtTestCase {
         $expected = 0x46DD794E;
         $this->assertEquals($output, $expected);
     }
+
+    public function testCrc32cLargeBuffer() {
+        $input = implode(array_map("chr", array_fill(0, 1 << 20, 0)));
+        $output = CRT::crc32c($input);
+        $expected = 0x14298C12;
+        $this->assertEquals($output, $expected);
+    }
+    
 }
