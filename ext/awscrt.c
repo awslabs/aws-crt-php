@@ -5,11 +5,11 @@
 
 /* This is a unity-build style source file, as PHP's build system is simplest with 1 source file per extension */
 
+#include "crc.c"
 #include "credentials.c"
 #include "crt.c"
 #include "event_loop.c"
+#include "hash.c"
 #include "http.c"
 #include "signing.c"
 #include "stream.c"
-#include "hash.c"
-#include "crc.c"
