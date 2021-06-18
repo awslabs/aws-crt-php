@@ -7,8 +7,6 @@ use AWS\CRT\CRT;
 
 require_once('common.inc');
 
-ini_set("memory_limit", "512M");
-
 final class CrcTest extends CrtTestCase {
 
     public function testCrc32ZeroesOneShot() {
