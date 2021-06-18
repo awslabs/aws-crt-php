@@ -11,5 +11,5 @@
 #include "http.c"
 #include "signing.c"
 #include "stream.c"
-// #include "hash.c"
+#include "hash.c"
 #include "crc.c"

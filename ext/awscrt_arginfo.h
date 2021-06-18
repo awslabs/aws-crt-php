@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 36d4e512f02a12c10689eb9b0941bcd7837fbf1d */
+ * Stub hash: 271adcfe560a474d149e60d7951a45a93a9259d3 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -235,6 +235,28 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_aws_crt_crc32c arginfo_aws_crt_crc32
 
+#define arginfo_aws_crt_sha1_new arginfo_aws_crt_last_error
+
+#define arginfo_aws_crt_sha256_new arginfo_aws_crt_last_error
+
+#define arginfo_aws_crt_md5_new arginfo_aws_crt_last_error
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_hash_update, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, hash, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, buffer, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_hash_digest, 0, 3, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, hash, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, truncate_to, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, length, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_hash_destroy, 0, 1, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, hash, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+
 ZEND_FUNCTION(aws_crt_last_error);
 ZEND_FUNCTION(aws_crt_error_name);
 ZEND_FUNCTION(aws_crt_error_str);
@@ -294,6 +316,12 @@ ZEND_FUNCTION(aws_crt_signing_result_apply_to_http_request);
 ZEND_FUNCTION(aws_crt_sign_request_aws);
 ZEND_FUNCTION(aws_crt_crc32);
 ZEND_FUNCTION(aws_crt_crc32c);
+ZEND_FUNCTION(aws_crt_sha1_new);
+ZEND_FUNCTION(aws_crt_sha256_new);
+ZEND_FUNCTION(aws_crt_md5_new);
+ZEND_FUNCTION(aws_crt_hash_update);
+ZEND_FUNCTION(aws_crt_hash_digest);
+ZEND_FUNCTION(aws_crt_hash_destroy);
 
 
 static const zend_function_entry ext_functions[] = {
@@ -356,5 +384,11 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_sign_request_aws, arginfo_aws_crt_sign_request_aws)
 	ZEND_FE(aws_crt_crc32, arginfo_aws_crt_crc32)
 	ZEND_FE(aws_crt_crc32c, arginfo_aws_crt_crc32c)
+	ZEND_FE(aws_crt_sha1_new, arginfo_aws_crt_sha1_new)
+	ZEND_FE(aws_crt_sha256_new, arginfo_aws_crt_sha256_new)
+	ZEND_FE(aws_crt_md5_new, arginfo_aws_crt_md5_new)
+	ZEND_FE(aws_crt_hash_update, arginfo_aws_crt_hash_update)
+	ZEND_FE(aws_crt_hash_digest, arginfo_aws_crt_hash_digest)
+	ZEND_FE(aws_crt_hash_destroy, arginfo_aws_crt_hash_destroy)
 	ZEND_FE_END
 };

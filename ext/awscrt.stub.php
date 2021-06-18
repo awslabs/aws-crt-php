@@ -122,3 +122,15 @@ function aws_crt_sign_request_aws(int $signable, int $signing_config, object $on
 function aws_crt_crc32(string $input, int $prev): int {}
 
 function aws_crt_crc32c(string $input, int $prev): int {}
+
+function aws_crt_sha1_new(): int {}
+
+function aws_crt_sha256_new(): int {}
+
+function aws_crt_md5_new(): int {}
+
+function aws_crt_hash_update(int $hash, string $buffer): int{}
+
+function aws_crt_hash_digest(int $hash, int $truncate_to, int $length): string {}
+
+function aws_crt_hash_destroy(int $hash): void {}
