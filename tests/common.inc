@@ -5,6 +5,8 @@
  */
 use AWS\CRT\CRT as CRT;
 
+ini_set("memory_limit", "512M");
+
 abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
     private static $crt = null;
     public static function setUpBeforeClass() {
