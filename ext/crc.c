@@ -11,11 +11,11 @@ PHP_FUNCTION(aws_crt_crc32) {
     size_t len = 0;
 
     aws_php_parse_parameters("sl", &input, &len, &prev);
-    
+
     if (prev > UINT32_MAX) {
         aws_php_throw_exception("previous crc cannot be larger than UINT32_MAX");
     }
-    RETURN_LONG((zend_ulong) aws_crt_crc32((const uint8_t *)input, len, prev));
+    RETURN_LONG((zend_ulong)aws_crt_crc32((const uint8_t *)input, len, prev));
 }
 
 PHP_FUNCTION(aws_crt_crc32c) {
@@ -24,9 +24,9 @@ PHP_FUNCTION(aws_crt_crc32c) {
     size_t len = 0;
 
     aws_php_parse_parameters("sl", &input, &len, &prev);
-    
+
     if (prev > UINT32_MAX) {
         aws_php_throw_exception("previous crc cannot be larger than UINT32_MAX");
     }
-    RETURN_LONG((zend_ulong) aws_crt_crc32c((const uint8_t *)input, len, prev));
+    RETURN_LONG((zend_ulong)aws_crt_crc32c((const uint8_t *)input, len, prev));
 }
