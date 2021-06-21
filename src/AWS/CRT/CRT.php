@@ -346,11 +346,35 @@ final class CRT {
         return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete, $user_data);
     }
 
-    public static function crc32($input, $previous = 0) {
+    function sha1_new() {
+        return self::$impl->aws_crt_sha1_new();
+    }
+
+    function sha256_new() {
+        return self::$impl->aws_crt_sha256_new();
+    }
+
+    function md5_new() {
+        return self::$impl->aws_crt_md5_new();
+    }
+
+    function hash_update($hash, $buffer) {
+        return self::$impl->aws_crt_hash_update($hash, $buffer);
+    }
+
+    function hash_digest($hash, $truncate_to, $length) {
+        return self::$impl->aws_crt_hash_digest($hash, $truncate_to, $length);
+    }
+
+    function hash_destroy($hash) {
+        return self::$impl->aws_crt_hash_destroy($hash);
+    }
+
+    public static function crc32($input, $previous) {
         return self::$impl->aws_crt_crc32($input, $previous);
     }
 
-    public static function crc32c($input, $previous = 0) {
+    public static function crc32c($input, $previous) {
         return self::$impl->aws_crt_crc32c($input, $previous);
     }
 }
