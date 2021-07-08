@@ -21,11 +21,9 @@ PHP_FUNCTION(aws_crt_http_message_to_blob) {
     aws_php_parse_parameters("l", &php_msg);
 
     aws_crt_http_message *message = (void *)php_msg;
-    uint8_t *blob = NULL;
-    size_t blob_len = 0;
-    aws_crt_http_message_to_blob(message, &blob, &blob_len);
-    RETURN_STRINGL((const char *)blob, blob_len);
-    aws_crt_mem_release(blob);
+    aws_crt_buf blob;
+    aws_crt_http_message_to_blob(message, &blob);
+    RETURN_STRINGL((const char *)blob.blob, blob.length);
 }
 
 PHP_FUNCTION(aws_crt_http_message_release) {
