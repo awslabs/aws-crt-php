@@ -51,11 +51,7 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
             case 's': {
                 const char *buf = va_arg(va, const char *);
                 const size_t len = va_arg(va, size_t);
-#if AWS_PHP_AT_LEAST_7
-                ZVAL_STRINGL(&stack[arg_idx], buf, len);
-#else
-                ZVAL_STRINGL(&stack[arg_idx], buf, len, 0);
-#endif
+                aws_php_zval_stringl(&stack[arg_idx], buf, len);
                 break;
             }
             /* other primitives */
@@ -138,6 +134,15 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
     }
 
     return retval;
+}
+
+void aws_php_zval_stringl(zval *val, const char *str, size_t len) {
+    AWS_FATAL_ASSERT(val != NULL);
+#if AWS_PHP_AT_LEAST_7
+    ZVAL_STRINGL(val, str, len);
+#else
+    ZVAL_STRINGL(val, str, len, 0);
+#endif
 }
 
 aws_php_thread_queue s_aws_php_main_thread_queue;

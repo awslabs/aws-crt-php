@@ -163,4 +163,9 @@ void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_promise *
  */
 zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...);
 
+/**
+ * Replacement for ZVAL_STRINGL that is PHP version agnostic
+ */
+void aws_php_zval_stringl(zval *val, const char *str, size_t len);
+
 #endif /* PHP_AWS_CRT_H */
