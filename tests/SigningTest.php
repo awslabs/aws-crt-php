@@ -97,4 +97,44 @@ final class SigningTest extends CrtTestCase {
             $headers->get('Authorization'));
         $this->assertEquals('20150830T123600Z', $headers->get('X-Amz-Date'));
     }
+
+    public function testSigV4aHeaderSigning() {
+        $this->skipFFI();
+
+        $date = mktime(12, 36, 0, 8, 30, 2015);
+        $credentials_provider = new StaticCredentialsProvider([
+            'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
+            'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
+            'session_token' => self::SIGV4TEST_SESSION_TOKEN,
+        ]);
+        $signing_config = new SigningConfigAWS([
+            'algorithm' => SigningAlgorithm::SIGv4_ASYMMETRIC,
+            'signature_type' => SignatureType::HTTP_REQUEST_HEADERS,
+            'credentials_provider' => $credentials_provider,
+            'region' => self::SIGV4TEST_REGION,
+            'service' => self::SIGV4TEST_SERVICE,
+            'date' => $date,
+        ]);
+
+        $http_request = new Request('GET', '/', [], ['Host' => 'example.amazonaws.com']);
+        $this->assertNotNull($http_request, "Unable to create HttpRequest for signing");
+        $signable = Signable::fromHttpRequest($http_request);
+        $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
+
+        Signing::signRequestAws(
+            $signable, $signing_config,
+            function($signing_result, $error_code) use (&$http_request) {
+                $this->assertEquals(0, $error_code);
+                $signing_result->applyToHttpRequest($http_request);
+            }
+        );
+
+        $headers = $http_request->headers();
+        $auth_header_value = $headers->get('Authorization');
+        $this->assertNotNull($auth_header_value);
+        $this->assertStringStartsWith(
+            'AWS4-ECDSA-P256-SHA256 Credential=AKIDEXAMPLE/20150830/service/aws4_request, SignedHeaders=host;x-amz-date;x-amz-region-set, Signature=',
+            $auth_header_value);
+        $this->assertEquals('20150830T123600Z', $headers->get('X-Amz-Date'));
+    }
 }
