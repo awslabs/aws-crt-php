@@ -121,7 +121,7 @@ PHP_FUNCTION(aws_crt_input_stream_read) {
     aws_crt_input_stream *stream = (void *)php_stream;
     uint8_t *buf = emalloc(length);
     int ret = aws_crt_input_stream_read(stream, buf, length);
-    RETVAL_STRINGL((const char*)buf, length);
+    RETVAL_STRINGL((const char *)buf, length PHP5_DUP);
     efree(buf);
 }
 

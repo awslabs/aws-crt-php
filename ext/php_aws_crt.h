@@ -48,21 +48,11 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
+#    define PHP5_DUP
 #else /* PHP 5.5-5.6, 7.0-7.1 */
-/* PHP 7.2+ always duplicate string return values */
-#    undef RETURN_STRING
-#    define RETURN_STRING(s)                                                                                           \
-        {                                                                                                              \
-            RETVAL_STRING(s, 1);                                                                                       \
-            return;                                                                                                    \
-        }
-#    undef RETURN_STRINGL
-#    define RETURN_STRINGL(s, l)                                                                                       \
-        {                                                                                                              \
-            RETVAL_STRINGL(s, l, 1);                                                                                   \
-            return;                                                                                                    \
-        }
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
+/* Puts a , 1 for the duplicate parameter to all RETURN_/RETVAL_ macros */
+#    define PHP5_DUP , 1
 #endif /* PHP 5.x */
 
 #include "api.h"

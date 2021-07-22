@@ -23,7 +23,7 @@ PHP_FUNCTION(aws_crt_http_message_to_blob) {
     aws_crt_http_message *message = (void *)php_msg;
     aws_crt_buf blob;
     aws_crt_http_message_to_blob(message, &blob);
-    RETURN_STRINGL((const char *)blob.blob, blob.length);
+    RETURN_STRINGL((const char *)blob.blob, blob.length PHP5_DUP);
 }
 
 PHP_FUNCTION(aws_crt_http_message_release) {
