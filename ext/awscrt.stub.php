@@ -105,6 +105,8 @@ function aws_crt_signing_config_aws_set_expiration_in_seconds(int $config, int $
 
 function aws_crt_signing_config_aws_set_date(int $config, int $timestamp): void {}
 
+function aws_crt_signing_config_aws_set_should_sign_header_fn(int $config, object $should_sign_header): void {}
+
 function aws_crt_signable_new_from_http_request(int $http_message): int {}
 
 function aws_crt_signable_new_from_chunk(int $input_stream, string $previous_signature): int {}

@@ -48,6 +48,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
+#    define AWS_PHP_ZVAL_AS_BOOL(z) (Z_TYPE_P(z) == IS_TRUE)
 #else /* PHP 5.5-5.6, 7.0-7.1 */
 /* PHP 7.2+ always duplicate string return values */
 #    undef RETURN_STRING
@@ -63,6 +64,7 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
             return;                                                                                                    \
         }
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
+#    define AWS_PHP_ZVAL_AS_BOOL(z) (Z_TYPE_P(z) == IS_BOOL && Z_LVAL_P(z) != 0)
 #endif /* PHP 5.x */
 
 #include "api.h"
@@ -100,29 +102,29 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
  * throws an exception resulting from argument parsing, notes the current function name in the exception
  */
 #define aws_php_argparse_fail()                                                                                        \
-do {                                                                                                                   \
-    aws_php_throw_exception("Failed to parse arguments to %s", __func__);                                              \
-} while (0)
+    do {                                                                                                               \
+        aws_php_throw_exception("Failed to parse arguments to %s", __func__);                                          \
+    } while (0)
 
 /**
  * calls zend_parse_parameters() with the arguments and throws an exception if parsing fails
  */
 #define aws_php_parse_parameters(type_spec, ...)                                                                       \
-do {                                                                                                                   \
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) {                                   \
-        aws_php_argparse_fail();                                                                                       \
-    }                                                                                                                  \
-} while (0)
+    do {                                                                                                               \
+        if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) {                               \
+            aws_php_argparse_fail();                                                                                   \
+        }                                                                                                              \
+    } while (0)
 
 /**
  * calls zend_parse_parameters_none() and throws an exception if parsing fails
  */
 #define aws_php_parse_parameters_none()                                                                                \
-do {                                                                                                                   \
-    if (zend_parse_parameters_none() == FAILURE) {                                                                     \
-        aws_php_argparse_fail();                                                                                       \
-    }                                                                                                                  \
-} while (0)
+    do {                                                                                                               \
+        if (zend_parse_parameters_none() == FAILURE) {                                                                 \
+            aws_php_argparse_fail();                                                                                   \
+        }                                                                                                              \
+    } while (0)
 
 /* Thread queue functions for managing PHP's optional threading situation */
 typedef struct _aws_php_task {
