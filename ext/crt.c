@@ -125,13 +125,7 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
 #endif
 
     /* Clean up arguments */
-    for (int arg_idx = 0; arg_idx < num_args; ++arg_idx) {
-#if !AWS_PHP_AT_LEAST_7
-        zval_ptr_dtor(args[arg_idx]);
-#else
-        zval_ptr_dtor(&stack[arg_idx]);
-#endif
-    }
+    zend_fcall_info_args_clear(&fci, 1);
 
     return retval;
 }
