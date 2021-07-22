@@ -189,7 +189,7 @@ static bool aws_php_should_sign_header(const char *header_name, size_t header_le
 
 static void dynamic_zval_dtor(void *user_data) {
     zval *val = user_data;
-    zval_ptr_dtor(val);
+    zval_dtor(val);
     efree(val);
 }
 
