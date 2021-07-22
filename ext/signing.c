@@ -160,7 +160,7 @@ typedef struct _should_sign_header_data {
 static void should_sign_header_task(void *data) {
     should_sign_header_data *task = data;
     zval result = aws_php_invoke_callback(task->should_sign_header, "z", task->header_name);
-    task->result = AWS_PHP_ZVAL_AS_BOOL(&result);
+    task->result = aws_php_zval_as_bool(&result);
     zval_dtor(&result);
 }
 
@@ -187,12 +187,6 @@ static bool aws_php_should_sign_header(const char *header_name, size_t header_le
     return task_data.result;
 }
 
-static void dynamic_zval_dtor(void *user_data) {
-    zval *val = user_data;
-    zval_dtor(val);
-    efree(val);
-}
-
 PHP_FUNCTION(aws_crt_signing_config_aws_set_should_sign_header_fn) {
     zend_ulong php_signing_config = 0;
     zval *php_should_sign_header = NULL;
@@ -202,9 +196,9 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_should_sign_header_fn) {
     aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
 
     /* copy/retain PHP callback, add as user data for signing_config resource */
-    zval *should_sign_header = emalloc(sizeof(zval));
-    ZVAL_COPY(should_sign_header, php_should_sign_header);
-    aws_crt_resource_set_user_data(signing_config, should_sign_header, dynamic_zval_dtor);
+    zval *should_sign_header = aws_php_zval_new();
+    aws_php_zval_copy(should_sign_header, php_should_sign_header);
+    aws_crt_resource_set_user_data(signing_config, should_sign_header, aws_php_zval_dtor);
 
     aws_crt_signing_config_aws_set_should_sign_header_fn(
         signing_config, aws_php_should_sign_header, should_sign_header);

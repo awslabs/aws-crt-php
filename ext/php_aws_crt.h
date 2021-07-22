@@ -48,7 +48,6 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
-#    define AWS_PHP_ZVAL_AS_BOOL(z) (Z_TYPE_P(z) == IS_TRUE)
 #else /* PHP 5.5-5.6, 7.0-7.1 */
 /* PHP 7.2+ always duplicate string return values */
 #    undef RETURN_STRING
@@ -64,7 +63,6 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
             return;                                                                                                    \
         }
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
-#    define AWS_PHP_ZVAL_AS_BOOL(z) (Z_TYPE_P(z) == IS_BOOL && Z_LVAL_P(z) != 0)
 #endif /* PHP 5.x */
 
 #include "api.h"
@@ -125,6 +123,12 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
             aws_php_argparse_fail();                                                                                   \
         }                                                                                                              \
     } while (0)
+
+/* PHP/Zend utility functions to work across PHP versions */
+zval *aws_php_zval_new(void);
+void aws_php_zval_dtor(void *zval_ptr);
+bool aws_php_zval_as_bool(zval *z);
+void aws_php_zval_copy(zval *dest, zval *src);
 
 /* Thread queue functions for managing PHP's optional threading situation */
 typedef struct _aws_php_task {
