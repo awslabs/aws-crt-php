@@ -123,8 +123,8 @@ PHP_FUNCTION(aws_crt_input_stream_read) {
     int ret = aws_crt_input_stream_read(stream, buf, length);
     zval buffer;
     aws_php_zval_stringl(&buffer, (const char*)buf, length);
+    RETVAL_ZVAL(&buffer, false, NULL);
     efree(buf);
-    RETURN_ZVAL(&buffer, 0, NULL);
 }
 
 PHP_FUNCTION(aws_crt_input_stream_eof) {
