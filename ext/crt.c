@@ -289,7 +289,7 @@ PHP_FUNCTION(aws_crt_error_str) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_str(error_code) PHP5_DUP PHP5_DUP);
+    RETURN_STRING(aws_crt_error_str(error_code) PHP5_DUP);
 }
 
 /* aws_crt_error_name(int error_code) */
