@@ -151,6 +151,59 @@ PHP_FUNCTION(aws_crt_signing_config_aws_set_date) {
     aws_crt_signing_config_aws_set_date(signing_config, php_timestamp);
 }
 
+typedef struct _should_sign_header_data {
+    zval *should_sign_header;
+    zval *header_name;
+    bool result;
+} should_sign_header_data;
+
+static void should_sign_header_task(void *data) {
+    should_sign_header_data *task = data;
+    zval result = aws_php_invoke_callback(task->should_sign_header, "z", task->header_name);
+    task->result = aws_php_zval_as_bool(&result);
+    zval_dtor(&result);
+}
+
+static bool aws_php_should_sign_header(const char *header_name, size_t header_length, void *user_data) {
+    zval php_header_name;
+    aws_php_zval_stringl(&php_header_name, header_name, header_length);
+
+    should_sign_header_data task_data = {
+        .should_sign_header = user_data,
+        .header_name = &php_header_name,
+        .result = false,
+    };
+
+    aws_php_task task = {
+        .callback = should_sign_header_task,
+        .data = &task_data,
+    };
+
+    aws_php_thread_queue_push(&s_aws_php_main_thread_queue, task);
+    aws_php_thread_queue_yield(&s_aws_php_main_thread_queue);
+
+    zval_dtor(&php_header_name);
+
+    return task_data.result;
+}
+
+PHP_FUNCTION(aws_crt_signing_config_aws_set_should_sign_header_fn) {
+    zend_ulong php_signing_config = 0;
+    zval *php_should_sign_header = NULL;
+
+    aws_php_parse_parameters("lz", &php_signing_config, &php_should_sign_header);
+
+    aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
+
+    /* copy/retain PHP callback, add as user data for signing_config resource */
+    zval *should_sign_header = aws_php_zval_new();
+    aws_php_zval_copy(should_sign_header, php_should_sign_header);
+    aws_crt_resource_set_user_data(signing_config, should_sign_header, aws_php_zval_dtor);
+
+    aws_crt_signing_config_aws_set_should_sign_header_fn(
+        signing_config, aws_php_should_sign_header, should_sign_header);
+}
+
 PHP_FUNCTION(aws_crt_signable_new_from_http_request) {
     zend_ulong php_http_message = 0;
 

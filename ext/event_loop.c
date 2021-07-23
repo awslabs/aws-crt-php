@@ -43,6 +43,6 @@ PHP_FUNCTION(aws_crt_event_loop_group_release) {
 
     aws_php_parse_parameters("l", &php_elg);
 
-    struct aws_event_loop_group *elg = (void *)php_elg;
+    aws_crt_event_loop_group *elg = (void *)php_elg;
     aws_crt_event_loop_group_release(elg);
 }

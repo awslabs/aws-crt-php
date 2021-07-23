@@ -51,11 +51,7 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
             case 's': {
                 const char *buf = va_arg(va, const char *);
                 const size_t len = va_arg(va, size_t);
-#if AWS_PHP_AT_LEAST_7
-                ZVAL_STRINGL(&stack[arg_idx], buf, len);
-#else
-                ZVAL_STRINGL(&stack[arg_idx], buf, len, 0);
-#endif
+                aws_php_zval_stringl(&stack[arg_idx], buf, len);
                 break;
             }
             /* other primitives */
@@ -129,15 +125,20 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
 #endif
 
     /* Clean up arguments */
-    for (int arg_idx = 0; arg_idx < num_args; ++arg_idx) {
-#if !AWS_PHP_AT_LEAST_7
-        zval_ptr_dtor(args[arg_idx]);
-#else
-        zval_ptr_dtor(&stack[arg_idx]);
+#if AWS_PHP_AT_LEAST_7
+    zend_fcall_info_args_clear(&fci, 1);
 #endif
-    }
 
     return retval;
+}
+
+void aws_php_zval_stringl(zval *val, const char *str, size_t len) {
+    AWS_FATAL_ASSERT(val != NULL);
+#if AWS_PHP_AT_LEAST_7
+    ZVAL_STRINGL(val, str, len);
+#else
+    ZVAL_STRINGL(val, str, len, 1);
+#endif
 }
 
 aws_php_thread_queue s_aws_php_main_thread_queue;
@@ -290,7 +291,7 @@ PHP_FUNCTION(aws_crt_error_str) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_str(error_code));
+    XRETURN_STRING(aws_crt_error_str(error_code));
 }
 
 /* aws_crt_error_name(int error_code) */
@@ -298,7 +299,7 @@ PHP_FUNCTION(aws_crt_error_name) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_name(error_code));
+    XRETURN_STRING(aws_crt_error_name(error_code));
 }
 
 /* aws_crt_error_debug_str(int error_code) */
@@ -306,5 +307,5 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_debug_str(error_code));
+    XRETURN_STRING(aws_crt_error_debug_str(error_code));
 }

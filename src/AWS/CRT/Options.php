@@ -34,6 +34,10 @@ final class OptionValue {
     public function asArray() {
         return is_array($this->value) ? $this->value : (!empty($this->value) ? [$this->value] : []);
     }
+
+    public function asCallable() {
+        return is_callable($this->value) ? $this->value : null;
+    }
 }
 
 final class Options {

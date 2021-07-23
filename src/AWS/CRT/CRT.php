@@ -317,6 +317,10 @@ final class CRT {
         self::$impl->aws_crt_signing_config_aws_set_date($signing_config, $timestamp);
     }
 
+    function signing_config_aws_set_should_sign_header_fn($signing_config, $should_sign_header_fn) {
+        self::$impl->aws_crt_signing_config_aws_set_should_sign_header_fn($signing_config, $should_sign_header_fn);
+    }
+
     function signable_new_from_http_request($http_message) {
         return self::$impl->aws_crt_signable_new_from_http_request($http_message);
     }
