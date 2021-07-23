@@ -48,12 +48,16 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
-#    define PHP5_DUP
+#define XRETURN_STRINGL RETURN_STRINGL
+#define XRETURN_STRING RETURN_STRING
+#define XRETVAL_STRINGL RETVAL_STRINGL
+#define XRETVAL_STRING RETVAL_STRING
 #else /* PHP 5.5-5.6 */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
-/* Puts a , 1 for the duplicate parameter to all RETURN_/RETVAL_ macros */
-#    define _PHP5_DUP 1
-#    define PHP5_DUP , _PHP5_DUP
+#define XRETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
+#define XRETURN_STRING(s) RETURN_STRING(s, 1)
+#define XRETVAL_STRINGL(s, l) RETVAL_STRINGL(s, l, 1)
+#define XRETVAL_STRING(s) RETVAL_STRING(s, 1)
 #endif /* PHP 5.x */
 
 #include "api.h"
@@ -120,6 +124,10 @@ zval *aws_php_zval_new(void);
 void aws_php_zval_dtor(void *zval_ptr);
 bool aws_php_zval_as_bool(zval *z);
 void aws_php_zval_copy(zval *dest, zval *src);
+/**
+ * Replacement for ZVAL_STRINGL that is PHP version agnostic
+ */
+void aws_php_zval_stringl(zval *val, const char *str, size_t len);
 
 /* Thread queue functions for managing PHP's optional threading situation */
 typedef struct _aws_php_task {
@@ -159,10 +167,5 @@ void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_promise *
  * Uses the same format string as zend_parse_parameters
  */
 zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...);
-
-/**
- * Replacement for ZVAL_STRINGL that is PHP version agnostic
- */
-void aws_php_zval_stringl(zval *val, const char *str, size_t len);
 
 #endif /* PHP_AWS_CRT_H */

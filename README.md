@@ -58,7 +58,10 @@ Note: You must use a debug build of PHP to debug native extensions.
 See the [PHP Internals Book](https://www.phpinternalsbook.com/php7/build_system/building_php.html) for more info
 
 ```shell
+# PHP 8 example
 $ phpbrew install --stdout -j 8 8.0 +default -- CFLAGS=-Wno-error --disable-cgi --enable-debug
+# PHP 5.5 example
+$ phpbrew install --stdout -j 8 5.5 +default -openssl -mbstring -- CFLAGS="-w -Wno-error" --enable-debug --with-zlib=/usr/local/opt/zlib
 $ phpbrew switch php-8.0.6 # or whatever version is current, it'll be at the end of the build output
 $ phpize
 $ ./configure

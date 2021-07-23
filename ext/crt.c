@@ -289,7 +289,7 @@ PHP_FUNCTION(aws_crt_error_str) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_str(error_code) PHP5_DUP);
+    XRETURN_STRING(aws_crt_error_str(error_code));
 }
 
 /* aws_crt_error_name(int error_code) */
@@ -297,7 +297,7 @@ PHP_FUNCTION(aws_crt_error_name) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_name(error_code) PHP5_DUP);
+    XRETURN_STRING(aws_crt_error_name(error_code));
 }
 
 /* aws_crt_error_debug_str(int error_code) */
@@ -305,5 +305,5 @@ PHP_FUNCTION(aws_crt_error_debug_str) {
     zend_ulong error_code = 0;
     aws_php_parse_parameters("l", &error_code);
 
-    RETURN_STRING(aws_crt_error_debug_str(error_code) PHP5_DUP);
+    XRETURN_STRING(aws_crt_error_debug_str(error_code));
 }
