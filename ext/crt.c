@@ -125,7 +125,9 @@ zval aws_php_invoke_callback(zval *callback, const char *arg_types, ...) {
 #endif
 
     /* Clean up arguments */
+#if AWS_PHP_AT_LEAST_7
     zend_fcall_info_args_clear(&fci, 1);
+#endif
 
     return retval;
 }
@@ -135,7 +137,7 @@ void aws_php_zval_stringl(zval *val, const char *str, size_t len) {
 #if AWS_PHP_AT_LEAST_7
     ZVAL_STRINGL(val, str, len);
 #else
-    ZVAL_STRINGL(val, str, len, 0);
+    ZVAL_STRINGL(val, str, len, 1);
 #endif
 }
 
