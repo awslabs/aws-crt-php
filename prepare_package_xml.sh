@@ -31,7 +31,7 @@ skip_files='(package.xml*|prepare_release.sh|codereview.settings|*.o|*.a|*.obj|*
 
 special_scripts='(awscrt.stub.php)'
 
-skip_directories='(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|verfication|third_party|docs|generated-src)'
+skip_directories='(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|verfication|third_party|docs|generated-src|aws-lc)'
 
 process_file() {
     if (( $# == 0 ))
@@ -101,20 +101,7 @@ process_dir() {
     else process_dir "${a}"
     fi
   done
-  # Special cases for compiler features placed in tests directories in aws-lc and s2n
-  if [[ "${1}" = "aws-lc" && -d tests ]]
-  then
-      echo '<dir name="tests">'
-      echo '<dir name="compiler_features_tests">'
-      cd tests/compiler_features_tests
-      for a in *
-      do
-          process_file "${a}"
-      done
-      cd ../..
-      echo '</dir>'
-      echo '</dir>'
-  fi
+  # Special cases for compiler features placed in tests directories in and s2n
   if [[ "${1}" = "s2n" && -d tests ]]
   then
       echo '<dir name="tests">'
