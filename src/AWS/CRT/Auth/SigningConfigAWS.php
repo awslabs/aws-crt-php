@@ -23,7 +23,8 @@ class SigningConfigAWS extends NativeResource {
             'signed_body_value' => null,
             'signed_body_header_type' => SignedBodyHeaderType::NONE,
             'expiration_in_seconds' => 0,
-            'date' => time()
+            'date' => time(),
+            'should_sign_header' => null,
         ];
     }
 
@@ -57,6 +58,9 @@ class SigningConfigAWS extends NativeResource {
         self::$crt->signing_config_aws_set_expiration_in_seconds(
             $sc, $options->expiration_in_seconds->asInt());
         self::$crt->signing_config_aws_set_date($sc, $options->date->asInt());
+        if ($should_sign_header = $options->should_sign_header->asCallable()) {
+            self::$crt->signing_config_aws_set_should_sign_header_fn($sc, $should_sign_header);
+        }
     }
 
     function __destruct()

@@ -48,21 +48,16 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #if AWS_PHP_AT_LEAST_7
 /* PHP 7 takes a zval*, PHP5 takes a zval** */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, z)
-#else /* PHP 5.5-5.6, 7.0-7.1 */
-/* PHP 7.2+ always duplicate string return values */
-#    undef RETURN_STRING
-#    define RETURN_STRING(s)                                                                                           \
-        {                                                                                                              \
-            RETVAL_STRING(s, 1);                                                                                       \
-            return;                                                                                                    \
-        }
-#    undef RETURN_STRINGL
-#    define RETURN_STRINGL(s, l)                                                                                       \
-        {                                                                                                              \
-            RETVAL_STRINGL(s, l, 1);                                                                                   \
-            return;                                                                                                    \
-        }
+#define XRETURN_STRINGL RETURN_STRINGL
+#define XRETURN_STRING RETURN_STRING
+#define XRETVAL_STRINGL RETVAL_STRINGL
+#define XRETVAL_STRING RETVAL_STRING
+#else /* PHP 5.5-5.6 */
 #    define AWS_PHP_STREAM_FROM_ZVAL(s, z) php_stream_from_zval(s, &z)
+#define XRETURN_STRINGL(s, l) RETURN_STRINGL(s, l, 1)
+#define XRETURN_STRING(s) RETURN_STRING(s, 1)
+#define XRETVAL_STRINGL(s, l) RETVAL_STRINGL(s, l, 1)
+#define XRETVAL_STRING(s) RETVAL_STRING(s, 1)
 #endif /* PHP 5.x */
 
 #include "api.h"
@@ -100,29 +95,39 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
  * throws an exception resulting from argument parsing, notes the current function name in the exception
  */
 #define aws_php_argparse_fail()                                                                                        \
-do {                                                                                                                   \
-    aws_php_throw_exception("Failed to parse arguments to %s", __func__);                                              \
-} while (0)
+    do {                                                                                                               \
+        aws_php_throw_exception("Failed to parse arguments to %s", __func__);                                          \
+    } while (0)
 
 /**
  * calls zend_parse_parameters() with the arguments and throws an exception if parsing fails
  */
 #define aws_php_parse_parameters(type_spec, ...)                                                                       \
-do {                                                                                                                   \
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) {                                   \
-        aws_php_argparse_fail();                                                                                       \
-    }                                                                                                                  \
-} while (0)
+    do {                                                                                                               \
+        if (zend_parse_parameters(ZEND_NUM_ARGS(), type_spec, __VA_ARGS__) == FAILURE) {                               \
+            aws_php_argparse_fail();                                                                                   \
+        }                                                                                                              \
+    } while (0)
 
 /**
  * calls zend_parse_parameters_none() and throws an exception if parsing fails
  */
 #define aws_php_parse_parameters_none()                                                                                \
-do {                                                                                                                   \
-    if (zend_parse_parameters_none() == FAILURE) {                                                                     \
-        aws_php_argparse_fail();                                                                                       \
-    }                                                                                                                  \
-} while (0)
+    do {                                                                                                               \
+        if (zend_parse_parameters_none() == FAILURE) {                                                                 \
+            aws_php_argparse_fail();                                                                                   \
+        }                                                                                                              \
+    } while (0)
+
+/* PHP/Zend utility functions to work across PHP versions */
+zval *aws_php_zval_new(void);
+void aws_php_zval_dtor(void *zval_ptr);
+bool aws_php_zval_as_bool(zval *z);
+void aws_php_zval_copy(zval *dest, zval *src);
+/**
+ * Replacement for ZVAL_STRINGL that is PHP version agnostic
+ */
+void aws_php_zval_stringl(zval *val, const char *str, size_t len);
 
 /* Thread queue functions for managing PHP's optional threading situation */
 typedef struct _aws_php_task {
