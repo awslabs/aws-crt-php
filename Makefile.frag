@@ -1,14 +1,16 @@
 
 INT_DIR=build/install
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
-HAS_FFI=$(shell php -m | grep FFI | wc -l | xargs)
+#HAS_FFI=$(shell php -m | grep FFI | wc -l | xargs)
+HAS_FFI=0
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
 	CMAKE = cmake
 endif
 
-CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
+USE_OPENSSL ?= ON
+CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -DUSE_OPENSSL=$(USE_OPENSSL)
 CMAKE_BUILD = $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install

@@ -13,7 +13,7 @@ if test "$PHP_AWSCRT" != "no"; then
     if uname -a | grep -i darwin > /dev/null 2>&1; then
         platform_tls_libs=""
     else
-        platform_tls_libs="-ls2n -l:libcrypto.a"
+        platform_tls_libs="-ls2n -lcrypto"
     fi
     CRT_LIBPATHS="-L${cwd}/build/install/lib -L${cwd}/build/install/lib64"
     CRT_LIBS="-laws-crt-ffi -laws-c-auth -laws-c-http -laws-c-io -laws-c-cal -laws-c-compression -laws-checksums -laws-c-common ${platform_tls_libs}"
