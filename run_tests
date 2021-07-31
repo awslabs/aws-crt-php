@@ -2,4 +2,4 @@
 
 set -ex
 
-catchsegv $PHP_BINARY -c php.ini vendor/bin/phpunit tests --debug
+catchsegv $PHP_BINARY -c php.ini vendor/bin/phpunit tests --debug --filter CoreTest
