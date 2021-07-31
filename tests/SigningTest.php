@@ -16,10 +16,6 @@ require_once('common.inc');
 
 final class SigningTest extends CrtTestCase {
 
-    protected function setUp() {
-        $this->markTestIncomplete();
-    }
-
     public function testConfigAWSLifetime() {
         $config = new SigningConfigAWS();
         $this->assertNotNull($config, "Failed to create default SigningConfigAWS");
