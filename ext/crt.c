@@ -239,9 +239,9 @@ STD_PHP_INI_ENTRY(
 PHP_INI_END()
 
 #if defined(AWS_OS_POSIX) && !defined(AWS_OS_APPLE)
-typedef void (*CRYPTO_get_locking_callback_fn)(void);
+typedef void* (*CRYPTO_get_locking_callback_fn)(void);
 typedef void (*CRYPTO_set_locking_callback_fn)(void (*locking_func)(int, int, const char *, int));
-typedef void (*CRYPTO_get_id_callback_fn)(void);
+typedef void* (*CRYPTO_get_id_callback_fn)(void);
 typedef void (*CRYPTO_set_id_callback_fn)(unsigned long (*id_func)(void));
 
 static void dummy_crypto_lock(int mode, int n, const char *file, int line) {
