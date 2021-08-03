@@ -367,5 +367,5 @@ PHP_FUNCTION(aws_crt_test_verify_sigv4a_signing) {
     const aws_crt_signing_config *signing_config = (void *)php_signing_config;
 
     return aws_crt_test_verify_sigv4a_signing(
-        signable->signable, &signing_config->config, signature, ecc_key_pub_x, ecc_key_pub_y) == AWS_OP_SUCCESS;
+               signable->signable, &signing_config->config, signature, ecc_key_pub_x, ecc_key_pub_y) == AWS_OP_SUCCESS;
 }
