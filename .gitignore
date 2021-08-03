@@ -204,3 +204,7 @@ PHP-Parser*/
 src/*.so
 src/*.dylib
 src/*.dll
+
+# ignoring output of package.xml as it needs to be generated from ./prepare_release.sh in each publishing
+package.xml
+*.tgz
