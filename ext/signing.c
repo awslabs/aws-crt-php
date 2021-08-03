@@ -337,3 +337,38 @@ done:
     aws_promise_release(promise);
     RETURN_LONG(ret);
 }
+
+PHP_FUNCTION(aws_crt_test_verify_sigv4a_signing) {
+    zend_ulong php_signable = 0;
+    zend_ulong php_signing_config = 0;
+    const char *expected_canonical_request = NULL;
+    size_t expected_canonical_request_len = 0;
+    const char *signature = NULL;
+    size_t signature_len = 0;
+    const char *ecc_key_pub_x = NULL;
+    size_t ecc_key_pub_x_len = 0;
+    const char *ecc_key_pub_y = NULL;
+    size_t ecc_key_pub_y_len = 0;
+
+    aws_php_parse_parameters(
+        "llssss",
+        &php_signable,
+        &php_signing_config,
+        &expected_canonical_request,
+        &expected_canonical_request_len,
+        &signature,
+        &signature_len,
+        &ecc_key_pub_x,
+        &ecc_key_pub_x_len,
+        &ecc_key_pub_y,
+        &ecc_key_pub_y_len);
+
+    const aws_crt_signable *signable = (void *)php_signable;
+    const aws_crt_signing_config *signing_config = (void *)php_signing_config;
+
+    bool result = AWS_OP_SUCCESS ==
+                  aws_crt_test_verify_sigv4a_signing(
+                      signable, signing_config, expected_canonical_request, signature, ecc_key_pub_x, ecc_key_pub_y);
+
+    RETURN_BOOL(result);
+}

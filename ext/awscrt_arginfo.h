@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 3d39c69ca902372d6bf164faadb43df1f201bd80 */
+ * Stub hash: 344f9d59b85697b80bb6808ac7d5eb7c1d07c03f */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_last_error, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -253,6 +253,15 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_sign_request_aws, 0, 0, 4)
 	ZEND_ARG_INFO(0, user_data)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_test_verify_sigv4a_signing, 0, 0, 6)
+	ZEND_ARG_INFO(0, signable)
+	ZEND_ARG_INFO(0, signing_config)
+	ZEND_ARG_INFO(0, expected_canonical_request)
+	ZEND_ARG_INFO(0, signature)
+	ZEND_ARG_INFO(0, ecc_key_pub_x)
+	ZEND_ARG_INFO(0, ecc_key_pub_y)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_aws_crt_crc32, 0, 0, 2)
 	ZEND_ARG_INFO(0, input)
 	ZEND_ARG_INFO(0, prev)
@@ -326,6 +335,7 @@ ZEND_FUNCTION(aws_crt_signable_release);
 ZEND_FUNCTION(aws_crt_signing_result_release);
 ZEND_FUNCTION(aws_crt_signing_result_apply_to_http_request);
 ZEND_FUNCTION(aws_crt_sign_request_aws);
+ZEND_FUNCTION(aws_crt_test_verify_sigv4a_signing);
 ZEND_FUNCTION(aws_crt_crc32);
 ZEND_FUNCTION(aws_crt_crc32c);
 
@@ -396,6 +406,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_signing_result_release, arginfo_aws_crt_signing_result_release)
 	ZEND_FE(aws_crt_signing_result_apply_to_http_request, arginfo_aws_crt_signing_result_apply_to_http_request)
 	ZEND_FE(aws_crt_sign_request_aws, arginfo_aws_crt_sign_request_aws)
+	ZEND_FE(aws_crt_test_verify_sigv4a_signing, arginfo_aws_crt_test_verify_sigv4a_signing)
 	ZEND_FE(aws_crt_crc32, arginfo_aws_crt_crc32)
 	ZEND_FE(aws_crt_crc32c, arginfo_aws_crt_crc32c)
 	ZEND_FE_END

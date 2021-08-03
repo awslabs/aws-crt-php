@@ -15,4 +15,8 @@ abstract class Signing extends NativeResource {
                 $on_complete($signing_result, $error_code);
             }, null);
     }
+
+    static function testVerifySigV4ASigning($signable, $signing_config, $expected_canonical_request, $signature, $ecc_key_pub_x, $ecc_key_pub_y) {
+        return self::$crt->test_verify_sigv4a_signing($signable, $signing_config, $expected_canonical_request, $signature, $ecc_key_pub_x, $ecc_key_pub_y);
+    }
 }
