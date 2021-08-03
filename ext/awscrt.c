@@ -14,3 +14,4 @@
 // #include "hash.c"
 #include "crc.c"
 #include "php_util.c"
+#include "logging.c"
