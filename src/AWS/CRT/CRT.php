@@ -113,6 +113,34 @@ final class CRT {
         return self::$impl->aws_crt_error_name((int) $error);
     }
 
+    public static function log_to_stdout() {
+        return self::$impl->aws_crt_log_to_stdout();
+    }
+
+    public static function log_to_stderr() {
+        return self::$impl->aws_crt_log_to_stderr();
+    }
+
+    public static function log_to_file($filename) {
+        return self::$impl->aws_crt_log_to_file($filename);
+    }
+
+    public static function log_to_stream($stream) {
+        return self::$impl->aws_crt_log_to_stream($stream);
+    }
+
+    public static function log_set_level($level) {
+        return self::$impl->aws_crt_log_set_level($level);
+    }
+
+    public static function log_stop() {
+        return self::$impl->aws_crt_log_stop();
+    }
+
+    public static function log_message($level, $message) {
+        return self::$impl->aws_crt_log_message($level, $message);
+    }
+
     /**
      * @return object Pointer to native event_loop_group_options
      */
@@ -348,6 +376,10 @@ final class CRT {
 
     function sign_request_aws($signable, $signing_config, $on_complete, $user_data) {
         return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete, $user_data);
+    }
+
+    function test_verify_sigv4a_signing($signable, $signing_config, $expected_canonical_request, $signature, $ecc_key_pub_x, $ecc_key_pub_y) {
+        return self::$impl->aws_crt_test_verify_sigv4a_signing($signable, $signing_config, $expected_canonical_request, $signature, $ecc_key_pub_x, $ecc_key_pub_y);
     }
 
     public static function crc32($input, $previous = 0) {

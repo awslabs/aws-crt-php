@@ -238,10 +238,69 @@ STD_PHP_INI_ENTRY(
     awscrt_globals)
 PHP_INI_END()
 
+#if defined(AWS_OS_POSIX) && !defined(AWS_OS_APPLE)
+typedef void* (*CRYPTO_get_locking_callback_fn)(void);
+typedef void (*CRYPTO_set_locking_callback_fn)(void (*locking_func)(int, int, const char *, int));
+typedef void* (*CRYPTO_get_id_callback_fn)(void);
+typedef void (*CRYPTO_set_id_callback_fn)(unsigned long (*id_func)(void));
+
+static void dummy_crypto_lock(int mode, int n, const char *file, int line) {
+    (void)mode;
+    (void)n;
+    (void)file;
+    (void)line;
+    assert(!"aws-crt-php: OpenSSL/libcrypto tried to operate a lock during initialization");
+}
+
+static unsigned long dummy_crypto_id(void) {
+    assert(!"aws-crt-php: OpenSSL/libcrypto tried to resolve the current thread id during initialization");
+    return 0;
+}
+
+static void hack_openssl_init_pre() {
+    void *process = dlopen(NULL, RTLD_NOW);
+    CRYPTO_get_locking_callback_fn CRYPTO_get_locking_callback = dlsym(process, "CRYPTO_get_locking_callback");
+    CRYPTO_set_locking_callback_fn CRYPTO_set_locking_callback = dlsym(process, "CRYPTO_set_locking_callback");
+    CRYPTO_get_id_callback_fn CRYPTO_get_id_callback = dlsym(process, "CRYPTO_get_id_callback");
+    CRYPTO_set_id_callback_fn CRYPTO_set_id_callback = dlsym(process, "CRYPTO_set_id_callback");
+    dlclose(process);
+    if (CRYPTO_get_locking_callback && CRYPTO_set_locking_callback) {
+        if (CRYPTO_get_locking_callback() == NULL) {
+            CRYPTO_set_locking_callback(dummy_crypto_lock);
+        }
+        if (CRYPTO_get_id_callback() == NULL) {
+            CRYPTO_set_id_callback(dummy_crypto_id);
+        }
+    }
+}
+
+static void hack_openssl_init_post() {
+    void *process = dlopen(NULL, RTLD_NOW);
+    CRYPTO_get_locking_callback_fn CRYPTO_get_locking_callback = dlsym(process, "CRYPTO_get_locking_callback");
+    CRYPTO_set_locking_callback_fn CRYPTO_set_locking_callback = dlsym(process, "CRYPTO_set_locking_callback");
+    CRYPTO_get_id_callback_fn CRYPTO_get_id_callback = dlsym(process, "CRYPTO_get_id_callback");
+    CRYPTO_set_id_callback_fn CRYPTO_set_id_callback = dlsym(process, "CRYPTO_set_id_callback");
+    dlclose(process);
+    if (CRYPTO_get_locking_callback && CRYPTO_get_id_callback) {
+        if (CRYPTO_get_locking_callback() == dummy_crypto_lock) {
+            CRYPTO_set_locking_callback(NULL);
+        }
+        if (CRYPTO_get_id_callback() == dummy_crypto_id) {
+            CRYPTO_set_id_callback(NULL);
+        }
+    }
+}
+#else
+static void hack_openssl_init_pre() {}
+static void hack_openssl_init_post() {}
+#endif
+
 static PHP_MINIT_FUNCTION(awscrt) {
     REGISTER_INI_ENTRIES();
 
+    hack_openssl_init_pre();
     aws_crt_init();
+    hack_openssl_init_post();
     aws_php_thread_queue_init(&s_aws_php_main_thread_queue);
     return SUCCESS;
 }
