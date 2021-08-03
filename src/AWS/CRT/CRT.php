@@ -133,6 +133,10 @@ final class CRT {
         return self::$impl->aws_crt_log_set_level($level);
     }
 
+    public static function log_stop() {
+        return self::$impl->aws_crt_log_stop();
+    }
+
     public static function log_message($level, $message) {
         return self::$impl->aws_crt_log_message($level, $message);
     }

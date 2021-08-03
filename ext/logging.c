@@ -49,6 +49,11 @@ PHP_FUNCTION(aws_crt_log_set_level) {
     aws_crt_log_set_level((aws_crt_log_level)log_level);
 }
 
+PHP_FUNCTION(aws_crt_log_stop) {
+    aws_php_parse_parameters_none();
+    aws_crt_log_stop();
+}
+
 PHP_FUNCTION(aws_crt_log_message) {
     zend_ulong log_level = 0;
     const char *message = NULL;

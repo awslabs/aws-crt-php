@@ -32,8 +32,8 @@ final class Log {
         CRT::log_to_stream($stream);
     }
 
-    public static function disable() {
-        CRT::log_to_stream(null);
+    public static function stop() {
+        CRT::log_stop();
     }
 
     public static function setLogLevel($level) {

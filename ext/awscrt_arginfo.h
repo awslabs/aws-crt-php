@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 698f2e42e8101879a2f36ea05a2e617d7610806e */
+ * Stub hash: 3d39c69ca902372d6bf164faadb43df1f201bd80 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_last_error, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -24,6 +24,8 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_log_to_stream, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, stream, IS_OBJECT, 0)
 ZEND_END_ARG_INFO()
+
+#define arginfo_aws_crt_log_stop arginfo_aws_crt_log_to_stdout
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_aws_crt_log_set_level, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, level, IS_LONG, 0)
@@ -267,6 +269,7 @@ ZEND_FUNCTION(aws_crt_log_to_stdout);
 ZEND_FUNCTION(aws_crt_log_to_stderr);
 ZEND_FUNCTION(aws_crt_log_to_file);
 ZEND_FUNCTION(aws_crt_log_to_stream);
+ZEND_FUNCTION(aws_crt_log_stop);
 ZEND_FUNCTION(aws_crt_log_set_level);
 ZEND_FUNCTION(aws_crt_log_message);
 ZEND_FUNCTION(aws_crt_event_loop_group_options_new);
@@ -336,6 +339,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(aws_crt_log_to_stderr, arginfo_aws_crt_log_to_stderr)
 	ZEND_FE(aws_crt_log_to_file, arginfo_aws_crt_log_to_file)
 	ZEND_FE(aws_crt_log_to_stream, arginfo_aws_crt_log_to_stream)
+	ZEND_FE(aws_crt_log_stop, arginfo_aws_crt_log_stop)
 	ZEND_FE(aws_crt_log_set_level, arginfo_aws_crt_log_set_level)
 	ZEND_FE(aws_crt_log_message, arginfo_aws_crt_log_message)
 	ZEND_FE(aws_crt_event_loop_group_options_new, arginfo_aws_crt_event_loop_group_options_new)

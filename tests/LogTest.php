@@ -19,5 +19,6 @@ class LogTest extends CrtTestCase {
         $this->assertTrue(rewind($log_stream));
         $log_contents = stream_get_contents($log_stream, -1, 0);
         $this->assertStringEndsWith("THIS IS A TEST", trim($log_contents));
+        Log::stop();
     }
 }

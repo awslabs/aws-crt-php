@@ -21,6 +21,8 @@ function aws_crt_log_to_file(string $filename): void {}
 
 function aws_crt_log_to_stream(object $stream): void {}
 
+function aws_crt_log_stop(): void {}
+
 function aws_crt_log_set_level(int $level): void {}
 
 function aws_crt_log_message(string $message): void {}
