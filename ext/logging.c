@@ -56,5 +56,5 @@ PHP_FUNCTION(aws_crt_log_message) {
 
     aws_php_parse_parameters("ls", &log_level, &message, &message_len);
 
-    aws_crt_log_message((aws_crt_log_level)log_level, (const uint8_t*)message, message_len);
+    aws_crt_log_message((aws_crt_log_level)log_level, (const uint8_t *)message, message_len);
 }
