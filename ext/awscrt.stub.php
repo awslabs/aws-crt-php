@@ -13,6 +13,20 @@ function aws_crt_error_str(int $error_code): string {}
 
 function aws_crt_error_debug_str(int $error_code): string {}
 
+function aws_crt_log_to_stdout(): void {}
+
+function aws_crt_log_to_stderr(): void {}
+
+function aws_crt_log_to_file(string $filename): void {}
+
+function aws_crt_log_to_stream(object $stream): void {}
+
+function aws_crt_log_stop(): void {}
+
+function aws_crt_log_set_level(int $level): void {}
+
+function aws_crt_log_message(string $message): void {}
+
 function aws_crt_event_loop_group_options_new(): int {}
 
 function aws_crt_event_loop_group_options_release(int $elg_options): void {}
