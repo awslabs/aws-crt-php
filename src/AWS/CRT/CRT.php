@@ -378,6 +378,10 @@ final class CRT {
         return self::$impl->aws_crt_sign_request_aws($signable, $signing_config, $on_complete, $user_data);
     }
 
+    function test_verify_sigv4a_signing($signable, $signing_config, $expected_canonical_request, $signature, $ecc_key_pub_x, $ecc_key_pub_y) {
+        return self::$impl->aws_crt_test_verify_sigv4a_signing($signable, $signing_config, $expected_canonical_request, $signature, $ecc_key_pub_x, $ecc_key_pub_y);
+    }
+
     public static function crc32($input, $previous = 0) {
         return self::$impl->aws_crt_crc32($input, $previous);
     }
