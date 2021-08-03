@@ -113,6 +113,34 @@ final class CRT {
         return self::$impl->aws_crt_error_name((int) $error);
     }
 
+    public static function log_to_stdout() {
+        return self::$impl->aws_crt_log_to_stdout();
+    }
+
+    public static function log_to_stderr() {
+        return self::$impl->aws_crt_log_to_stderr();
+    }
+
+    public static function log_to_file($filename) {
+        return self::$impl->aws_crt_log_to_file($filename);
+    }
+
+    public static function log_to_stream($stream) {
+        return self::$impl->aws_crt_log_to_stream($stream);
+    }
+
+    public static function log_set_level($level) {
+        return self::$impl->aws_crt_log_set_level($level);
+    }
+
+    public static function log_stop() {
+        return self::$impl->aws_crt_log_stop();
+    }
+
+    public static function log_message($level, $message) {
+        return self::$impl->aws_crt_log_message($level, $message);
+    }
+
     /**
      * @return object Pointer to native event_loop_group_options
      */
