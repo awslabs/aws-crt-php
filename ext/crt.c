@@ -298,9 +298,9 @@ static void hack_openssl_init_post() {}
 static PHP_MINIT_FUNCTION(awscrt) {
     REGISTER_INI_ENTRIES();
 
-    hack_openssl_init_pre();
+    //hack_openssl_init_pre();
     aws_crt_init();
-    hack_openssl_init_post();
+    //hack_openssl_init_post();
     aws_php_thread_queue_init(&s_aws_php_main_thread_queue);
     return SUCCESS;
 }
