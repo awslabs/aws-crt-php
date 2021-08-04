@@ -6,4 +6,4 @@ launcher=
 if command -v catchsegv; then
     launcher=catchsegv
 fi
-$launcher $PHP_BINARY -c php.ini vendor/bin/phpunit tests --debug --filter CoreTest
+$launcher $PHP_BINARY -c php.ini vendor/bin/phpunit tests --debug
