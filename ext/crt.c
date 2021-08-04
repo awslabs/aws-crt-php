@@ -6,10 +6,6 @@
 
 #include "php_aws_crt.h"
 
-#if defined(AWS_OS_POSIX) && !defined(AWS_OS_APPLE) && !defined(OPENSSL_IS_AWSLC)
-#    include <openssl/crypto.h>
-#endif
-
 /* Helpful references for this extension:
  * zend_parse_parameters and friends -
  * https://git.php.net/?p=php-src.git;a=blob;f=docs/parameter-parsing-api.md;h=c962fc6ee58cc756aaac9e65759b7d5ea5c18fc4;hb=HEAD
@@ -245,10 +241,8 @@ PHP_INI_END()
 static PHP_MINIT_FUNCTION(awscrt) {
     REGISTER_INI_ENTRIES();
 
-#if defined(AWS_OS_POSIX) && !defined(AWS_OS_APPLE) && !defined(OPENSSL_IS_AWSLC)
     /* prevent s2n from initializing/de-initializing OpenSSL/libcrypto */
-    setenv("S2N_SHARE_LIBCRYPTO", "1", 1);
-#endif
+    aws_crt_crypto_share();
     aws_crt_init();
     aws_php_thread_queue_init(&s_aws_php_main_thread_queue);
     return SUCCESS;
