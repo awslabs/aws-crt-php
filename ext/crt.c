@@ -6,7 +6,9 @@
 
 #include "php_aws_crt.h"
 
-#include <openssl/crypto.h>
+#if defined(AWS_OS_POSIX) && !defined(AWS_OS_APPLE) && !defined(OPENSSL_IS_AWSLC)
+#    include <openssl/crypto.h>
+#endif
 
 /* Helpful references for this extension:
  * zend_parse_parameters and friends -
