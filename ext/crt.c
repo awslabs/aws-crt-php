@@ -252,7 +252,7 @@ static PHP_MSHUTDOWN_FUNCTION(awscrt) {
     UNREGISTER_INI_ENTRIES();
     aws_php_thread_queue_clean_up(&s_aws_php_main_thread_queue);
     aws_crt_thread_join_all(0);
-    aws_crt_clean_up();
+    //aws_crt_clean_up();
     return SUCCESS;
 }
 
