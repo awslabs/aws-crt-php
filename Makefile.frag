@@ -9,9 +9,14 @@ ifeq (, $(shell which cmake3))
 	CMAKE = cmake
 endif
 
-ifneq (,$(USE_OPENSSL))
-    CMAKE_PREFIX_PATH=-DCMAKE_PREFIX_PATH=$(USE_OPENSSL)
-    CMAKE_USE_OPENSSL=-DUSE_OPENSSL=ON
+# default to using system OpenSSL, if disabled aws-lc will be used
+USE_OPENSSL ?= ON
+ifneq (OFF,$(USE_OPENSSL))
+	CMAKE_USE_OPENSSL=-DUSE_OPENSSL=ON
+	# if a path was provided, add it to CMAKE_PREFIX_PATH
+	ifneq (ON,$(USE_OPENSSL))
+    	CMAKE_PREFIX_PATH=-DCMAKE_PREFIX_PATH=$(USE_OPENSSL)
+	endif
 endif
 
 CMAKE_CONFIGURE = $(CMAKE) \
