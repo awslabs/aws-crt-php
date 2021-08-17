@@ -31,10 +31,4 @@ abstract class CrtTestCase extends PHPUnit_Framework_TestCase {
             $this->setExpectedException($arguments[0]);
         }
     }
-
-    public function skipFFI() {
-        if (CRT::isFFI()) {
-            $this->markTestSkipped();
-        }
-    }
 }

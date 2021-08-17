@@ -39,7 +39,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSignableFromChunkLifetime() {
-        $this->skipFFI();
         $chunk = "THIS IS A TEST CHUNK IT CONTAINS MULTITUDES";
         $stream = fopen("php://memory", 'r+');
         fputs($stream, $chunk);
@@ -66,8 +65,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testShouldSignHeader() {
-        $this->skipFFI();
-
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
             'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
@@ -107,8 +104,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSigv4HeaderSigning() {
-        $this->skipFFI();
-
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
             'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
@@ -143,8 +138,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testSigV4aHeaderSigning() {
-        $this->skipFFI();
-
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
             'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
