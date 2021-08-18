@@ -19,7 +19,6 @@ final class InputStreamTest extends CrtTestCase {
     }
 
     public function testMemoryStream() {
-        $this->skipFFI();
         $mem_stream = $this->getMemoryStream();
         $stream = new InputStream($mem_stream);
         $this->assertNotNull($stream, "Failed to create InputStream from PHP memory stream");

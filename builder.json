@@ -32,6 +32,6 @@
         "NO_INTERACTION": "1"
     },
     "test_steps": [
-        ["./ci-test.sh"]
+        ["./run_tests"]
     ]
 }

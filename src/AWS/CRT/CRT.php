@@ -22,30 +22,10 @@ final class CRT {
 
     function __construct() {
         if (is_null(self::$impl)) {
-            // Figure out what backends are/should be available
-            $backends = ['Extension'];
-            if (extension_loaded('ffi')) {
-                $backends = ['Extension', 'FFI'];
-                if (getenv('AWS_CRT_PHP_EXTENSION')) {
-                    $backends = ['Extension'];
-                } else if (getenv('AWS_CRT_PHP_FFI')) {
-                    $backends = ['FFI'];
-                }
-            }
-
-            // Try to load each backend, give up if none succeed
-            $exceptions = [];
-            foreach ($backends as $backend) {
-                try {
-                    $backend = 'AWS\\CRT\\Internal\\' . $backend;
-                    self::$impl = new $backend();
-                    break;
-                } catch (RuntimeException $rex) {
-                    array_push($exceptions, $rex);
-                }
-            }
-            if (is_null(self::$impl)) {
-                throw new RuntimeException('Unable to initialize AWS CRT via ' . join(', ', $backends) . ": \n" . join("\n", $exceptions), -1);
+            try {
+                self::$impl = new Extension();
+            } catch (RuntimeException $rex) {
+                throw new RuntimeException("Unable to initialize AWS CRT via awscrt extension: \n$rex", -1);
             }
         }
         ++self::$refcount;
@@ -58,7 +38,7 @@ final class CRT {
     }
 
     /**
-     * @return bool whether or not the CRT is currently loaded with an active backend
+     * @return bool whether or not the CRT is currently loaded
      */
     public static function isLoaded() {
         return !is_null(self::$impl);
@@ -74,20 +54,6 @@ final class CRT {
         } catch (RuntimeException $ex) {
             return false;
         }
-    }
-
-    /**
-     * @return bool true if using PHP FFI (PHP 7.4+)
-     */
-    public static function isFFI() {
-        return self::isLoaded() && strstr(get_class(self::$impl), 'FFI');
-    }
-
-    /**
-     * @return bool true if using PHP Extension awscrt
-     */
-    public static function isExtension() {
-        return self::isLoaded() && strstr(get_class(self::$impl), 'Extension');
     }
 
     /**
