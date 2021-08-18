@@ -2,4 +2,13 @@
 
 set -ex
 
+if [ -z $PHP_BINARY ]; then
+    PHP_BINARY=$(which php)
+fi
+
+if [ ! -d vendor ]; then
+    composer update
+fi
+
 $PHP_BINARY -c php.ini vendor/bin/phpunit tests --debug
+

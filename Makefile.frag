@@ -12,8 +12,8 @@ CMAKE_BUILD = $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 
-all: extension ffi
-.PHONY: all extension ffi
+all: extension 
+.PHONY: all extension 
 
 # configure for static aws-crt-ffi.a
 build/aws-crt-ffi-static/CMakeCache.txt:
@@ -51,7 +51,7 @@ vendor/bin/phpunit:
 	composer update
 
 test-extension: vendor/bin/phpunit extension
-	AWS_CRT_PHP_EXTENSION=1 composer run test-extension
+	composer run test-extension
 
 # Use PHPUnit to run tests
 test: test-extension
