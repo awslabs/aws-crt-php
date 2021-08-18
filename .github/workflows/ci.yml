@@ -37,7 +37,7 @@ jobs:
     - name: Install depedencies
       run: composer update --no-interaction
 
-    - name: Run tests
+    - name: Build for PHP 5.5
       env:
         CC: clang
         CXX: clang++
@@ -45,7 +45,6 @@ jobs:
         phpize
         ./configure
         make
-        make -k test
 
   php-linux-x64:
     runs-on: ubuntu-latest
