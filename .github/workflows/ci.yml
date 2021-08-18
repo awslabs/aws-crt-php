@@ -45,7 +45,7 @@ jobs:
         phpize
         ./configure
         make
-        make test
+        make -k test
 
   php-linux-x64:
     runs-on: ubuntu-latest
