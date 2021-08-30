@@ -7,8 +7,23 @@ ifeq (, $(shell which cmake3))
 	CMAKE = cmake
 endif
 
-CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(INT_DIR) -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
-CMAKE_BUILD = $(CMAKE) --build
+# default to using system OpenSSL, if disabled aws-lc will be used
+USE_OPENSSL ?= ON
+ifneq (OFF,$(USE_OPENSSL))
+	CMAKE_USE_OPENSSL=-DUSE_OPENSSL=ON
+	# if a path was provided, add it to CMAKE_PREFIX_PATH
+	ifneq (ON,$(USE_OPENSSL))
+    	CMAKE_PREFIX_PATH=-DCMAKE_PREFIX_PATH=$(USE_OPENSSL)
+	endif
+endif
+
+CMAKE_CONFIGURE = $(CMAKE) \
+    -DCMAKE_INSTALL_PREFIX=$(INT_DIR) \
+    -DBUILD_TESTING=OFF \
+    -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
+    $(CMAKE_USE_OPENSSL) \
+    $(CMAKE_PREFIX_PATH)
+CMAKE_BUILD = CMAKE_BUILD_PARALLEL_LEVEL='' $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 

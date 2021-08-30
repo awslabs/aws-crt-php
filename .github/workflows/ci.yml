@@ -37,14 +37,14 @@ jobs:
     - name: Install depedencies
       run: composer update --no-interaction
 
-    - name: Run tests
+    - name: Build for PHP 5.5
       env:
         CC: clang
         CXX: clang++
       run: |
         phpize
         ./configure
-        make test
+        make
 
   php-linux-x64:
     runs-on: ubuntu-latest
@@ -60,12 +60,30 @@ jobs:
           - "7.4"
           - "8.0"
     steps:
-      - name: PHP ${{ matrix.version}} Extension
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
-          export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-php${{ matrix.version }}-linux-x64:${{ env.BUILDER_VERSION }}
-          docker pull $DOCKER_IMAGE
-          docker run --env GITHUB_REF --env LC_ALL=C.UTF-8 $DOCKER_IMAGE --version=${{env.BUILDER_VERSION}} build -p ${{ env.PACKAGE_NAME }} --spec=downstream --skip-install
+    - name: Setup PHP with Xdebug
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: xdebug
+        php-version: ${{matrix.version}}
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Install depedencies
+      run: composer update --no-interaction
+
+    - name: Run tests
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        phpize
+        ./configure
+        make
+        make test
 
 
   #   linux-arm:
