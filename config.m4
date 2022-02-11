@@ -15,9 +15,9 @@ if test "$PHP_AWSCRT" != "no"; then
     else
         platform_tls_libs="-ls2n -lcrypto"
     fi
-    CRT_LIBPATHS="-L${cwd}/build/install/lib -L${cwd}/build/install/lib64"
+    CRT_LIBPATHS="-L${cwd}/install/lib -L${cwd}/install/lib64"
     CRT_LIBS="-laws-crt-ffi -laws-c-auth -laws-c-http -laws-c-io -laws-c-cal -laws-c-compression -laws-checksums -laws-c-common ${platform_tls_libs}"
-    PHP_ADD_INCLUDE(${cwd}/build/install/include)
+    PHP_ADD_INCLUDE(${cwd}/install/include)
     PHP_EVAL_LIBLINE([$CRT_LIBPATHS $CRT_LIBS], AWSCRT_SHARED_LIBADD)
 
     # Shoves the linker line into the Makefile
