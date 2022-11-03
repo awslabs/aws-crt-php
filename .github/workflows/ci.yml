@@ -104,15 +104,14 @@ jobs:
       matrix:
         arch: [x64]
     steps:
-    - uses: ilammy/msvc-dev-cmd@v1
-      with:
-        arch: ${{ matrix.arch }}
-        uwp: false
-        spectre: true
-    - name: Build ${{ env.PACKAGE_NAME }} + consumers
-      run: |
-        ls
-        php
+      - name: Checkout Sources
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build ${{ env.PACKAGE_NAME }} + consumers
+        run: |
+          ls
+          php
 
   # windows-vc14:
   #   runs-on: windows-latest
