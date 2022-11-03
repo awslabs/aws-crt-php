@@ -38,11 +38,11 @@ jobs:
 
     - name: Build for PHP 5.5
       env:
-        CC: clang
-        CXX: clang++
+        CC: clang --cc="-Wno-error"
+        CXX: clang++ --cc="-Wno-error"
       run: |
         phpize
-        ./configure CC="-Wno-error"
+        ./configure
         make
 
   php-linux-x64:
@@ -76,11 +76,11 @@ jobs:
 
     - name: Run tests
       env:
-        CC: clang
-        CXX: clang++
+        CC: clang --cc="-Wno-error"
+        CXX: clang++ --cc="-Wno-error"
       run: |
         phpize
-        ./configure CC="-Wno-error"
+        ./configure
         make
         make test
 
