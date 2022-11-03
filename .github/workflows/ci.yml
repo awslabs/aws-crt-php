@@ -44,6 +44,7 @@ jobs:
         phpize
         ./configure
         make
+        make test
 
   php-linux-x64:
     runs-on: ubuntu-latest
@@ -70,6 +71,9 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: recursive
+
+    - name: Install ancient PHPUnit
+      run: composer require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
 
     - name: Install dependencies
       run: composer update --no-interaction
