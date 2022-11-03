@@ -110,7 +110,6 @@ jobs:
           submodules: true
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
-          ls
           php
 
   # windows-vc14:
