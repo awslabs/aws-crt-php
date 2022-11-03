@@ -18,17 +18,17 @@ final class InputStreamTest extends CrtTestCase {
         return $stream;
     }
 
-    // public function testMemoryStream() {
-    //     $mem_stream = $this->getMemoryStream();
-    //     $stream = new InputStream($mem_stream);
-    //     $this->assertNotNull($stream, "Failed to create InputStream from PHP memory stream");
-    //     $this->assertEquals(strlen(self::MEM_STREAM_CONTENTS), $stream->length(), "Stream length doesn't match source buffer");
-    //     $this->assertEquals(self::MEM_STREAM_CONTENTS, $stream->read(), "Stream doesn't match source buffer");
-    //     $this->assertTrue($stream->eof(), "Stream is not EOF after reading");
-    //     $this->assertEquals(0, $stream->seek(0, InputStream::SEEK_BEGIN), "Unable to rewind stream");
-    //     $this->assertFalse($stream->eof(), "Stream is EOF after rewinding");
-    //     $this->assertEquals(0, $stream->seek(0, InputStream::SEEK_END), "Unable to seek to end of stream");
-    //     $this->assertTrue($stream->eof(), "Stream is not EOF after seeking to end");
-    //     $stream = null;
-    // }
+    public function testMemoryStream() {
+        $mem_stream = $this->getMemoryStream();
+        $stream = new InputStream($mem_stream);
+        $this->assertNotNull($stream, "Failed to create InputStream from PHP memory stream");
+        $this->assertEquals(strlen(self::MEM_STREAM_CONTENTS), $stream->length(), "Stream length doesn't match source buffer");
+        $this->assertEquals(self::MEM_STREAM_CONTENTS, $stream->read(), "Stream doesn't match source buffer");
+        $this->assertTrue($stream->eof(), "Stream is not EOF after reading");
+        $this->assertEquals(0, $stream->seek(0, InputStream::SEEK_BEGIN), "Unable to rewind stream");
+        $this->assertFalse($stream->eof(), "Stream is EOF after rewinding");
+        $this->assertEquals(0, $stream->seek(0, InputStream::SEEK_END), "Unable to seek to end of stream");
+        $this->assertTrue($stream->eof(), "Stream is not EOF after seeking to end");
+        $stream = null;
+    }
 }
