@@ -64,44 +64,44 @@ final class SigningTest extends CrtTestCase {
         return mktime(12, 36, 0, 8, 30, 2015);
     }
 
-    public function testShouldSignHeader() {
-        $credentials_provider = new StaticCredentialsProvider([
-            'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
-            'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
-            'session_token' => self::SIGV4TEST_SESSION_TOKEN,
-        ]);
-        $signing_config = new SigningConfigAWS([
-            'algorithm' => SigningAlgorithm::SIGv4,
-            'signature_type' => SignatureType::HTTP_REQUEST_HEADERS,
-            'credentials_provider' => $credentials_provider,
-            'region' => self::SIGV4TEST_REGION,
-            'service' => self::SIGV4TEST_SERVICE,
-            'date' => self::SIGV4TEST_DATE(),
-            'should_sign_header' => function($header) {
-                return strtolower($header) != 'x-do-not-sign';
-            }
-        ]);
-        $http_request = new Request('GET', '/', [], [
-            'Host' => 'example.amazonaws.com',
-            'X-Do-Not-Sign' => 'DO NOT SIGN THIS']);
-        $this->assertNotNull($http_request, "Unable to create HttpRequest for signing");
-        $signable = Signable::fromHttpRequest($http_request);
-        $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
+    // public function testShouldSignHeader() {
+    //     $credentials_provider = new StaticCredentialsProvider([
+    //         'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
+    //         'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,
+    //         'session_token' => self::SIGV4TEST_SESSION_TOKEN,
+    //     ]);
+    //     $signing_config = new SigningConfigAWS([
+    //         'algorithm' => SigningAlgorithm::SIGv4,
+    //         'signature_type' => SignatureType::HTTP_REQUEST_HEADERS,
+    //         'credentials_provider' => $credentials_provider,
+    //         'region' => self::SIGV4TEST_REGION,
+    //         'service' => self::SIGV4TEST_SERVICE,
+    //         'date' => self::SIGV4TEST_DATE(),
+    //         'should_sign_header' => function($header) {
+    //             return strtolower($header) != 'x-do-not-sign';
+    //         }
+    //     ]);
+    //     $http_request = new Request('GET', '/', [], [
+    //         'Host' => 'example.amazonaws.com',
+    //         'X-Do-Not-Sign' => 'DO NOT SIGN THIS']);
+    //     $this->assertNotNull($http_request, "Unable to create HttpRequest for signing");
+    //     $signable = Signable::fromHttpRequest($http_request);
+    //     $this->assertNotNull($signable, "Unable to create signable from HttpRequest");
 
-        Signing::signRequestAws(
-            $signable, $signing_config,
-            function($signing_result, $error_code) use (&$http_request) {
-                $this->assertEquals(0, $error_code);
-                $signing_result->applyToHttpRequest($http_request);
-            }
-        );
+    //     Signing::signRequestAws(
+    //         $signable, $signing_config,
+    //         function($signing_result, $error_code) use (&$http_request) {
+    //             $this->assertEquals(0, $error_code);
+    //             $signing_result->applyToHttpRequest($http_request);
+    //         }
+    //     );
 
-        // This signature value is computed without the X-Do-Not-Sign header above
-        $headers = $http_request->headers();
-        $this->assertEquals(
-            'AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31',
-            $headers->get('Authorization'));
-    }
+    //     // This signature value is computed without the X-Do-Not-Sign header above
+    //     $headers = $http_request->headers();
+    //     $this->assertEquals(
+    //         'AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/aws4_request, SignedHeaders=host;x-amz-date, Signature=5fa00fa31553b73ebf1942676e86291e8372ff2a2260956d9b8aae1d763fbf31',
+    //         $headers->get('Authorization'));
+    // }
 
     public function testSigv4HeaderSigning() {
         $credentials_provider = new StaticCredentialsProvider([
