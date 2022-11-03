@@ -42,7 +42,7 @@ jobs:
         CXX: clang++
       run: |
         phpize
-        ./configure --cc="-Wno-error"
+        ./configure CC="-Wno-error"
         make
 
   php-linux-x64:
@@ -80,7 +80,7 @@ jobs:
         CXX: clang++
       run: |
         phpize
-        ./configure --cc="-Wno-error"
+        ./configure CC="-Wno-error"
         make
         make test
 
