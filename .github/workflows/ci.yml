@@ -38,13 +38,13 @@ jobs:
 
     - name: Build for PHP 5.5
       env:
-        CC: clang
-        CXX: clang++
+        CC: clang -Wno-error
+        CXX: clang++ -Wno-error
       run: |
         phpize
         ./configure
         make
-
+        make test
   php-linux-x64:
     runs-on: ubuntu-latest
     strategy:
@@ -71,33 +71,33 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Install ancient PHPUnit
+      run: composer require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
+
     - name: Install dependencies
       run: composer update --no-interaction
 
     - name: Run tests
       env:
-        CC: clang
-        CXX: clang++
+        CC: clang -Wno-error
+        CXX: clang++ -Wno-error
       run: |
         phpize
         ./configure
         make
         make test
-
-
-  #   linux-arm:
-  #     name: ARM (${{ matrix.arch }})
-  #     runs-on: ubuntu-latest
-  #     strategy:
-  #       matrix:
-  #         arch: [armv6, armv7, arm64]
-  #     steps:
-  #     - name: Build ${{ env.PACKAGE_NAME }}
-  #       run: |
-  #         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-  #         chmod a+x builder
-  #         ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
-
+  linux-arm:
+    name: ARM (${{ matrix.arch }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [armv6, armv7, arm64]
+    steps:
+    - name: Build ${{ env.PACKAGE_NAME }}
+      run: |
+        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+        chmod a+x builder
+        ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
   # windows-vc16:
   #   runs-on: windows-latest
   #   strategy:
