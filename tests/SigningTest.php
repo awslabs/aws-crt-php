@@ -38,15 +38,15 @@ final class SigningTest extends CrtTestCase {
         $signable = null;
     }
 
-    public function testSignableFromChunkLifetime() {
-        $chunk = "THIS IS A TEST CHUNK IT CONTAINS MULTITUDES";
-        $stream = fopen("php://memory", 'r+');
-        fputs($stream, $chunk);
-        rewind($stream);
-        $signable = Signable::fromChunk($stream);
-        $this->assertNotNull($signable, "Failed to create Signable from chunk stream");
-        $signable = null;
-    }
+    // public function testSignableFromChunkLifetime() {
+    //     $chunk = "THIS IS A TEST CHUNK IT CONTAINS MULTITUDES";
+    //     $stream = fopen("php://memory", 'r+');
+    //     fputs($stream, $chunk);
+    //     rewind($stream);
+    //     $signable = Signable::fromChunk($stream);
+    //     $this->assertNotNull($signable, "Failed to create Signable from chunk stream");
+    //     $signable = null;
+    // }
 
     public function testSignableFromCanonicalRequestLifetime() {
         $canonical_request = "THIS IS A CANONICAL_REQUEST. IT IS DEEPLY CANONICAL";
