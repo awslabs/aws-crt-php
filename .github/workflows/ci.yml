@@ -38,8 +38,8 @@ jobs:
 
     - name: Build for PHP 5.5
       env:
-        CC: clang --cc="-Wno-error"
-        CXX: clang++ --cc="-Wno-error"
+        CC: clang -Wno-error
+        CXX: clang++ -Wno-error
       run: |
         phpize
         ./configure
