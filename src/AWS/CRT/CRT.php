@@ -15,6 +15,7 @@ use \RuntimeException;
  * Creating an instance of any NativeResource will activate the CRT binding. User code
  * should only need to create one of these if they are only accessing CRT:: static functions.
  */
+
 final class CRT {
 
     private static $impl = null;
