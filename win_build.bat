@@ -3,7 +3,10 @@
 git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
 cd ./php-sdk
 
-vswhere
-@REM  -nologo -version "[15,16)" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text
-
 ./phpsdk-vs16-x64.bat
+
+phpsdk_buildtree php-8.1
+
+git clone https://github.com/php/php-src.git && cd php-src
+
+phpsdk_deps --update --branch 8.1
