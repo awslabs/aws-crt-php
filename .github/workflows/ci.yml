@@ -110,14 +110,7 @@ jobs:
           submodules: true
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
-          cd ..
-          git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
-          cd ./php-sdk
-          ls
-          ./phpsdk-vc15-x64.bat
-          phpsdk_buildtree php-7.4
-          git clone https://github.com/php/php-src.git && cd php-src
-          phpsdk_deps --update --branch 7.4
+          ./window_build.bat
 
   # windows-vc14:
   #   runs-on: windows-latest
