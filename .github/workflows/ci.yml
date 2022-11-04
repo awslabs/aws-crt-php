@@ -110,7 +110,7 @@ jobs:
           submodules: true
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
-          ./window_build.bat
+          ./win_build.bat
 
   # windows-vc14:
   #   runs-on: windows-latest
