@@ -21,6 +21,7 @@ final class InputStream extends NativeResource {
         // a native php_stream* and executes operations entirely in native
         self::$crt->input_stream_options_set_user_data($options, $stream);
         $this->acquire(self::$crt->input_stream_new($options));
+        self::$crt->input_stream_options_release($options);
     }
 
     public function __destruct() {
