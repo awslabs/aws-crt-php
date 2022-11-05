@@ -22,7 +22,7 @@ final class InputStreamTest extends CrtTestCase {
         $mem_stream = $this->getMemoryStream();
         $stream = new InputStream($mem_stream);
         $this->assertNotNull($stream, "Failed to create InputStream from PHP memory stream");
-//        $this->assertEquals(strlen(self::MEM_STREAM_CONTENTS), $stream->length(), "Stream length doesn't match source buffer");
+        $this->assertEquals(strlen(self::MEM_STREAM_CONTENTS), $stream->length(), "Stream length doesn't match source buffer");
 //        $this->assertEquals(self::MEM_STREAM_CONTENTS, $stream->read(), "Stream doesn't match source buffer");
 //        $this->assertTrue($stream->eof(), "Stream is not EOF after reading");
 //        $this->assertEquals(0, $stream->seek(0, InputStream::SEEK_BEGIN), "Unable to rewind stream");
