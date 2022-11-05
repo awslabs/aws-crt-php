@@ -71,6 +71,9 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Install ancient PHPUnit
+      run: composer require --dev --ignore-platform-reqs phpunit/phpunit "5.7.27"
+
     - name: Install dependencies
       run: composer update --no-interaction
 
