@@ -25,7 +25,7 @@ final class InputStream extends NativeResource {
     }
 
     public function __destruct() {
-        self::$crt->input_stream_release($this->release());
+        $this->release();
         parent::__destruct();
     }
 
