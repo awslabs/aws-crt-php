@@ -14,8 +14,8 @@ call phpsdk_deps --update --branch master
 
 robocopy %SOURCE_DIR% ..\pecl\awscrt /E
 
-buildconf
+call buildconf
 
-configure --enable-cli --with-openssl --enable-awscrt=shared
+call configure --enable-cli --with-openssl --enable-awscrt=shared
 
-nmake
+call nmake
