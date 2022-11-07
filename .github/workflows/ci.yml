@@ -112,7 +112,7 @@ jobs:
         run: |
           cd ..\
           git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
-          .\php-sdk\phpsdk-vs16-x64.bat -t .\aws-crt-php\win_build.bat
+          .\php-sdk\phpsdk-vs16-x64.bat -t .\aws-crt-php\win_build.bat --task-args %CD%\aws-crt-php
 
 
   macos:
