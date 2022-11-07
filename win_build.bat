@@ -17,4 +17,4 @@ call configure --enable-cli --with-openssl --enable-awscrt=shared
 
 call nmake
 
-@REM call nmake test-awscrt
+call nmake test-awscrt
