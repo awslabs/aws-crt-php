@@ -111,8 +111,7 @@ jobs:
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
           git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
-          (gc .\php-sdk\phpsdk-starter.bat) -replace 'cmd /k "!PHP_SDK_VC_SHELL_CMD! && ', 'call "' | Out-File -encoding ASCII .\php-sdk\phpsdk-starter.bat
-          .\win_build.bat
+          ./php-sdk/phpsdk-vs16-x64.bat -t ./win_build.bat
 
   # windows-vc14:
   #   runs-on: windows-latest
