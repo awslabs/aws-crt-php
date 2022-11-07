@@ -107,11 +107,12 @@ jobs:
       - name: Checkout Sources
         uses: actions/checkout@v2
         with:
-          submodules: true
+          submodules: recursive
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
+          cd ..\
           git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
-          .\php-sdk\phpsdk-vs16-x64.bat -t .\win_build.bat
+          .\php-sdk\phpsdk-vs16-x64.bat -t .\aws-crt-php\win_build.bat
 
   # windows-vc14:
   #   runs-on: windows-latest

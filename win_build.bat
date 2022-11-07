@@ -1,7 +1,5 @@
 @echo on
 
-cd ../
-
 echo %CD%
 
 set SOURCE_DIR=%CD%\aws-crt-php
