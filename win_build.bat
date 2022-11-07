@@ -17,3 +17,5 @@ call buildconf
 call configure --enable-cli --with-openssl --enable-awscrt=shared
 
 call nmake
+
+call nmake test-awscrt
