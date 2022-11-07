@@ -1,6 +1,5 @@
 @echo on
 
-git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
 cd ./php-sdk
 
 ./phpsdk-vs16-x64.bat
