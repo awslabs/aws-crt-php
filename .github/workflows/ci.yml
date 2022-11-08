@@ -112,11 +112,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-          extensions: pecl_http
+          extensions: pecl_http, mbstring
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
-          composer require pcov/clobber
-          vendor/bin/pcov clobber
           cd ..\
           git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
           .\php-sdk\phpsdk-vs16-x64.bat -t .\aws-crt-php\win_build.bat --task-args %CD%\aws-crt-php
