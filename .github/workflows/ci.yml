@@ -115,9 +115,9 @@ jobs:
           extensions: pecl_http
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php .\composer-setup.php
-          ls
+          cd ..\
+          git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
+          .\php-sdk\phpsdk-vs16-x64.bat -t .\aws-crt-php\win_build.bat --task-args %CD%\aws-crt-php
 
 
   # macos:
