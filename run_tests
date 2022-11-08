@@ -15,4 +15,6 @@ if [ ! -d vendor ]; then
     composer update
 fi
 
+$PHP_BINARY --version
+
 $launcher $PHP_BINARY -c php.ini vendor/bin/phpunit tests --debug
