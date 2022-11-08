@@ -115,6 +115,7 @@ jobs:
           where composer
           Get-Command composer
           composer
+          composer.phar
 
 
   # macos:
