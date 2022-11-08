@@ -31,7 +31,7 @@ $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 
 # Use PHPUnit and composer to run tests
 test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
-	curl -O composer-setup.php https://getcomposer.org/installer
+	curl -o composer-setup.php https://getcomposer.org/installer
     $(PHP_BINARY) .\composer-setup.php
 	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini .\composer.phar --working-dir=$(AWSCRT_DIR) update
 	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini .\composer.phar --working-dir=$(AWSCRT_DIR) run test-win
