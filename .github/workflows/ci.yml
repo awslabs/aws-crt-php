@@ -112,7 +112,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-          extensions: pecl_http
+          extensions: pecl_http, php_openssl
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
           cd ..\
