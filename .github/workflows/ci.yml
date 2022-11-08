@@ -108,14 +108,16 @@ jobs:
       #   uses: actions/checkout@v2
       #   with:
       #     submodules: recursive
-      - name: Setup Composer
-        uses: php-actions/composer@v6
+      - name: Setup PHP 8.0
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: pecl_http
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
-          where composer
-          Get-Command composer
-          composer
-          composer.phar
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php .\composer-setup.php
+          ls
 
 
   # macos:
