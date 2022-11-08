@@ -1,5 +1,7 @@
 
 CMAKE=cmake.exe
+COMPOSER_PHAR=C:\ProgramData\ComposerSetup\bin\composer.phar
+PHP_BINARY=$(PHP_PREFIX)\php.exe
 
 CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(AWSCRT_DIR)\build\install -DCMAKE_PREFIX_PATH=$(AWSCRT_DIR)\build\install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
 CMAKE_BUILD = $(CMAKE) --build
@@ -31,5 +33,5 @@ $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
 	curl -o composer-setup.php https://getcomposer.org/installer
     php .\composer-setup.php
-	php -c $(AWSCRT_DIR)\php-win.ini .\composer.phar --working-dir=$(AWSCRT_DIR) update
-	php -c $(AWSCRT_DIR)\php-win.ini .\composer.phar --working-dir=$(AWSCRT_DIR) run test-win
+	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini .\composer.phar --working-dir=$(AWSCRT_DIR) update
+	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini .\composer.phar --working-dir=$(AWSCRT_DIR) run test-win
