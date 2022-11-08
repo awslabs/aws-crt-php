@@ -28,8 +28,11 @@ $(AWSCRT_DIR)\src\api.h: $(AWSCRT_DIR)\crt\aws-crt-ffi\src\api.h
 # install api.h to ext/ as well
 $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 	copy $(AWSCRT_DIR)\src\api.h $(AWSCRT_DIR)\ext\api.h
-
+$(PHP_BINARY) -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+$(PHP_BINARY) -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+$(PHP_BINARY) composer-setup.php
+$(PHP_BINARY) -r "unlink('composer-setup.php');"
 # Use PHPUnit to run tests
 test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
-	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini composer --working-dir=$(AWSCRT_DIR) update
-	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini composer --working-dir=$(AWSCRT_DIR) run test-win
+	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini composer.phar --working-dir=$(AWSCRT_DIR) update
+	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini composer.phar --working-dir=$(AWSCRT_DIR) run test-win
