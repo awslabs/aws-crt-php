@@ -104,10 +104,10 @@ jobs:
       matrix:
         arch: [x64]
     steps:
-      # - name: Checkout Sources
-      #   uses: actions/checkout@v2
-      #   with:
-      #     submodules: recursive
+      - name: Checkout Sources
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Setup PHP 8.0
         uses: shivammathur/setup-php@v2
         with:
