@@ -115,6 +115,7 @@ jobs:
       - name: Build ${{ env.PACKAGE_NAME }} + consumers
         run: |
           where composer.phar
+          where composer
           composer
           composer.phar
 
