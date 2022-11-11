@@ -123,7 +123,7 @@ jobs:
     - run: phpize
     - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt
     - run: nmake
-    - run: nmake test
+    - run: nmake test-awscrt
 
   windows2:
     runs-on: windows-2019
