@@ -107,9 +107,6 @@ jobs:
       matrix:
         arch: [x64] # TODO: add x86
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
     - id: setup-php-sdk
       uses: cmb69/setup-php-sdk@v0.6
       with:
@@ -120,10 +117,40 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - run: phpize
-    - run: configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}}
+    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt
     - run: nmake
     - run: nmake test
+
+  windows2:
+    runs-on: windows-2019
+    defaults:
+      run:
+        shell: cmd # TODO: does this matter?
+    strategy:
+      matrix:
+        arch: [x64] # TODO: add x86
+    steps:
+    - id: setup-php-sdk
+      uses: cmb69/setup-php-sdk@v0.6
+      with:
+        version: '8.0'
+        arch: x64
+        ts: ts
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ matrix.arch }}
+        toolset: ${{steps.setup-php-sdk.outputs.toolset}}
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - run: phpize
+    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
+    - run: nmake
+    - run: nmake test-awscrt
 
   # macos:
   #   runs-on: macos-${{ matrix.version }}
