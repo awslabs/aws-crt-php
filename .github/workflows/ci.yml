@@ -107,6 +107,9 @@ jobs:
       matrix:
         arch: [x64] # TODO: add x86
     steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - id: setup-php-sdk
       uses: cmb69/setup-php-sdk@v0.6
       with:
@@ -117,9 +120,6 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
     - run: phpize
     - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt
     - run: nmake
@@ -134,6 +134,9 @@ jobs:
       matrix:
         arch: [x64] # TODO: add x86
     steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - id: setup-php-sdk
       uses: cmb69/setup-php-sdk@v0.6
       with:
@@ -144,9 +147,6 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
     - run: phpize
     - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
     - run: nmake
