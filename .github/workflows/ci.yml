@@ -107,6 +107,9 @@ jobs:
       matrix:
         arch: [x64] # TODO: add x86
     steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - id: setup-php-sdk
       uses: cmb69/setup-php-sdk@v0.6
       with:
