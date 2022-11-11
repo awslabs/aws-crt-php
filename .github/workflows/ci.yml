@@ -117,11 +117,10 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
-    - name: Build ${{ env.PACKAGE_NAME }}
-      run: phpize
-      run: configure
-      run: nmake
-      run: nmake test
+    - run: phpize
+    - run: configure
+    - run: nmake
+    - run: nmake test
 
   # macos:
   #   runs-on: macos-${{ matrix.version }}
