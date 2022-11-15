@@ -182,6 +182,8 @@ fabric.properties
 build/
 configure.in
 configure.ac
+configure.bat
+configure.js
 mkinstalldirs
 run-tests.php
 Makefile.global
@@ -191,12 +193,14 @@ modules/
 *.lo
 config.h
 config.nice
+config.nice.bat
 *.la
 Makefile*
 !Makefile.am
 !Makefile.frag
 !Makefile.frag.w32
 /vendor/
+/x64/
 .idea/
 .DS_Store
 composer.lock
