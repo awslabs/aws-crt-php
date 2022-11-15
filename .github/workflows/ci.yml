@@ -121,7 +121,7 @@ jobs:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
     - run: phpize
-    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt
+    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
     - run: nmake
     - run: nmake test-awscrt
 
@@ -147,10 +147,11 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
-    - run: phpize
-    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
-    - run: nmake
-    - run: nmake test-awscrt
+    - run: php --version
+    - run: where.exe php.exe
+    - run: ${{steps.setup-php-sdk.outputs.prefix}}\php.exe --version
+    - run: where.exe composer
+    - run: where.exe composer.phar
 
   # macos:
   #   runs-on: macos-${{ matrix.version }}
