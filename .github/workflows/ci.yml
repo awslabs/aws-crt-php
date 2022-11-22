@@ -121,7 +121,7 @@ jobs:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
     - run: phpize
-    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
+    - run: .\configure --with-openssl --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
     - run: nmake
     - run: nmake test-awscrt
 
