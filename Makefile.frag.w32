@@ -1,8 +1,6 @@
 
 CMAKE=cmake.exe
 PHP_BINARY=$(PHP_PREFIX)\php.exe
-path = where.exe composer.phar
-COMPOSER_PHAR = %%path%%
 
 CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(AWSCRT_DIR)\build\install -DCMAKE_PREFIX_PATH=$(AWSCRT_DIR)\build\install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
 CMAKE_BUILD = $(CMAKE) --build
@@ -32,5 +30,7 @@ $(AWSCRT_DIR)\ext\api.h : $(AWSCRT_DIR)\src\api.h
 
 # Use PHPUnit and composer to run tests
 test-awscrt: install $(AWSCRT_DIR)\src\api.h $(BUILD_DIR)\php_awscrt.dll
+	path = where.exe composer.phar
+	COMPOSER_PHAR = %%path%%
 	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) update
 	$(PHP_BINARY) -c $(AWSCRT_DIR)\php-win.ini $(COMPOSER_PHAR) --working-dir=$(AWSCRT_DIR) run test-win
