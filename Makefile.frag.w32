@@ -1,7 +1,7 @@
 
 CMAKE=cmake.exe
 PHP_BINARY=$(PHP_PREFIX)\php.exe
-set path = where.exe composer.phar
+path = where.exe composer.phar
 COMPOSER_PHAR = %%path%%
 
 CMAKE_CONFIGURE = $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(AWSCRT_DIR)\build\install -DCMAKE_PREFIX_PATH=$(AWSCRT_DIR)\build\install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
