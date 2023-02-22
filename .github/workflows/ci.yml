@@ -79,7 +79,8 @@ jobs:
       run: |
         phpize
         ./configure
-        make test
+        make
+        ./run_tests
 
     # - name: Install dependencies
     #   run: |
