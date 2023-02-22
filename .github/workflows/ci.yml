@@ -30,12 +30,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install ancient PHPUnit
-      run: composer require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
-
-    - name: Install dependencies
-      run: composer update --no-interaction
-
     - name: Build for PHP 5.5
       env:
         CC: clang
@@ -44,6 +38,13 @@ jobs:
         phpize
         ./configure
         make
+
+    - name: Install dependencies
+      run: |
+        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        php composer-setup.php
+        php -c php.ini composer.phar require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
+        php -c php.ini composer.phar update --no-interaction
 
   php-linux-x64:
     runs-on: ubuntu-latest
@@ -71,9 +72,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install dependencies
-      run: composer update --no-interaction
-
     - name: Run tests
       env:
         CC: clang
@@ -83,6 +81,12 @@ jobs:
         ./configure
         make
         make test
+
+    - name: Install dependencies
+      run: |
+        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        php composer-setup.php
+        php -c php.ini composer.phar update --no-interaction
 
 
   #   linux-arm:
