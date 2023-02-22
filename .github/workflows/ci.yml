@@ -170,7 +170,8 @@ jobs:
         CC: clang
         CXX: clang++
       run: |
-        dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
+        ls
+        ./dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
         ls *.tgz
         tar zxvf *.tgz
         ls
