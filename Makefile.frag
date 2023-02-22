@@ -1,6 +1,6 @@
 
 INT_DIR=build/install
-GENERATE_STUBS=$(expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
+GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
