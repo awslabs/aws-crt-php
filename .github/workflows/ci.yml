@@ -170,6 +170,6 @@ jobs:
         ./dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
         tar -zxf *.tgz
         cd awscrt-1.0.0
-        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-        chmod a+x builder
-        ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+        phpize
+        ./configure
+        make
