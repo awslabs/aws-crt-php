@@ -18,6 +18,8 @@ WORK_DIR="${TOOLS_DIR}/.."
 
 cd "${WORK_DIR}"
 
+git submodule update --init --recursive
+
 $TOOLS_DIR/cleanup.sh
 $TOOLS_DIR/prepare_package_xml.sh --name "${NAME}" --user "${USER}" --email "${EMAIL}" --version "${VERSION}" --notes "${NOTES}" >package.xml
 if [[ $? -ne 0 ]]; then
