@@ -80,7 +80,7 @@ jobs:
         phpize
         ./configure
         make
-        ./run_tests
+        ./dev-scripts/run_tests
 
   #   linux-arm:
   #     name: ARM (${{ matrix.arch }})
