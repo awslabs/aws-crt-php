@@ -30,7 +30,7 @@ doc_ext='(md|json|html|dot|graphml|png|gn|sha1|css|rst|)'
 special_docs='(LICENSE*|NOTICE|changelog.txt|CHANGELOG|THIRD-PARTY|README*|readme|METADATA|CONTRIBUTORS|UPDATING|doc.config|THIRD-PARTY-LICENSES.txt)'
 special_tests='(ci-test.sh|format-check.sh|run_tests*|sanitizer-blacklist.txt|run-clang-tidy.sh|benchmark-build-run.sh|break-tests.sh|generate-coverage.sh|test.xml)'
 special_src='(gen_api.php|gen_stub.php|CMakeLists.txt|post.sh|postun.sh|Makefile*|build-buildspec.sh|build-deps.sh|objects.txt|go.*|BUILD*|DEPS|install_and_run.sh|codemod.sh|requirements.txt)'
-skip_files='(package.xml*|prepare_release.sh|codereview.settings|*.o|*.a|*.obj|*.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|*.pdf|*.svg|*.docx|cbmc-proof.txt|codecov*|litani*|*.toml|module.modulemap)'
+skip_files='(package.xml*|prepare_release.sh|codereview.settings|*.o|*.a|*.obj|*.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|*.pdf|*.svg|*.docx|cbmc-proof.txt|codecov*|litani*|*.toml|module.modulemap|cleanup.sh)'
 
 special_scripts='(awscrt.stub.php)'
 
@@ -136,6 +136,12 @@ do
     echo '</dir>'
     continue
   fi
+  # skip the src directory as it is not part of the native extension
+  if [[ ${a} == 'src' ]]
+  then
+    continue
+  fi
+
   if [[ -f ${a} ]]
   then process_file "${a}"
   else process_dir "${a}"

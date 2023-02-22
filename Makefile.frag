@@ -55,12 +55,8 @@ ifeq ($(GENERATE_STUBS),1)
 endif
 
 # transform/install api.h from FFI lib
-src/api.h: crt/aws-crt-ffi/src/api.h
-	php gen_api.php crt/aws-crt-ffi/src/api.h > src/api.h
-
-# install api.h to ext/ as well
-ext/api.h : src/api.h
-	cp -v src/api.h ext/api.h
+ext/api.h : crt/aws-crt-ffi/src/api.h
+	php gen_api.php crt/aws-crt-ffi/src/api.h > ext/api.h
 
 ext/php_aws_crt.h: ext/awscrt_arginfo.h ext/api.h
 
