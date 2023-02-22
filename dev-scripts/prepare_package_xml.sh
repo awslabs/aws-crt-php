@@ -34,7 +34,7 @@ skip_files='(package.xml*|prepare_release.sh|codereview.settings|*.o|*.a|*.obj|*
 
 special_scripts='(awscrt.stub.php)'
 
-skip_directories='(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|verfication|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance|verification)'
+skip_directories='(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance|verification)'
 
 process_file() {
     if (( $# == 0 ))
