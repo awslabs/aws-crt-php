@@ -11,7 +11,15 @@ EMAIL="${opts[--email]}"
 VERSION="${opts[--version]}"
 NOTES="${opts[--notes]}"
 
-./prepare_package_xml.sh --name "${NAME}" --user "${USER}" --email "${EMAIL}" --version "${VERSION}" --notes "${NOTES}" >package.xml
+
+BASENAME=${0}
+TOOLS_DIR=$(dirname ${BASENAME})
+WORK_DIR="${TOOLS_DIR}/.."
+
+cd "${WORK_DIR}"
+
+$TOOLS_DIR/cleanup.sh
+$TOOLS_DIR/prepare_package_xml.sh --name "${NAME}" --user "${USER}" --email "${EMAIL}" --version "${VERSION}" --notes "${NOTES}" >package.xml
 if [[ $? -ne 0 ]]; then
   echo "ERROR PROCESSING review package.xml"
   exit 1

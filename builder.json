@@ -32,6 +32,6 @@
         "NO_INTERACTION": "1"
     },
     "test_steps": [
-        ["./run_tests"]
+        ["./dev-scripts/run_tests"]
     ]
 }

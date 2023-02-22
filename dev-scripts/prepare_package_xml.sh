@@ -11,9 +11,12 @@ EMAIL="${opts[--email]}"
 VERSION="${opts[--version]}"
 NOTES="${opts[--notes]}"
 
+BASENAME=${0}
+TOOLS_DIR=$(dirname ${BASENAME})
+
 TODAY=$(date -u +%Y-%m-%d)
 
-cat package.xml-template_pre \
+cat $TOOLS_DIR/package.xml-template_pre \
     | sed "s/{{{NAME}}}/$NAME/g" \
     | sed "s/{{{USER}}}/$USER/g" \
     | sed "s/{{{EMAIL}}}/$EMAIL/g" \
@@ -24,14 +27,14 @@ cat package.xml-template_pre \
 source_ext='(c|cc|h|cpp|hpp|m4|w32|ini|frag|cmake|inl|in|py|gnu|yaml|def|pl|S|s|errordata|go|lds|num|asm|mod|peg|mk|rs|toml|sh)'
 doc_ext='(md|json|html|dot|graphml|png|gn|sha1|css|rst|)'
 
-special_docs='(LICENSE*|NOTICE|changelog.txt|CHANGELOG|THIRD-PARTY|README*|readme|METADATA|CONTRIBUTORS|UPDATING|doc.config)'
+special_docs='(LICENSE*|NOTICE|changelog.txt|CHANGELOG|THIRD-PARTY|README*|readme|METADATA|CONTRIBUTORS|UPDATING|doc.config|THIRD-PARTY-LICENSES.txt)'
 special_tests='(ci-test.sh|format-check.sh|run_tests*|sanitizer-blacklist.txt|run-clang-tidy.sh|benchmark-build-run.sh|break-tests.sh|generate-coverage.sh|test.xml)'
 special_src='(gen_api.php|gen_stub.php|CMakeLists.txt|post.sh|postun.sh|Makefile*|build-buildspec.sh|build-deps.sh|objects.txt|go.*|BUILD*|DEPS|install_and_run.sh|codemod.sh|requirements.txt)'
-skip_files='(package.xml*|prepare_release.sh|codereview.settings|*.o|*.a|*.obj|*.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|*.pdf|*.svg|*.docx|cbmc-proof.txt|codecov*|litani*|*.toml)'
+skip_files='(package.xml*|prepare_release.sh|codereview.settings|*.o|*.a|*.obj|*.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|*.pdf|*.svg|*.docx|cbmc-proof.txt|codecov*|litani*|*.toml|module.modulemap)'
 
 special_scripts='(awscrt.stub.php)'
 
-skip_directories='(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|verfication|third_party|docs|generated-src|aws-lc|aws-crt-sys)'
+skip_directories='(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|verfication|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance)'
 
 process_file() {
     if (( $# == 0 ))
@@ -140,5 +143,4 @@ do
 done
 echo '</dir>'
 
-cat package.xml-template_post
-
+cat $TOOLS_DIR/package.xml-template_post

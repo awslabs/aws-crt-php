@@ -1,6 +1,6 @@
 
 INT_DIR=build/install
-GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
+GENERATE_STUBS=$(expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
@@ -27,8 +27,8 @@ CMAKE_BUILD = CMAKE_BUILD_PARALLEL_LEVEL='' $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 
-all: extension 
-.PHONY: all extension 
+all: extension
+.PHONY: all extension
 
 # configure for static aws-crt-ffi.a
 build/aws-crt-ffi-static/CMakeCache.txt:
@@ -46,8 +46,10 @@ ext/awscrt.lo: ext/awscrt.c
 
 ext/awscrt.c: build/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
-ext/awscrt_arginfo.h: ext/awscrt.stub.php gen_stub.php
+ext/awscrt_arginfo.h: awscrt.stub.php gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
+	# install awscrt.stub.php to ext/
+	cp -v awscrt.stub.php ext/awscrt.stub.php
 	# generate awscrt_arginfo.h
 	php gen_stub.php --minimal-arginfo ext/awscrt.stub.php
 endif
