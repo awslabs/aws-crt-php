@@ -82,14 +82,6 @@ jobs:
         make
         ./run_tests
 
-    # - name: Install dependencies
-    #   run: |
-    #     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    #     php composer-setup.php
-    #     php -c php.ini composer.phar update --no-interaction
-    #     make test
-
-
   #   linux-arm:
   #     name: ARM (${{ matrix.arch }})
   #     runs-on: ubuntu-latest
