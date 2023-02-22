@@ -79,14 +79,14 @@ jobs:
       run: |
         phpize
         ./configure
-        make
-
-    - name: Install dependencies
-      run: |
-        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        php composer-setup.php
-        php -c php.ini composer.phar update --no-interaction
         make test
+
+    # - name: Install dependencies
+    #   run: |
+    #     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    #     php composer-setup.php
+    #     php -c php.ini composer.phar update --no-interaction
+    #     make test
 
 
   #   linux-arm:
