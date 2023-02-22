@@ -29,7 +29,7 @@
     "scripts": {
         "test": "./dev-scripts/run_tests",
         "test-extension": "@test",
-        "test-win": "run_tests"
+        "test-win": ".\\dev-scripts\\run_tests.bat"
     },
     "license": "Apache-2.0"
 }
