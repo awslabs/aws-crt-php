@@ -22,7 +22,7 @@ jobs:
       id: tag
 
     - name: Prepare Package Script
-      run: dev-scripts/prepare-release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${{ steps.tag.outputs.release_tag }} --notes NOTES
+      run: dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${{ steps.tag.outputs.release_tag }} --notes NOTES
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v3

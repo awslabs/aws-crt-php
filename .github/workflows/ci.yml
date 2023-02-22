@@ -151,3 +151,26 @@ jobs:
           python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
           chmod a+x builder
           ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+
+  pecl-package-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Run tests
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
+        ls *.tgz
+        tar zxvf *.tgz
+        ls
