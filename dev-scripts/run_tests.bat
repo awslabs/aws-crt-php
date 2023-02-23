@@ -14,7 +14,7 @@ if "%composer_dir%"=="" (
   set "work_dir=%script_dir%/.."
   cd %work_dir%
   echo %work_dir%
-  ls x64\Release
+  ls x64\
 
   php -c php-win.ini %composer_dir% update
   if %errorlevel% neq 0 (

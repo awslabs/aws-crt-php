@@ -119,6 +119,7 @@ jobs:
         phpize
         .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
         nmake
+        nmake install
         .\dev-scripts\run_tests
 
   # windows-vc14:
