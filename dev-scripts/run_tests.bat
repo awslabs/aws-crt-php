@@ -14,10 +14,19 @@ if "%composer_dir%"=="" (
   set "work_dir=%script_dir%/.."
   cd %work_dir%
   echo %work_dir%
-  ls
+  ls x64\Release
 
   php -c php-win.ini %composer_dir% update
+  if %errorlevel% neq 0 (
+    echo An error occurred while using composer to get dependence
+    exit /b %errorlevel%
+  )
+
   php -c php-win.ini vendor/bin/phpunit tests --debug
+  if %errorlevel% neq 0 (
+    echo An error occurred while running unittests
+    exit /b %errorlevel%
+  )
 )
 
 endlocal
