@@ -95,21 +95,31 @@ jobs:
   #         chmod a+x builder
   #         ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
 
-  # windows-vc16:
-  #   runs-on: windows-latest
-  #   strategy:
-  #     matrix:
-  #       arch: [x64]
-  #   steps:
-  #   - uses: ilammy/msvc-dev-cmd@v1
-  #     with:
-  #       arch: ${{ matrix.arch }}
-  #       uwp: false
-  #       spectre: true
-  #   - name: Build ${{ env.PACKAGE_NAME }} + consumers
-  #     run: |
-  #       python -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-  #       python builder.pyz build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+  windows-vc16:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        arch: [x64]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - id: setup-php-sdk
+      uses: cmb69/setup-php-sdk@v0.6
+      with:
+        version: '8.0'
+        arch: x64
+        ts: ts
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ matrix.arch }}
+        toolset: ${{steps.setup-php-sdk.outputs.toolset}}
+    - name: Build ${{ env.PACKAGE_NAME }} + consumers
+      run: |
+        phpize
+        .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
+        nmake
+        .\dev-scripts\run_tests
 
   # windows-vc14:
   #   runs-on: windows-latest
