@@ -10,10 +10,10 @@ if "%composer_dir%"=="" (
   echo No composer found.
   exit /b 1
 ) else (
-  cd ..
   set "script_dir=%~dp0"
   set "work_dir=%script_dir%/.."
   cd %work_dir%
+  echo %work_dir%
   ls
 
   php -c php-win.ini %composer_dir% update
