@@ -14,86 +14,86 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  # php-5_5-linux-x64:
-  #   name: php-linux-x64 (5.5)
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Setup PHP with Xdebug
-  #     uses: shivammathur/setup-php@v2
-  #     with:
-  #       coverage: xdebug
-  #       php-version: 5.5
-  #       ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+  php-5_5-linux-x64:
+    name: php-linux-x64 (5.5)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup PHP with Xdebug
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: xdebug
+        php-version: 5.5
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
-  #   - name: Checkout
-  #     uses: actions/checkout@v2
-  #     with:
-  #       submodules: recursive
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-  #   - name: Build for PHP 5.5
-  #     env:
-  #       CC: clang
-  #       CXX: clang++
-  #     run: |
-  #       phpize
-  #       ./configure
-  #       make
+    - name: Build for PHP 5.5
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        phpize
+        ./configure
+        make
 
-  #   - name: Install dependencies
-  #     run: |
-  #       php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  #       php composer-setup.php
-  #       php -c php.ini composer.phar require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
-  #       php -c php.ini composer.phar update --no-interaction
+    - name: Install dependencies
+      run: |
+        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        php composer-setup.php
+        php -c php.ini composer.phar require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
+        php -c php.ini composer.phar update --no-interaction
 
-  # php-linux-x64:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       version:
-  #         - "5.6"
-  #         - "7.0"
-  #         - "7.1"
-  #         - "7.2"
-  #         - "7.3"
-  #         - "7.4"
-  #         - "8.0"
-  #   steps:
-  #   - name: Setup PHP with Xdebug
-  #     uses: shivammathur/setup-php@v2
-  #     with:
-  #       coverage: xdebug
-  #       php-version: ${{matrix.version}}
-  #       ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+  php-linux-x64:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "5.6"
+          - "7.0"
+          - "7.1"
+          - "7.2"
+          - "7.3"
+          - "7.4"
+          - "8.0"
+    steps:
+    - name: Setup PHP with Xdebug
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: xdebug
+        php-version: ${{matrix.version}}
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
-  #   - name: Checkout
-  #     uses: actions/checkout@v2
-  #     with:
-  #       submodules: recursive
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-  #   - name: Run tests
-  #     env:
-  #       CC: clang
-  #       CXX: clang++
-  #     run: |
-  #       phpize
-  #       ./configure
-  #       make
-  #       ./dev-scripts/run_tests
+    - name: Run tests
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        phpize
+        ./configure
+        make
+        ./dev-scripts/run_tests
 
-    # linux-arm:
-    #   name: ARM (${{ matrix.arch }})
-    #   runs-on: ubuntu-latest
-    #   strategy:
-    #     matrix:
-    #       arch: [armv6, armv7, arm64]
-    #   steps:
-    #   - name: Build ${{ env.PACKAGE_NAME }}
-    #     run: |
-    #       python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-    #       chmod a+x builder
-    #       ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
+    linux-arm:
+      name: ARM (${{ matrix.arch }})
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          arch: [armv6, armv7, arm64]
+      steps:
+      - name: Build ${{ env.PACKAGE_NAME }}
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+          chmod a+x builder
+          ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
 
   windows-vc16:
     runs-on: windows-2019
@@ -144,48 +144,48 @@ jobs:
   #       python -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
   #       python builder.pyz build -p ${{ env.PACKAGE_NAME }} downstream
 
-  # macos:
-  #   runs-on: macos-${{ matrix.version }}
-  #   strategy:
-  #     matrix:
-  #       version: [10.15]
-  #   steps:
-  #     # Force PHP to 8.0
-  #     # Doing this because tests fail in PHP 8.1 (default on macos Github Runner as of Dec 2021)
-  #     # due to the old version of PHPUnit we're using.
-  #     # We're using an old PHPUnit because it's compatible our min supported PHP 5.5.
-  #     # Quick fix is to force PHP version back to 8.0, which can still run our tests without error.
-  #     # A real solution is to get our tests working on all PHP versions
-  #     # (maybe don't use PHPUnit, maybe raise our min supported PHP version so we can upgrade,
-  #     # or maybe use PHPUnit-Polyfills so we can use a modern PHPUnit with old PHP)
-  #     - name: Setup PHP 8.0
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: '8.0'
-  #     - name: Build PHP 8 extension and test
-  #       run: |
-  #         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-  #         chmod a+x builder
-  #         ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream
+  macos:
+    runs-on: macos-${{ matrix.version }}
+    strategy:
+      matrix:
+        version: [10.15]
+    steps:
+      # Force PHP to 8.0
+      # Doing this because tests fail in PHP 8.1 (default on macos Github Runner as of Dec 2021)
+      # due to the old version of PHPUnit we're using.
+      # We're using an old PHPUnit because it's compatible our min supported PHP 5.5.
+      # Quick fix is to force PHP version back to 8.0, which can still run our tests without error.
+      # A real solution is to get our tests working on all PHP versions
+      # (maybe don't use PHPUnit, maybe raise our min supported PHP version so we can upgrade,
+      # or maybe use PHPUnit-Polyfills so we can use a modern PHPUnit with old PHP)
+      - name: Setup PHP 8.0
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - name: Build PHP 8 extension and test
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+          chmod a+x builder
+          ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream
 
-  # pecl-package-test:
-  #   runs-on: macos-latest
-  #   steps:
-  #   - name: Setup PHP
-  #     uses: shivammathur/setup-php@v2
-  #     with:
-  #       php-version: '8.0'
+  pecl-package-test:
+    runs-on: macos-latest
+    steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
 
-  #   - name: Checkout
-  #     uses: actions/checkout@v2
-  #     with:
-  #       submodules: recursive
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-  #   - name: Run tests
-  #     run: |
-  #       ./dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
-  #       tar -zxf *.tgz
-  #       cd awscrt-1.0.0
-  #       phpize
-  #       ./configure
-  #       make
+    - name: Run tests
+      run: |
+        ./dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
+        tar -zxf *.tgz
+        cd awscrt-1.0.0
+        phpize
+        ./configure
+        make
