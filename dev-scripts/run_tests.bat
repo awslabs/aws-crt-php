@@ -16,15 +16,14 @@ REM Check if composer_dir was found
 if "%composer_dir%"=="" (
   echo No composer found.
   exit /b 1
-) else (
-  set "script_dir=%~dp0"
-  set "work_dir=%script_dir%/.."
-  cd %work_dir%
-  echo %work_dir%
-  ls x64\
-
-  call %PHP_BINARY% -c php-win.ini %composer_dir% update
-  call %PHP_BINARY% -c php-win.ini vendor/bin/phpunit tests --debug
 )
+
+set "script_dir=%~dp0"
+set "work_dir=%script_dir%/.."
+cd %work_dir%
+
+call %PHP_BINARY% -c php-win.ini %composer_dir% update
+call %PHP_BINARY% -c php-win.ini vendor/bin/phpunit tests --debug
+
 
 endlocal

@@ -118,7 +118,7 @@ jobs:
     - name: Build ${{ env.PACKAGE_NAME }} + consumers
       run: |
         phpize
-        .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --with-openssl
+        .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
         nmake
         nmake generate-php-ini
         .\dev-scripts\run_tests ${{steps.setup-php-sdk.outputs.prefix}}\php
