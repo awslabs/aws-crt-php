@@ -116,7 +116,6 @@ jobs:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
     - name: Build ${{ env.PACKAGE_NAME }} + consumers
-      shell: cmd
       run: |
         phpize
         .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
