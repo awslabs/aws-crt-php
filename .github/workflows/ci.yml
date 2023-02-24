@@ -110,6 +110,7 @@ jobs:
         version: '8.0'
         arch: x64
         ts: ts
+        deps: openssl
     - uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ matrix.arch }}
