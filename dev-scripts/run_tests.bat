@@ -21,7 +21,7 @@ set "script_dir=%~dp0"
 set "work_dir=%script_dir%/.."
 cd %work_dir%
 
-call %PHP_BINARY% -c php-win.ini %composer_dir% update
+composer update
 call %PHP_BINARY% -c php-win.ini vendor/bin/phpunit tests --debug
 
 
