@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import xml.dom.minidom
 
 
 parser = argparse.ArgumentParser(description='PECL Package generator')
@@ -37,7 +38,11 @@ subprocess.run(['python3', f'{TOOLS_DIR}/prepare_pecl_package_xml.py', '--name',
 try:
     with open('package.xml', 'r') as f:
         package_xml = f.read()
-    subprocess.run(['tidy', '-xml', '-m', '-i', 'package.xml'], check=True)
+    doc = xml.dom.minidom.parse('package.xml')
+    doc.encoding = 'UTF-8'
+    xml_str = doc.toprettyxml(indent=' ', newl='')
+    with open('package.xml', 'w') as f:
+        f.write(xml_str)
     subprocess.run(['pear', 'package-validate'], check=True)
     subprocess.run(['pear', 'package'], check=True)
 except subprocess.CalledProcessError as e:
