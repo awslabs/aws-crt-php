@@ -27,5 +27,5 @@ $(AWSCRT_DIR)\ext\api.h: $(AWSCRT_DIR)\crt\aws-crt-ffi\src\api.h
 # Get the dll directory to load
 generate-php-ini:
 	@echo extension=$(BUILD_DIR)\php_awscrt.dll > php-win.ini
-	@echo extension=$(PHP_PREFIX)\php_openssl.dll >> php-win.ini
+	@echo extension=$(PHP_PREFIX)\ext\php_openssl.dll >> php-win.ini
 	@echo extension=$(PHP_PREFIX)\ext\php_mbstring.dll >> php-win.ini

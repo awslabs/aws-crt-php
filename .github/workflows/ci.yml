@@ -99,7 +99,7 @@ jobs:
     runs-on: windows-2019
     defaults:
       run:
-        shell: cmd # TODO: does this matter?
+        shell: cmd # use CMD instead of powershell to catch error from bat script
     strategy:
       matrix:
         arch: [x64]
@@ -118,6 +118,7 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
+    # CMD only execute one commend per run
     - run: phpize
     - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
     - run: nmake
