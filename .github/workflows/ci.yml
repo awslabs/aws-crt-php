@@ -99,7 +99,7 @@ jobs:
     runs-on: windows-2019
     defaults:
       run:
-        shell: cmd # use CMD instead of powershell to catch error from bat script
+        shell: cmd # TODO: does this matter?
     strategy:
       matrix:
         arch: [x64]
@@ -118,14 +118,11 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
-    - name: Build ${{ env.PACKAGE_NAME }} + consumers
-      run: |
-        phpize
-        .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
-        nmake
-        nmake generate-php-ini
-        type .\php-win.ini
-        .\dev-scripts\run_tests ${{steps.setup-php-sdk.outputs.prefix}}\php
+    - run: phpize
+    - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
+    - run: nmake
+    - run: nmake generate-php-ini
+    - run: .\dev-scripts\run_tests ${{steps.setup-php-sdk.outputs.prefix}}\php
 
   # windows-vc14:
   #   runs-on: windows-latest
