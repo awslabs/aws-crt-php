@@ -5,6 +5,13 @@ REM Run command to get composer_dir
 set "composer_dir="
 for /f "usebackq delims=" %%i in (`where composer.phar`) do set "composer_dir=%%i"
 
+set "PHP_BINARY=php"
+
+if not "%~1"=="" (
+  set "PHP_BINARY=%~1"
+)
+
+
 REM Check if composer_dir was found
 if "%composer_dir%"=="" (
   echo No composer found.
@@ -16,13 +23,13 @@ if "%composer_dir%"=="" (
   echo %work_dir%
   ls x64\
 
-  php -c php-win.ini %composer_dir% update
+  %PHP_BINARY% -c php-win.ini %composer_dir% update
   if %errorlevel% neq 0 (
     echo An error occurred while using composer to get dependence
     exit /b %errorlevel%
   )
 
-  php -c php-win.ini vendor/bin/phpunit tests --debug
+  %PHP_BINARY% -c php-win.ini vendor/bin/phpunit tests --debug
   if %errorlevel% neq 0 (
     echo An error occurred while running unittests
     exit /b %errorlevel%

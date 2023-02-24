@@ -121,7 +121,7 @@ jobs:
         .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared
         nmake
         nmake generate-php-ini
-        .\dev-scripts\run_tests
+        .\dev-scripts\run_tests ${{steps.setup-php-sdk.outputs.prefix}}\php
 
   # windows-vc14:
   #   runs-on: windows-latest
