@@ -11,7 +11,6 @@ if not "%~1"=="" (
   set "PHP_BINARY=%~1"
 )
 
-
 REM Check if composer_dir was found
 if "%composer_dir%"=="" (
   echo No composer found.
