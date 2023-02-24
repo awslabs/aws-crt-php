@@ -167,7 +167,7 @@ jobs:
           ./builder build -p ${{ env.PACKAGE_NAME }} --spec=downstream
 
   pecl-package-test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -179,9 +179,9 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Run tests
+    - name: Test PECL package build
       run: |
-        ./dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version 1.0.0 --notes NOTES
+        python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --version 1.0.0
         tar -zxf *.tgz
         cd awscrt-1.0.0
         phpize
