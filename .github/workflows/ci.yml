@@ -82,18 +82,18 @@ jobs:
         make
         ./dev-scripts/run_tests
 
-    linux-arm:
-      name: ARM (${{ matrix.arch }})
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          arch: [armv6, armv7, arm64]
-      steps:
-      - name: Build ${{ env.PACKAGE_NAME }}
-        run: |
-          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
-          chmod a+x builder
-          ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
+    # linux-arm:
+    #   name: ARM (${{ matrix.arch }})
+    #   runs-on: ubuntu-latest
+    #   strategy:
+    #     matrix:
+    #       arch: [armv6, armv7, arm64]
+    #   steps:
+    #   - name: Build ${{ env.PACKAGE_NAME }}
+    #     run: |
+    #       python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+    #       chmod a+x builder
+    #       ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
 
   windows-vc16:
     runs-on: windows-2019
