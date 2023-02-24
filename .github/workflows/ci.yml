@@ -97,9 +97,6 @@ jobs:
 
   windows-vc16:
     runs-on: windows-2019
-    defaults:
-      run:
-        shell: cmd # TODO: does this matter make the error out?
     strategy:
       matrix:
         arch: [x64]
@@ -119,6 +116,7 @@ jobs:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
     - name: Build ${{ env.PACKAGE_NAME }} + consumers
+      shell: cmd
       run: |
         phpize
         .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
