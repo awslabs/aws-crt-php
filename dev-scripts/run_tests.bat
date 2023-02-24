@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal
 
 REM Run command to get composer_dir
