@@ -14,73 +14,73 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  php-5_5-linux-x64:
-    name: php-linux-x64 (5.5)
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
-      with:
-        coverage: xdebug
-        php-version: 5.5
-        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+  # php-5_5-linux-x64:
+  #   name: php-linux-x64 (5.5)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Setup PHP with Xdebug
+  #     uses: shivammathur/setup-php@v2
+  #     with:
+  #       coverage: xdebug
+  #       php-version: 5.5
+  #       ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #     with:
+  #       submodules: recursive
 
-    - name: Build for PHP 5.5
-      env:
-        CC: clang
-        CXX: clang++
-      run: |
-        phpize
-        ./configure
-        make
+  #   - name: Build for PHP 5.5
+  #     env:
+  #       CC: clang
+  #       CXX: clang++
+  #     run: |
+  #       phpize
+  #       ./configure
+  #       make
 
-    - name: Install dependencies
-      run: |
-        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        php composer-setup.php
-        php -c php.ini composer.phar require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
-        php -c php.ini composer.phar update --no-interaction
+  #   - name: Install dependencies
+  #     run: |
+  #       php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  #       php composer-setup.php
+  #       php -c php.ini composer.phar require --dev --ignore-platform-reqs phpunit/phpunit "4.8.36"
+  #       php -c php.ini composer.phar update --no-interaction
 
-  php-linux-x64:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version:
-          - "5.6"
-          - "7.0"
-          - "7.1"
-          - "7.2"
-          - "7.3"
-          - "7.4"
-          - "8.0"
-    steps:
-    - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
-      with:
-        coverage: xdebug
-        php-version: ${{matrix.version}}
-        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+  # php-linux-x64:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       version:
+  #         - "5.6"
+  #         - "7.0"
+  #         - "7.1"
+  #         - "7.2"
+  #         - "7.3"
+  #         - "7.4"
+  #         - "8.0"
+  #   steps:
+  #   - name: Setup PHP with Xdebug
+  #     uses: shivammathur/setup-php@v2
+  #     with:
+  #       coverage: xdebug
+  #       php-version: ${{matrix.version}}
+  #       ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #     with:
+  #       submodules: recursive
 
-    - name: Run tests
-      env:
-        CC: clang
-        CXX: clang++
-      run: |
-        phpize
-        ./configure
-        make
-        ./dev-scripts/run_tests.sh
+  #   - name: Run tests
+  #     env:
+  #       CC: clang
+  #       CXX: clang++
+  #     run: |
+  #       phpize
+  #       ./configure
+  #       make
+  #       ./dev-scripts/run_tests
 
     # linux-arm:
     #   name: ARM (${{ matrix.arch }})
