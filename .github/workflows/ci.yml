@@ -97,6 +97,9 @@ jobs:
 
   windows-vc16:
     runs-on: windows-2019
+    defaults:
+      run:
+        shell: cmd # TODO: does this matter make the error out?
     strategy:
       matrix:
         arch: [x64]
