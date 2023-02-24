@@ -126,6 +126,7 @@ jobs:
         .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
         nmake
         nmake generate-php-ini
+        composer update --ignore-platform-req=ext-awscrt
         .\dev-scripts\run_tests ${{steps.setup-php-sdk.outputs.prefix}}\php
 
   # windows-vc14:
