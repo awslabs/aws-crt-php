@@ -23,17 +23,8 @@ if "%composer_dir%"=="" (
   echo %work_dir%
   ls x64\
 
-  %PHP_BINARY% -c php-win.ini %composer_dir% update
-  if %errorlevel% neq 0 (
-    echo An error occurred while using composer to get dependence
-    exit /b %errorlevel%
-  )
-
-  %PHP_BINARY% -c php-win.ini vendor/bin/phpunit tests --debug
-  if %errorlevel% neq 0 (
-    echo An error occurred while running unittests
-    exit /b %errorlevel%
-  )
+  call %PHP_BINARY% -c php-win.ini %composer_dir% update
+  call %PHP_BINARY% -c php-win.ini vendor/bin/phpunit tests --debug
 )
 
 endlocal
