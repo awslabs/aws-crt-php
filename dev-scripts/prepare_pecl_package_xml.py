@@ -84,26 +84,25 @@ def process_dir(dir_name, f):
         return
 
     f.write(f'<dir name="{dir_name}">\n')
+    os.chdir(dir_name)
+    for file_name in os.listdir():
+        if os.path.isfile(file_name):
+            process_file(file_name, f)
+        else:
+            process_dir(file_name, f)
 
-    if dir_name == 'tests' and os.path.isdir('tests'):
-        f.write('<dir name="tests">\n')
-        f.write('<dir name="features">\n')
+    # Special cases for compiler features placed in tests directories in and s2n
+    if dir_name == 's2n' and os.path.isdir('tests'):
+        f.write('<dir name="tests">')
+        f.write('<dir name="features">')
         os.chdir('tests/features')
-        for file_name in os.listdir():
-            process_file(file_name)
+        for a in os.listdir():
+            process_file(a)
         os.chdir('../..')
-        f.write('</dir>\n')
-        f.write('</dir>\n')
+        f.write('</dir>')
+        f.write('</dir>')
 
-    else:
-        os.chdir(dir_name)
-        for file_name in os.listdir():
-            if os.path.isfile(file_name):
-                process_file(file_name, f)
-            else:
-                process_dir(file_name, f)
-
-    f.write('</dir>\n')
+    f.write('</dir>')
     os.chdir('..')
 
 
