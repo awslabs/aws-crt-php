@@ -1,4 +1,3 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/autotools,cmake,phpstorm
 # Edit at https://www.toptal.com/developers/gitignore?templates=autotools,cmake,phpstorm
 
@@ -182,6 +181,8 @@ fabric.properties
 build/
 configure.in
 configure.ac
+configure.bat
+configure.js
 mkinstalldirs
 run-tests.php
 Makefile.global
@@ -191,6 +192,7 @@ modules/
 *.lo
 config.h
 config.nice
+config.nice.bat
 *.la
 Makefile*
 !Makefile.am
@@ -204,6 +206,7 @@ PHP-Parser*/
 src/*.so
 src/*.dylib
 src/*.dll
+/x64/
 
 # ignoring output of package.xml as it needs to be generated from ./prepare_release.sh in each publishing
 package.xml
