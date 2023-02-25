@@ -97,7 +97,7 @@ def process_dir(dir_name, f):
         f.write('<dir name="features">')
         os.chdir('tests/features')
         for a in os.listdir():
-            process_file(a)
+            process_file(a, f)
         os.chdir('../..')
         f.write('</dir>')
         f.write('</dir>')
