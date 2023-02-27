@@ -2,6 +2,7 @@
 crt/ export-ignore
 ext/ export-ignore
 tests/ export-ignore
+dev-scripts/ export-ignore
 .clang-format export-ignore
 .clang-format-ignore export-ignore
 .gitattributes export-ignore
@@ -16,11 +17,5 @@ config.w32 export-ignore
 format-check.sh export-ignore
 gen_api.php export-ignore
 gen_stub.php export-ignore
-package.xml-template_post export-ignore
-package.xml-template_pre export-ignore
 php-win.ini export-ignore
 php.ini export-ignore
-prepare_package_xml.sh export-ignore
-prepare_release.sh export-ignore
-run_tests export-ignore
-run_tests.bat export-ignore
