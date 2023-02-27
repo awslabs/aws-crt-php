@@ -12,7 +12,8 @@ DIRS_TO_REMOVE = [
     'build',
     'include',
     'modules',
-    'vendor']
+    'vendor',
+    'autom4te.cache']
 
 # Remove specified files
 FILES_TO_REMOVE = [
@@ -22,6 +23,7 @@ FILES_TO_REMOVE = [
     'Makefile.objects',
     'config.guess',
     'config.h',
+    'config.h.in',
     'config.log',
     'config.nice',
     'config.status',
@@ -40,14 +42,11 @@ FILES_TO_REMOVE = [
     'ext/awscrt.stub.php',
     'acinclude.m4',
     'aclocal.m4',
-    'autom4te.cache']
-
-
-def remove_files(files):
-    for file in files:
-        if os.path.exists(file):
-            os.remove(file)
-
+    '**/*.lo',
+    '**/*.o',
+    '**/*.la',
+    '**/*.a',
+    '*.tgz']
 
 os.chdir(WORK_DIR)
 
@@ -55,14 +54,6 @@ os.chdir(WORK_DIR)
 for directory in DIRS_TO_REMOVE:
     shutil.rmtree(directory, ignore_errors=True)
 
-# Remove all .lo and .o files
-FILES_TO_REMOVE += glob.glob(os.path.join(WORK_DIR, '**/*.lo'))
-FILES_TO_REMOVE += glob.glob(os.path.join(WORK_DIR, '**/*.o'))
-
-# Remove all .la and .a files
-FILES_TO_REMOVE += glob.glob(os.path.join(WORK_DIR, '**/*.la'))
-FILES_TO_REMOVE += glob.glob(os.path.join(WORK_DIR, '**/*.a'))
-# Remove all .tgz files
-FILES_TO_REMOVE += glob.glob(os.path.join(WORK_DIR, '*.tgz'))
-
-remove_files(FILES_TO_REMOVE)
+for pattern in FILES_TO_REMOVE:
+    for filepath in glob.glob(pattern):
+        os.remove(filepath)
