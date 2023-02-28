@@ -37,9 +37,7 @@ $ ./dev-scripts/run_tests.sh
 
 ### Requirements for Windows
 
-* Ensure that you are able to build PHP on windows via the PHP SDK (this example assumes installation of the SDK to C:\php-sdk and that you've checked out the PHP source to php-src within the build directory). The following resources are helpful to get PHP building on windows:
-
-    * https://github.com/microsoft/php-sdk-binary-tools
+* Ensure you have the [windows PHP SDK](https://github.com/microsoft/php-sdk-binary-tools) (this example assumes installation of the SDK to C:\php-sdk and that you've checked out the PHP source to php-src within the build directory) and it works well on your machine.
 
 * Ensure you have "Development package (SDK to develop PHP extensions)" and PHP available from your system path. You can download them from https://windows.php.net/download/. You can check if they are available by running `phpize -v` and `php -v`
 
