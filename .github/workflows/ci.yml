@@ -117,7 +117,7 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
         toolset: ${{steps.setup-php-sdk.outputs.toolset}}
-    # CMD only execute one commend per run
+    # not sure why CMD can't do multiline run statements
     - run: phpize
     - run: .\configure --with-prefix=${{steps.setup-php-sdk.outputs.prefix}} --enable-awscrt=shared --enable-cli --enable-openssl
     - run: nmake
