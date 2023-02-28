@@ -6,7 +6,7 @@
 * GCC 4.4+, clang 3.8+ on UNIX, Visual Studio build tools on Windows
 * Tests require [Composer](https://getcomposer.org)
 
-## Installation
+## Installing with Composer and PECL
 
 The package has two different package published to [composer](https://packagist.org/packages/aws/aws-crt-php) and [PECL](https://pecl.php.net/package/awscrt).
 
@@ -23,7 +23,8 @@ On Windows, you need to build from source as instruction written below for the n
 composer require aws/aws-crt-php
 ```
 
-## Building on UNIX
+## Building from Github source
+
 ```sh
 $ git clone --recursive https://github.com/awslabs/aws-crt-php.git
 $ cd aws-crt-php
