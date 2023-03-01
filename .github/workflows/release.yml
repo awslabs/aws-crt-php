@@ -42,4 +42,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: pecl_package_${VERSION}
-        path: awscrt-${VERSION}
+        path: awscrt-${VERSION}.tgz
