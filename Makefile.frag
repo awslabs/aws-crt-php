@@ -27,8 +27,8 @@ CMAKE_BUILD = CMAKE_BUILD_PARALLEL_LEVEL='' $(CMAKE) --build
 CMAKE_BUILD_TYPE ?= RelWithDebInfo
 CMAKE_TARGET = --config $(CMAKE_BUILD_TYPE) --target install
 
-all: extension 
-.PHONY: all extension 
+all: extension
+.PHONY: all extension
 
 # configure for static aws-crt-ffi.a
 build/aws-crt-ffi-static/CMakeCache.txt:
@@ -46,19 +46,17 @@ ext/awscrt.lo: ext/awscrt.c
 
 ext/awscrt.c: build/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
-ext/awscrt_arginfo.h: ext/awscrt.stub.php gen_stub.php
+ext/awscrt_arginfo.h: awscrt.stub.php gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
+	# install awscrt.stub.php to ext/
+	cp -v awscrt.stub.php ext/awscrt.stub.php
 	# generate awscrt_arginfo.h
 	php gen_stub.php --minimal-arginfo ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
-src/api.h: crt/aws-crt-ffi/src/api.h
-	php gen_api.php crt/aws-crt-ffi/src/api.h > src/api.h
-
-# install api.h to ext/ as well
-ext/api.h : src/api.h
-	cp -v src/api.h ext/api.h
+ext/api.h : crt/aws-crt-ffi/src/api.h
+	php gen_api.php crt/aws-crt-ffi/src/api.h > ext/api.h
 
 ext/php_aws_crt.h: ext/awscrt_arginfo.h ext/api.h
 

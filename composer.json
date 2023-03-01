@@ -11,7 +11,7 @@
         }
     ],
     "config": {
-        "platform": {"php": "5.6"}
+        "platform": {"php": "7.4"}
     },
     "minimum-stability": "alpha",
     "require": {
@@ -26,9 +26,9 @@
         ]
     },
     "scripts": {
-        "test": "./run_tests",
+        "test": "./dev-scripts/run_tests",
         "test-extension": "@test",
-        "test-win": "run_tests"
+        "test-win": ".\\dev-scripts\\run_tests.bat"
     },
     "license": "Apache-2.0"
 }
