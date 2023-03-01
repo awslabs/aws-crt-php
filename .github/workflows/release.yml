@@ -35,10 +35,7 @@ jobs:
     - name: Prepare Package Script
       # Update the version in code and generate the package.
       run: |
-        version=$(git describe --tags --abbrev=0)
-        version_without_v=$(echo ${version} | cut -f2 -dv)
-        echo "${version_without_v}" > VERSION
-        echo $VERSION
+        ls
         echo ${{ steps.tag.outputs.release_tag }}
         sed -i "s/#define CRT_VERSION \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/#define CRT_VERSION \"${{ steps.tag.outputs.release_tag }}\"/g" ext/crt.c
         python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${{ steps.tag.outputs.release_tag }}
