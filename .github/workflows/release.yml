@@ -28,16 +28,10 @@ jobs:
       with:
           submodules: recursive
 
-    - name: Get release tag
-      uses: awslabs/aws-crt-builder/.github/actions/release-tag@main
-      id: tag
-
     - name: Prepare Package Script
       # Update the version in code and generate the package.
       run: |
-        ls
-        echo ${{ steps.tag.outputs.release_tag }}
-        sed -i "s/#define CRT_VERSION \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/#define CRT_VERSION \"${{ steps.tag.outputs.release_tag }}\"/g" ext/crt.c
+        dev-scripts/update_version.sh
         python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${{ steps.tag.outputs.release_tag }}
 
     - name: Upload artifacts
