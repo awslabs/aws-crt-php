@@ -1,0 +1,45 @@
+
+name: Release PECL Preparation
+
+# on:
+#   release:
+#     types: [published]
+#   workflow_dispatch:
+
+# TO test
+on:
+  push:
+    branches-ignore:
+      - 'main'
+
+jobs:
+  package:
+    name: Prepare package
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+
+    - name: Checkout Source
+      uses: actions/checkout@v3
+      with:
+          submodules: recursive
+
+    - name: Get release tag
+      uses: awslabs/aws-crt-builder/.github/actions/release-tag@main
+      id: tag
+
+    - name: Prepare Package Script
+      # Update the version in code and generate the package.
+      run: |
+        sed -i "s/#define CRT_VERSION \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/#define CRT_VERSION \"${{ steps.tag.outputs.release_tag }}\"/g" ext/crt.c
+        dev-scripts/prepare_release.sh --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${{ steps.tag.outputs.release_tag }} --notes NOTES
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: pecl_package_${{ steps.tag.outputs.release_tag }}
+        path: awscrt-${{ steps.tag.outputs.release_tag }}.tgz
