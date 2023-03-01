@@ -16,6 +16,8 @@ jobs:
   package:
     name: Prepare package
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # allow push
 
     steps:
     - name: Setup PHP
@@ -29,18 +31,24 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-    - name: Prepare Package Script
-      id: prepare-package
-      # Update the version in code and generate the package.
+    - name: Update Version
       run: |
         version_with_v=$(git describe --tags --abbrev=0)
         VERSION=$(echo ${version_with_v} | cut -f2 -dv)
         sed -i "s/#define CRT_VERSION .*/#define CRT_VERSION \"$VERSION\"/g" ext/crt.c
-        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
-        python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${VERSION}
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+    - name: Commit
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add --force ext/crt.c
+        git commit --message="update version"
+
+    - name: Push to PECL-release branch
+      uses: ad-m/github-push-action@v0.6.0
       with:
-        name: pecl_package_${{ steps.prepare-package.outputs.VERSION }}
-        path: awscrt-${{ steps.prepare-package.outputs.VERSION }}.tgz
+        github_token: ${{ github.token }}
+        branch: PECL-release
+        # Force push so that `PECL-release` branch always looks like `main`,
+        # but with 1 additional "update version" commit.
+        force: true
