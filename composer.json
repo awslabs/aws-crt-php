@@ -1,6 +1,6 @@
 {
     "name": "aws/aws-crt-php",
-    "homepage": "http://aws.amazon.com/sdkforphp",
+    "homepage": "https://github.com/awslabs/aws-crt-php",
     "description": "AWS Common Runtime for PHP",
     "keywords": ["aws","amazon","sdk","crt"],
     "type": "library",
@@ -24,6 +24,9 @@
         "classmap": [
             "src/"
         ]
+    },
+    "suggest": {
+        "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
     },
     "scripts": {
         "test": "./dev-scripts/run_tests",
