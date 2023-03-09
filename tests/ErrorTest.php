@@ -6,21 +6,17 @@
 use AWS\CRT\CRT;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
-final class ErrorTest extends TestCase
-{
+final class ErrorTest extends TestCase {
 
-    public function testNoInitialError()
-    {
+    public function testNoInitialError() {
         $this->assertEquals(0, CRT::last_error());
     }
 
-    public function testCanResolveErrorName()
-    {
+    public function testCanResolveErrorName() {
         $this->assertEquals("AWS_ERROR_SUCCESS", CRT::error_name(0));
     }
 
-    public function testCanResolveErrorStr()
-    {
+    public function testCanResolveErrorStr() {
         $this->assertEquals("Success.", CRT::error_str(0));
     }
 }

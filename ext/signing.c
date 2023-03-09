@@ -313,7 +313,7 @@ PHP_FUNCTION(aws_crt_sign_request_aws) {
     zval *php_on_complete = 0;
     zend_ulong php_user_data = 0;
 
-    aws_php_parse_parameters("llzl", &php_signable, &php_signing_config, &php_on_complete, &php_user_data);
+    aws_php_parse_parameters("llzz", &php_signable, &php_signing_config, &php_on_complete, &php_user_data);
 
     aws_crt_signable *signable = (void *)php_signable;
     aws_crt_signing_config_aws *signing_config = (void *)php_signing_config;
