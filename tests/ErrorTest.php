@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 use AWS\CRT\CRT;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
-final class ErrorTest extends PHPUnit_Framework_TestCase {
+final class ErrorTest extends TestCase {
 
     public function testNoInitialError() {
         $this->assertEquals(0, CRT::last_error());
