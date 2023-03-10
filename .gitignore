@@ -207,6 +207,7 @@ src/*.so
 src/*.dylib
 src/*.dll
 /x64/
+awscrt.dep
 
 # ignoring output of package.xml as it needs to be generated from ./prepare_release.sh in each publishing
 package.xml

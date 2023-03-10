@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 use AWS\CRT\CRT;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 require_once('common.inc');
 
 // This intentionally does not inherit from CrtTestCase because it needs a clean-room environment
-final class CoreTest extends PHPUnit_Framework_TestCase {
+final class CoreTest extends TestCase {
 
     // The CRT should always be available in this test suite
     public function testIsAvailable() {
