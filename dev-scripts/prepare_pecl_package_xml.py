@@ -37,13 +37,10 @@ doc_ext = "(md|json|html|dot|graphml|png|gn|sha1|css|rst)"
 
 special_docs = "(LICENSE.*|NOTICE|changelog.txt|CHANGELOG|THIRD-PARTY|README.*|readme|METADATA|CONTRIBUTORS|UPDATING|doc.config|THIRD-PARTY-LICENSES.txt)"
 special_tests = "(ci-test.sh|format-check.sh|run_tests.*|sanitizer-blacklist.txt|run-clang-tidy.sh|benchmark-build-run.sh|break-tests.sh|generate-coverage.sh|test.xml)"
-special_src = "(gen_api.php|gen_stub.php|CMakeLists.txt|post.sh|postun.sh|Makefile.*|build-buildspec.sh|build-deps.sh|objects.txt|go.*|BUILD.*|DEPS|install_and_run.sh|codemod.sh|requirements.txt)"
+special_src = "(gen_api.php|gen_stub.php|CMakeLists.txt|post.sh|postun.sh|Makefile.*|build-buildspec.sh|build-deps.sh|objects.txt|go.*|BUILD.*|DEPS|install_and_run.sh|codemod.sh|requirements.txt|awscrt.stub.php)"
 skip_files = "(package.xml.*|prepare_release.sh|codereview.settings|.*\\.o|.*\\.a|.*\\.obj|.*\\.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|.*\\.pdf|.*\\.svg|.*\\.docx|cbmc-proof.txt|codecov.*|litani.*|.*\\.toml|module\\.modulemap|cleanup.sh|^\..*)"
 
-
-special_scripts = "(awscrt.stub.php)"
-
-skip_directories = "(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance|verification|^\..*)"
+skip_directories = "(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance|verification|dev-scripts|^\..*)"
 
 output_file_name = os.path.join(work_dir, 'package.xml')
 
@@ -54,9 +51,7 @@ def process_file(file_name, f):
         return
     f.write(f'<file name="{file_name}" role="')
     # Special cases
-    if re.match(special_scripts, file_name):
-        f.write('script')
-    elif re.match(special_docs, file_name):
+    if re.match(special_docs, file_name):
         f.write('doc')
     elif re.match(special_tests, file_name):
         f.write('test')
