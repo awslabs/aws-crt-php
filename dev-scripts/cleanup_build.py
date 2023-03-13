@@ -40,7 +40,6 @@ FILES_TO_REMOVE = [
     'awscrt.la',
     'awscrt.dep',
     'composer.lock',
-    'ext/awscrt.stub.php',
     'acinclude.m4',
     'aclocal.m4',
     '**/*.lo',
