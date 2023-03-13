@@ -46,10 +46,8 @@ ext/awscrt.lo: ext/awscrt.c
 
 ext/awscrt.c: build/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
 
-ext/awscrt_arginfo.h: awscrt.stub.php gen_stub.php
+ext/awscrt_arginfo.h: ext/awscrt.stub.php gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
-	# install awscrt.stub.php to ext/
-	cp -v awscrt.stub.php ext/awscrt.stub.php
 	# generate awscrt_arginfo.h
 	php gen_stub.php --minimal-arginfo ext/awscrt.stub.php
 endif
