@@ -1,5 +1,5 @@
 
-INT_DIR=build/install
+INT_DIR=$(builddir)/install
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
@@ -18,6 +18,8 @@ ifneq (OFF,$(USE_OPENSSL))
 endif
 
 CMAKE_CONFIGURE = $(CMAKE) \
+    -DCMAKE_SOURCE_DIR=$(srcdir) \
+    -DCMAKE_BINARY_DIR=$(builddir) \
     -DCMAKE_INSTALL_PREFIX=$(INT_DIR) \
     -DBUILD_TESTING=OFF \
     -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
@@ -31,37 +33,46 @@ all: extension
 .PHONY: all extension
 
 # configure for static aws-crt-ffi.a
-build/aws-crt-ffi-static/CMakeCache.txt:
-	$(CMAKE_CONFIGURE) -Hcrt/aws-crt-ffi -Bbuild/aws-crt-ffi-static -DBUILD_SHARED_LIBS=OFF
+$(builddir)/aws-crt-ffi-static/CMakeCache.txt:
+	$(CMAKE_CONFIGURE) -H$(srcdir)/crt/aws-crt-ffi -B$(builddir)/aws-crt-ffi-static -DBUILD_SHARED_LIBS=OFF
 
 # build static libaws-crt-ffi.a
-build/aws-crt-ffi-static/libaws-crt-ffi.a: build/aws-crt-ffi-static/CMakeCache.txt
-	$(CMAKE_BUILD) build/aws-crt-ffi-static $(CMAKE_TARGET)
+$(builddir)/aws-crt-ffi-static/libaws-crt-ffi.a: $(builddir)/aws-crt-ffi-static/CMakeCache.txt
+	$(CMAKE_BUILD) $(builddir)/aws-crt-ffi-static $(CMAKE_TARGET)
 
 # PHP extension target
-extension: ext/awscrt.lo
+extension: $(builddir)/ext/awscrt.lo
 
 # Force the crt object target to depend on the CRT static library
-ext/awscrt.lo: ext/awscrt.c
+$(builddir)/ext/awscrt.lo: $(builddir)/ext/awscrt.c
 
-ext/awscrt.c: build/aws-crt-ffi-static/libaws-crt-ffi.a ext/api.h ext/awscrt_arginfo.h
+$(builddir)/ext/awscrt.c: $(builddir)/aws-crt-ffi-static/libaws-crt-ffi.a $(builddir)/ext/api.h $(builddir)/ext/awscrt_arginfo.h
 
-ext/awscrt_arginfo.h: ext/awscrt.stub.php gen_stub.php
+$(builddir)/ext/awscrt_arginfo.h: $(srcdir)/ext/awscrt.stub.php $(srcdir)/gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
 	# generate awscrt_arginfo.h
-	php gen_stub.php --minimal-arginfo ext/awscrt.stub.php
+	mkdir -p $(builddir)/ext && php $(srcdir)/gen_stub.php --minimal-arginfo $(srcdir)/ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
-ext/api.h : crt/aws-crt-ffi/src/api.h
-	php gen_api.php crt/aws-crt-ffi/src/api.h > ext/api.h
+$(srcdir)/src/api.h: $(srcdir)/crt/aws-crt-ffi/src/api.h
+	php $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/src/api.h
 
-ext/php_aws_crt.h: ext/awscrt_arginfo.h ext/api.h
+# install api.h to ext/ as well
+$(builddir)/ext/api.h : $(srcdir)/src/api.h
+	mkdir -p $(builddir)/ext && cp -v $(srcdir)/src/api.h $(srcdir)/ext/api.h
+
+$(builddir)/ext/php_aws_crt.h: $(srcdir)/ext/awscrt_arginfo.h $(srcdir)/ext/api.h
 
 vendor/bin/phpunit:
+	cp -v $(srcdir)/composer.json $(builddir)
 	composer update
 
 test-extension: vendor/bin/phpunit extension
+	cp -v $(srcdir)/composer.json $(builddir)
+	cp -vr $(srcdir)/src $(builddir)
+	cp -vr $(srcdir)/tests $(builddir)
+	cp -v $(srcdir)/run_tests $(builddir)
 	composer run test-extension
 
 # Use PHPUnit to run tests
