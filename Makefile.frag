@@ -1,5 +1,5 @@
 
-INT_DIR=$(builddir)/install
+INT_DIR=$(builddir)/build/install
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
@@ -55,12 +55,12 @@ ifeq ($(GENERATE_STUBS),1)
 endif
 
 # transform/install api.h from FFI lib
-$(srcdir)/src/api.h: $(srcdir)/crt/aws-crt-ffi/src/api.h
-	php $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/src/api.h
+$(srcdir)/ext/api.h: $(srcdir)/crt/aws-crt-ffi/src/api.h
+	php $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/ext/api.h
 
 # install api.h to ext/ as well
-$(builddir)/ext/api.h : $(srcdir)/src/api.h
-	mkdir -p $(builddir)/ext && cp -v $(srcdir)/src/api.h $(srcdir)/ext/api.h
+$(builddir)/ext/api.h : $(srcdir)/ext/api.h
+	mkdir -p $(builddir)/ext
 
 $(builddir)/ext/php_aws_crt.h: $(srcdir)/ext/awscrt_arginfo.h $(srcdir)/ext/api.h
 
