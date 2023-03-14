@@ -10,6 +10,7 @@ DIRS_TO_REMOVE = [
     '.deps',
     '.libs',
     'build',
+    'cmake_build',
     'include',
     'modules',
     'vendor',

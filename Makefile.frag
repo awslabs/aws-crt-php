@@ -1,5 +1,6 @@
 
 INT_DIR=$(builddir)/build/install
+CMAKE_BUILD_DIR=$(builddir)/cmake_build
 GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
@@ -19,7 +20,7 @@ endif
 
 CMAKE_CONFIGURE = $(CMAKE) \
     -DCMAKE_SOURCE_DIR=$(srcdir) \
-    -DCMAKE_BINARY_DIR=$(builddir) \
+    -DCMAKE_BINARY_DIR=$(CMAKE_BUILD_DIR) \
     -DCMAKE_INSTALL_PREFIX=$(INT_DIR) \
     -DBUILD_TESTING=OFF \
     -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) \
@@ -33,12 +34,12 @@ all: extension
 .PHONY: all extension
 
 # configure for static aws-crt-ffi.a
-$(builddir)/aws-crt-ffi-static/CMakeCache.txt:
-	$(CMAKE_CONFIGURE) -H$(srcdir)/crt/aws-crt-ffi -B$(builddir)/aws-crt-ffi-static -DBUILD_SHARED_LIBS=OFF
+$(CMAKE_BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt:
+	$(CMAKE_CONFIGURE) -H$(srcdir)/crt/aws-crt-ffi -B$(CMAKE_BUILD_DIR)/aws-crt-ffi-static -DBUILD_SHARED_LIBS=OFF
 
 # build static libaws-crt-ffi.a
-$(builddir)/aws-crt-ffi-static/libaws-crt-ffi.a: $(builddir)/aws-crt-ffi-static/CMakeCache.txt
-	$(CMAKE_BUILD) $(builddir)/aws-crt-ffi-static $(CMAKE_TARGET)
+$(CMAKE_BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a: $(CMAKE_BUILD_DIR)/aws-crt-ffi-static/CMakeCache.txt
+	$(CMAKE_BUILD) $(CMAKE_BUILD_DIR)/aws-crt-ffi-static $(CMAKE_TARGET)
 
 # PHP extension target
 extension: $(builddir)/ext/awscrt.lo
@@ -46,7 +47,7 @@ extension: $(builddir)/ext/awscrt.lo
 # Force the crt object target to depend on the CRT static library
 $(builddir)/ext/awscrt.lo: $(builddir)/ext/awscrt.c
 
-$(builddir)/ext/awscrt.c: $(builddir)/aws-crt-ffi-static/libaws-crt-ffi.a $(builddir)/ext/api.h $(builddir)/ext/awscrt_arginfo.h
+$(builddir)/ext/awscrt.c: $(CMAKE_BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a $(builddir)/ext/api.h $(builddir)/ext/awscrt_arginfo.h
 
 $(builddir)/ext/awscrt_arginfo.h: $(srcdir)/ext/awscrt.stub.php $(srcdir)/gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
