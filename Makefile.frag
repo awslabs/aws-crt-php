@@ -66,14 +66,9 @@ $(builddir)/ext/api.h : $(srcdir)/ext/api.h
 $(builddir)/ext/php_aws_crt.h: $(srcdir)/ext/awscrt_arginfo.h $(srcdir)/ext/api.h
 
 vendor/bin/phpunit:
-	cp -v $(srcdir)/composer.json $(builddir)
 	composer update
 
 test-extension: vendor/bin/phpunit extension
-	cp -v $(srcdir)/composer.json $(builddir)
-	cp -vr $(srcdir)/src $(builddir)
-	cp -vr $(srcdir)/tests $(builddir)
-	cp -v $(srcdir)/run_tests $(builddir)
 	composer run test-extension
 
 # Use PHPUnit to run tests
