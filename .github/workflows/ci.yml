@@ -183,4 +183,4 @@ jobs:
     - name: Test PECL package build
       run: |
         python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --version 1.0.0
-        pecl install awscrt-1.0.0.tgz
+        sudo pecl install awscrt-1.0.0.tgz
