@@ -39,7 +39,7 @@ FILES_TO_REMOVE = [
     'mkinstalldirs',
     'run-tests.php',
     'awscrt.la',
-    'awscrt.dep',
+    'ext/awscrt.dep',
     'composer.lock',
     'acinclude.m4',
     'aclocal.m4',
