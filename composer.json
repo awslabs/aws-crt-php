@@ -27,7 +27,7 @@
         "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
     },
     "scripts": {
-        "test": "./dev-scripts/run_tests",
+        "test": "./dev-scripts/run_tests.sh",
         "test-extension": "@test",
         "test-win": ".\\dev-scripts\\run_tests.bat"
     },

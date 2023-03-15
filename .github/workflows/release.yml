@@ -1,0 +1,39 @@
+
+name: Release PECL Preparation
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  package:
+    name: Prepare package
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+
+    - name: Checkout Source
+      uses: actions/checkout@v3
+      with:
+          fetch-depth: 0
+          submodules: recursive
+
+    - name: Prepare Package Script
+      id: prepare-package
+      # Update the version in code and generate the package.
+      run: |
+        version_with_v=$(git describe --tags --abbrev=0)
+        VERSION=$(echo ${version_with_v} | cut -f2 -dv)
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+        python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${VERSION}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: pecl_package_${{ steps.prepare-package.outputs.VERSION }}
+        path: awscrt-${{ steps.prepare-package.outputs.VERSION }}.tgz

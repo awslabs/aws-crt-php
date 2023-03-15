@@ -179,6 +179,7 @@ fabric.properties
 .deps
 .libs/
 build/
+cmake_build/
 configure.in
 configure.ac
 configure.bat
