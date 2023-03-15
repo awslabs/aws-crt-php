@@ -1,16 +1,10 @@
 
 name: Release PECL Preparation
 
-# on:
-#   release:
-#     types: [published]
-#   workflow_dispatch:
-
-# TO test
 on:
-  push:
-    branches-ignore:
-      - 'main'
+  release:
+    types: [published]
+  workflow_dispatch:
 
 jobs:
   package:
@@ -35,7 +29,6 @@ jobs:
       run: |
         version_with_v=$(git describe --tags --abbrev=0)
         VERSION=$(echo ${version_with_v} | cut -f2 -dv)
-        sed -i "s/#define CRT_VERSION .*/#define CRT_VERSION \"$VERSION\"/g" ext/crt.c
         echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
         python3 dev-scripts/prepare_pecl_release.py --name aws-crt --user aws-crt --email aws-sdk-common-runtime@amazon.com --version ${VERSION}
 
