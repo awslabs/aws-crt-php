@@ -47,14 +47,20 @@ os.chdir(WORK_DIR)
 
 run(['git', 'submodule', 'update', '--init', '--recursive'])
 
-# replace the version number in the ext/crt.c file
+# replace the version number in the file_with_version
 data = ""
-with open("ext/crt.c", "r") as c_file:
+file_with_version = "ext/php_aws_crt.h"
+with open(file_with_version, "r") as c_file:
     for line in c_file:
-        line = re.sub("#define CRT_VERSION .*",
-                      f"#define CRT_VERSION \"{VERSION}\"", line)
+        if "define PHP_AWSCRT_VERSION" in line:
+            line = re.sub("define PHP_AWSCRT_VERSION .*",
+                          f"define PHP_AWSCRT_VERSION \"{VERSION}\"", line)
+            if VERSION not in line:
+                sys.exit(
+                    f"check {file_with_version}, the version number was not updated correctly.")
         data += line
-with open("ext/crt.c", "w") as c_file:
+
+with open(file_with_version, "w") as c_file:
     c_file.write(data)
 
 

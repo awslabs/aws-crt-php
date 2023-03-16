@@ -263,8 +263,6 @@ static PHP_GINIT_FUNCTION(awscrt) {
     awscrt_globals->log_level = 0;
 }
 
-#define CRT_VERSION "1.0.4"
-
 zend_module_entry awscrt_module_entry = {
     STANDARD_MODULE_HEADER,
     "awscrt",
@@ -274,7 +272,7 @@ zend_module_entry awscrt_module_entry = {
     NULL, /* RINIT */
     NULL, /* RSHUTDOWN */
     NULL, /* MINFO */
-    CRT_VERSION,
+    PHP_AWSCRT_VERSION,
     PHP_MODULE_GLOBALS(awscrt),
     PHP_GINIT(awscrt),
     NULL, /* GSHUTDOWN */
