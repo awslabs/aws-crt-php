@@ -49,12 +49,12 @@ run(['git', 'submodule', 'update', '--init', '--recursive'])
 
 # replace the version number in the ext/crt.c file
 data = ""
-with open("ext/crt.c", "r") as c_file:
+with open("ext/php_aws_crt.h", "r") as c_file:
     for line in c_file:
-        line = re.sub("#define CRT_VERSION .*",
-                      f"#define CRT_VERSION \"{VERSION}\"", line)
+        line = re.sub("#define PHP_AWSCRT_VERSION .*",
+                      f"#define PHP_AWSCRT_VERSION \"{VERSION}\"", line)
         data += line
-with open("ext/crt.c", "w") as c_file:
+with open("ext/php_aws_crt.h", "w") as c_file:
     c_file.write(data)
 
 
