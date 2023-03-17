@@ -38,12 +38,7 @@ jobs:
         phpize
         ./configure
         make
-
-    - name: Install dependencies
-      # get path to composer.phar so we can run it with custom php.ini
-      run: |
-        COMPOSER_PHAR=$(realpath $(which composer))
-        php -c php.ini $COMPOSER_PHAR update --no-interaction
+        ./dev-scripts/run_tests.sh
 
   php-linux-x64:
     runs-on: ubuntu-latest
