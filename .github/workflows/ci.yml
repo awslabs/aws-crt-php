@@ -14,31 +14,6 @@ env:
   RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  php-5_5-linux-x64:
-    name: php-linux-x64 (5.5)
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
-      with:
-        coverage: xdebug
-        php-version: 5.5
-        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
-
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
-
-    - name: Build for PHP 5.5
-      env:
-        CC: clang
-        CXX: clang++
-      run: |
-        phpize
-        ./configure
-        make
-        ./dev-scripts/run_tests.sh
 
   php-linux-x64:
     runs-on: ubuntu-latest
@@ -46,6 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
+          - "5.5"
           - "5.6"
           - "7.0"
           - "7.1"
