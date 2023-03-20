@@ -22,7 +22,6 @@ jobs:
       uses: cmb69/setup-php-sdk@v0.6
       with:
         version: ${{matrix.version}}
-        arch: ${{ matrix.arch }}
         ts: ts
         deps: openssl
 
@@ -61,7 +60,6 @@ jobs:
       uses: cmb69/setup-php-sdk@v0.6
       with:
         version: ${{matrix.version}}
-        arch: ${{ matrix.arch }}
         ts: ts
         deps: openssl
 
