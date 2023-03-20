@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup PHP with Xdebug
-      uses: cmb69/setup-php-sdk@v0.6
+      uses: shivammathur/setup-php@verbose
       with:
-        version: ${{matrix.version}}
-        ts: ts
-        deps: openssl
+        coverage: xdebug
+        php-version: 5.5
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
       run: |
         phpize
         ./configure
-        USE_OPENSSL=OFF make
+        make
         ./dev-scripts/run_tests.sh
 
   php-linux-x64:
@@ -57,11 +57,11 @@ jobs:
           - "8.2"
     steps:
     - name: Setup PHP with Xdebug
-      uses: cmb69/setup-php-sdk@v0.6
+      uses: shivammathur/setup-php@v2
       with:
-        version: ${{matrix.version}}
-        ts: ts
-        deps: openssl
+        coverage: xdebug
+        php-version: ${{matrix.version}}
+        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
     - name: Checkout
       uses: actions/checkout@v2
