@@ -19,11 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
+      uses: cmb69/setup-php-sdk@v0.6
       with:
-        coverage: xdebug
-        php-version: 5.5
-        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+        version: ${{matrix.version}}
+        arch: ${{ matrix.arch }}
+        ts: ts
+        deps: openssl
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -57,11 +58,12 @@ jobs:
           - "8.2"
     steps:
     - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
+      uses: cmb69/setup-php-sdk@v0.6
       with:
-        coverage: xdebug
-        php-version: ${{matrix.version}}
-        ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+        version: ${{matrix.version}}
+        arch: ${{ matrix.arch }}
+        ts: ts
+        deps: openssl
 
     - name: Checkout
       uses: actions/checkout@v2
