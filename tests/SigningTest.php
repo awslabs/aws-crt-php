@@ -11,7 +11,6 @@ use AWS\CRT\Auth\Signing;
 use AWS\CRT\Auth\Signable;
 use AWS\CRT\Auth\StaticCredentialsProvider;
 use AWS\CRT\HTTP\Request;
-use AWS\CRT\Log;
 
 require_once('common.inc');
 
@@ -66,9 +65,6 @@ final class SigningTest extends CrtTestCase {
     }
 
     public function testShouldSignHeader() {
-        Log::setLogLevel(Log::TRACE);
-        $stdout = fopen('php://stdout', 'w');
-        Log::toStream($stdout);
         $credentials_provider = new StaticCredentialsProvider([
             'access_key_id' => self::SIGV4TEST_ACCESS_KEY_ID,
             'secret_access_key' => self::SIGV4TEST_SECRET_ACCESS_KEY,

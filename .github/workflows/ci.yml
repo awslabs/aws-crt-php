@@ -19,11 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@verbose
+      uses: shivammathur/setup-php@v2
       with:
         coverage: xdebug
         php-version: 5.5
-        extensions: crypto
         ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
     - name: Checkout
@@ -38,7 +37,7 @@ jobs:
       run: |
         phpize
         ./configure
-        make
+        USE_OPENSSL=OFF make
         ./dev-scripts/run_tests.sh
 
   php-linux-x64:
