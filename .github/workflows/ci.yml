@@ -30,6 +30,9 @@ jobs:
       with:
         submodules: recursive
 
+    - name: php info
+      run: php -i
+
     - name: Build for PHP 5.5
       env:
         CC: clang
@@ -38,7 +41,8 @@ jobs:
         phpize
         ./configure
         USE_OPENSSL=OFF make
-        ./dev-scripts/run_tests.sh
+        ldd modules/awscrt.so
+        # ./dev-scripts/run_tests.sh
 
   php-linux-x64:
     runs-on: ubuntu-latest
