@@ -105,10 +105,9 @@ the system default php.
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
-## Knowning OpenSSL related issue (Unix only)
+## Known OpenSSL related issue (Unix only)
 
-* With php5.5 and openssl-3.0.2, signing functions will not work
-* When your php loads a different version of openssl than your system openssl version, awscrt may fail to load.
+* When your php loads a different version of openssl than your system openssl version, awscrt may fail to load or weirdly crash. You can find the openssl version php linked via: `php -i | grep 'OpenSSL'`, and awscrt linked from the build log, which will be `Found OpenSSL: * (found version *)`
 
 The easiest workaround to those issue is to build from source and get aws-lc as libscrypto for awscrt to depend on instead of your local openssl. Same instructions as [here](#building-from-github-source), but use `USE_OPENSSL=OFF make` instead of `make`
 

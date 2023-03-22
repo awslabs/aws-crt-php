@@ -16,7 +16,18 @@ ifneq (OFF,$(USE_OPENSSL))
 	ifneq (ON,$(USE_OPENSSL))
     	CMAKE_PREFIX_PATH=-DCMAKE_PREFIX_PATH=$(USE_OPENSSL)
 	endif
+else
+	# Hide symbols from libcrypto.a
+	# This avoids problems when an application ends up using both libcrypto.a and libcrypto.so.
+	#
+	# An example of this happening is the aws-c-io tests.
+	# All the C libs are compiled statically, but then a PKCS#11 library is
+	# loaded at runtime which happens to use libcrypto.so from OpenSSL.
+	# If the symbols from libcrypto.a aren't hidden, then SOME function calls use the libcrypto.a implementation
+	# and SOME function calls use the libcrypto.so implementation, and this mismatch leads to weird crashes.
+	EXTRA_LDFLAGS="-Wl,--exclude-libs,libcrypto.a"
 endif
+
 
 CMAKE_CONFIGURE = $(CMAKE) \
     -DCMAKE_SOURCE_DIR=$(srcdir) \
