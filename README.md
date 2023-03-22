@@ -109,7 +109,8 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 * When your php loads a different version of openssl than your system openssl version, awscrt may fail to load or weirdly crash. You can find the openssl version php linked via: `php -i | grep 'OpenSSL'`, and awscrt linked from the build log, which will be `Found OpenSSL: * (found version *)`
 
-The easiest workaround to those issue is to build from source and get aws-lc as libscrypto for awscrt to depend on instead of your local openssl. Same instructions as [here](#building-from-github-source), but use `USE_OPENSSL=OFF make` instead of `make`
+The easiest workaround to those issue is to build from source and get aws-lc for awscrt to depend on instead.
+TO do that, same instructions as [here](#building-from-github-source), but use `USE_OPENSSL=OFF make` instead of `make`
 
 ## License
 
