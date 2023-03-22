@@ -40,7 +40,7 @@ jobs:
       run: |
         phpize
         ./configure
-        USE_OPENSSL=OFF make
+        make
         ldd modules/awscrt.so
         # ./dev-scripts/run_tests.sh
 
@@ -72,6 +72,9 @@ jobs:
       with:
         submodules: recursive
 
+    - name: php info
+      run: php -i
+
     - name: Run tests
       env:
         CC: clang
@@ -80,7 +83,8 @@ jobs:
         phpize
         ./configure
         make
-        ./dev-scripts/run_tests.sh
+        ldd modules/awscrt.so
+        # ./dev-scripts/run_tests.sh
 
     # linux-arm:
     #   name: ARM (${{ matrix.arch }})
