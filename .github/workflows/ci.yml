@@ -34,7 +34,7 @@ jobs:
       run: php -i
 
     - name: libcrypto info
-      run: ls /usr/lib* | grep 'libcrypto*'
+      run: sudo find /usr -name "libcrypto*"
 
     - name: Build for PHP 5.5
       env:
@@ -79,7 +79,7 @@ jobs:
       run: php -i
 
     - name: libcrypto info
-      run: ls /usr/lib* | grep 'libcrypto*'
+      run: sudo find /usr -name "libcrypto*"
 
     - name: Run tests
       env:
