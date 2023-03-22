@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@@verbose
+      uses: shivammathur/setup-php@verbose
       with:
         coverage: xdebug
         php-version: 5.5
