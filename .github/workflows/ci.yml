@@ -79,8 +79,9 @@ jobs:
       run: php -i
 
     - name: libcrypto info
-      run: sudo cat /usr/lib/x86_64-linux-gnu/pkgconfig/libcrypto.pc
-      run: sudo realpath /usr/lib/x86_64-linux-gnu/libcrypto.so
+      run: |
+        sudo cat /usr/lib/x86_64-linux-gnu/pkgconfig/libcrypto.pc
+        sudo realpath /usr/lib/x86_64-linux-gnu/libcrypto.so
 
     - name: Run tests
       env:
