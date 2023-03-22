@@ -33,6 +33,9 @@ jobs:
     - name: php info
       run: php -i
 
+    - name: libcrypto info
+      run: ls /usr/lib* | grep 'libcrypto*'
+
     - name: Build for PHP 5.5
       env:
         CC: clang
@@ -74,6 +77,9 @@ jobs:
 
     - name: php info
       run: php -i
+
+    - name: libcrypto info
+      run: ls /usr/lib* | grep 'libcrypto*'
 
     - name: Run tests
       env:
