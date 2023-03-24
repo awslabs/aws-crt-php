@@ -37,13 +37,12 @@ jobs:
       run: |
         phpize
         ./configure
-        make
-
-    - name: Install dependencies
-      # get path to composer.phar so we can run it with custom php.ini
-      run: |
-        COMPOSER_PHAR=$(realpath $(which composer))
-        php -c php.ini $COMPOSER_PHAR update --no-interaction
+        # Normally, CRT uses the system's default libcrypto.so.
+        # But in this CI run, PHP 5.5 is using a different older libcrypto.so, as PHP 5.5 cannot build with openssl >=1.1.1.
+        # When an applications uses two different libcrypto.so at the same time, things tend to explode.
+        # Therefore, in this CI run we build AWS-LC statically, and use its libcrypto.a instead.
+        USE_OPENSSL=OFF make
+        ./dev-scripts/run_tests.sh
 
   php-linux-x64:
     runs-on: ubuntu-latest

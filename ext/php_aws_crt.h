@@ -60,6 +60,8 @@ ZEND_EXTERN_MODULE_GLOBALS(awscrt)
 #    define XRETURN_STRING(s) RETURN_STRING(s, 1)
 #    define XRETVAL_STRINGL(s, l) RETVAL_STRINGL(s, l, 1)
 #    define XRETVAL_STRING(s) RETVAL_STRING(s, 1)
+/* zend_error_noreturn is not public until PHP7, but may still be visible with some PHP 5.X distributions */
+#    define zend_error_noreturn zend_error
 #endif /* PHP 5.x */
 
 #include "api.h"
