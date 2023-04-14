@@ -70,7 +70,7 @@ body:
   - type: input
     id: compiler-version
     attributes:
-      label: Compiler and version used
+      label: php version used
     validations:
       required: true
 
