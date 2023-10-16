@@ -6,21 +6,12 @@ from datetime import datetime
 
 parser = argparse.ArgumentParser(
     description="Generate package.xml file for a release bundle.")
-parser.add_argument("--name", help="Name of the package", required=True)
-parser.add_argument(
-    "--user", help="Username of the package maintainer", required=True)
-parser.add_argument(
-    "--email", help="Email address of the package maintainer", default='aws-sdk-common-runtime@amazon.com')
 parser.add_argument(
     "--version", help="Version number of the package", required=True)
 parser.add_argument(
     "--notes", help="Release notes for the package", default='New release')
 args = parser.parse_args()
 
-
-name = args.name
-user = args.user
-email = args.email
 version = args.version
 notes = args.notes
 
@@ -105,9 +96,6 @@ def process_dir(dir_name, f):
 with open(os.path.join(tools_dir, "package.xml-template_pre"), 'r') as f:
     template_pre = f.read()
 
-template_pre = re.sub(r"{{{NAME}}}", name, template_pre)
-template_pre = re.sub(r"{{{USER}}}", user, template_pre)
-template_pre = re.sub(r"{{{EMAIL}}}", email, template_pre)
 template_pre = re.sub(r"{{{TODAY}}}", today, template_pre)
 template_pre = re.sub(r"{{{VERSION}}}", version, template_pre)
 template_pre = re.sub(r"{{{NOTES}}}", notes, template_pre)
