@@ -9,13 +9,13 @@
   <user>dengket</user>  
   <email>tingdaoform@gmail.com</email>  
   <active>yes</active>  
-</lead>
-<lead>
+ </lead>
+ <lead>
   <name>Dmitriy Musatkin</name>
   <user>musatkd</user>
   <email>musatkd@amazon.com</email>
   <active>yes</active>
-</lead>
+ </lead>
  <date>{{{TODAY}}}</date>
  <version>
    <release>{{{VERSION}}}</release>
