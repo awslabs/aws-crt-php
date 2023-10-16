@@ -4,10 +4,16 @@
  <channel>pecl.php.net</channel>
  <summary>AWS Common Runtime PHP bindings</summary>
  <description>AWS Common Runtime provides a set of low level tools as network protocols and authentication used by the AWSSDK for PHP to provide high level API to access AWS services.</description>
+ <lead>  
+  <name>Dengke Tang</name>  
+  <user>dengket</user>  
+  <email>tingdaoform@gmail.com</email>  
+  <active>yes</active>  
+ </lead>
  <lead>
-  <name>{{{NAME}}}</name>
-  <user>{{{USER}}}</user>
-  <email>{{{EMAIL}}}</email>
+  <name>Dmitriy Musatkin</name>
+  <user>musatkd</user>
+  <email>musatkd@amazon.com</email>
   <active>yes</active>
  </lead>
  <date>{{{TODAY}}}</date>

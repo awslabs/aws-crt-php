@@ -11,11 +11,6 @@ git_tag = subprocess.run(
 
 
 parser = argparse.ArgumentParser(description='PECL Package generator')
-parser.add_argument("--name", help="Name of the package", required=True)
-parser.add_argument(
-    "--user", help="Username of the package maintainer", required=True)
-parser.add_argument(
-    "--email", help="Email address of the package maintainer", default='aws-sdk-common-runtime@amazon.com')
 parser.add_argument(
     "--version", help="Version number of the package", default=git_tag)
 parser.add_argument(
@@ -23,9 +18,6 @@ parser.add_argument(
 args = parser.parse_args()
 
 PACKAGE = 'awscrt'
-NAME = args.name
-USER = args.user
-EMAIL = args.email
 VERSION = args.version
 NOTES = args.notes
 
@@ -65,8 +57,8 @@ with open(file_with_version, "w") as c_file:
 
 
 try:
-    run(['python3', f'{TOOLS_DIR}/prepare_pecl_package_xml.py', '--name', NAME, '--user', USER,
-                    '--email', EMAIL, '--version', VERSION, '--notes', NOTES])
+    run(['python3', f'{TOOLS_DIR}/prepare_pecl_package_xml.py',
+        '--version', VERSION, '--notes', NOTES])
 except subprocess.CalledProcessError as e:
     sys.exit(f'ERROR PROCESSING review package.xml: {e}')
 
