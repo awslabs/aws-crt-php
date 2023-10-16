@@ -32,15 +32,15 @@ os.chdir(work_dir)
 
 today = datetime.utcnow().strftime("%Y-%m-%d")
 
-source_ext = "(c|cc|h|cpp|hpp|m4|w32|ini|frag|cmake|inl|in|py|gnu|yaml|def|pl|S|s|errordata|go|lds|num|asm|mod|peg|mk|rs|toml|sh)"
+source_ext = "(c|cc|h|cpp|hpp|m4|w32|ini|frag|cmake|inl|in|py|gnu|yaml|def|pl|S|s|errordata|go|lds|num|asm|mod|peg|mk|rs|toml|sh|toolchain|flags)"
 doc_ext = "(md|json|html|dot|graphml|png|gn|sha1|css|rst)"
 
 special_docs = "(LICENSE.*|NOTICE|changelog.txt|CHANGELOG|THIRD-PARTY|README.*|readme|METADATA|CONTRIBUTORS|UPDATING|doc.config|THIRD-PARTY-LICENSES.txt)"
 special_tests = "(ci-test.sh|format-check.sh|run_tests.*|sanitizer-blacklist.txt|run-clang-tidy.sh|benchmark-build-run.sh|break-tests.sh|generate-coverage.sh|test.xml)"
 special_src = "(gen_api.php|gen_stub.php|CMakeLists.txt|post.sh|postun.sh|Makefile.*|build-buildspec.sh|build-deps.sh|objects.txt|go.*|BUILD.*|DEPS|install_and_run.sh|codemod.sh|requirements.txt|awscrt.stub.php)"
-skip_files = "(package.xml.*|prepare_release.sh|codereview.settings|.*\\.o|.*\\.a|.*\\.obj|.*\\.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|.*\\.pdf|.*\\.svg|.*\\.docx|cbmc-proof.txt|codecov.*|litani.*|.*\\.toml|module\\.modulemap|cleanup.sh|^\..*)"
+skip_files = "(package.xml.*|prepare_release.sh|codereview.settings|.*\\.o|.*\\.a|.*\\.obj|.*\\.lib|break-tests-android.sh|whitespace.txt|prepare_package_xml.sh|crypto_test_data.cc|flake.lock|flake.nix|.*\\.pdf|.*\\.svg|.*\\.docx|cbmc-proof.txt|codecov.*|litani.*|.*\\.toml|module\\.modulemap|cleanup.sh|^\..*)"
 
-skip_directories = "(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance|verification|dev-scripts|^\..*)"
+skip_directories = "(tests|test|AWSCRTAndroidTestRunner|docker-images|codebuild|fuzz|third_party|docs|generated-src|aws-lc|aws-crt-sys|ecdsa-fuzz-corpus|bin|examples|compliance|verification|dev-scripts|nix|^\..*)"
 
 output_file_name = os.path.join(work_dir, 'package.xml')
 
