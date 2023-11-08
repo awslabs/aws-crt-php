@@ -83,8 +83,8 @@ jobs:
         make
         ./dev-scripts/run_tests.sh
     - name: Run phpcs
-      run: phpcs -q --report=checkstyle src | cs2pr
-      
+      run: phpcs --runtime-set testVersion ${{ matrix.version }}- --report=checkstyle src | cs2pr
+
     # linux-arm:
     #   name: ARM (${{ matrix.arch }})
     #   runs-on: ubuntu-latest
