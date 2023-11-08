@@ -66,6 +66,7 @@ jobs:
         coverage: xdebug
         php-version: ${{matrix.version}}
         ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
+        tools: cs2pr, phpcs
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -81,7 +82,9 @@ jobs:
         ./configure
         make
         ./dev-scripts/run_tests.sh
-
+    - name: Run phpcs
+      run: phpcs -q --report=checkstyle src | cs2pr
+      
     # linux-arm:
     #   name: ARM (${{ matrix.arch }})
     #   runs-on: ubuntu-latest
