@@ -241,8 +241,6 @@ PHP_INI_END()
 static PHP_MINIT_FUNCTION(awscrt) {
     REGISTER_INI_ENTRIES();
 
-    /* prevent s2n from initializing/de-initializing OpenSSL/libcrypto */
-    aws_crt_crypto_share();
     aws_crt_init();
     aws_php_thread_queue_init(&s_aws_php_main_thread_queue);
     return SUCCESS;
