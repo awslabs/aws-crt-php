@@ -17,8 +17,8 @@
 
 #include <aws/common/common.h>
 #include <aws/common/mutex.h>
-#include <aws/common/promise.h>
 #include <aws/common/thread.h>
+#include <aws/io/future.h>
 
 /* ZEND_EXTENSION_API_NO from each branch of the PHP source */
 #define AWS_PHP_EXTENSION_API_5_5 220121212
@@ -162,8 +162,8 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue);
 /* called from worker thread to wait for the main thread to execute any queued work in PHP */
 void aws_php_thread_queue_yield(aws_php_thread_queue *queue);
 
-/* called from PHP thread to wait on async queued jobs, one of which MUST complete the promise */
-void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_promise *promise);
+/* called from PHP thread to wait on async queued jobs, one of which MUST complete the future */
+void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_future_void *future);
 
 /**
  * generic dispatch mechanism to call a callback provided as a zval with arguments
