@@ -195,9 +195,9 @@ bool aws_php_thread_queue_drain(aws_php_thread_queue *queue) {
 }
 
 /* called on main thread after delivery */
-static void s_thread_queue_complete_promise(void *data) {
-    struct aws_promise *promise = data;
-    aws_promise_complete(promise, NULL, NULL);
+static void s_thread_queue_complete_future(void *data) {
+    struct aws_future_void *future = data;
+    aws_future_void_set_result(future);
 }
 
 /* called from worker thread to wait for the main thread to execute any queued work in PHP */
@@ -206,21 +206,21 @@ void aws_php_thread_queue_yield(aws_php_thread_queue *queue) {
     if (aws_php_is_main_thread()) {
         aws_php_thread_queue_drain(queue);
     } else {
-        /* push a task onto the end of the queue, we will return once this task completes our promise */
-        struct aws_promise *queue_drained = aws_promise_new(aws_crt_default_allocator());
+        /* push a task onto the end of the queue, we will return once this task completes our future */
+        struct aws_future_void *queue_drained = aws_future_void_new(aws_crt_default_allocator());
         aws_php_task queue_drained_task = {
-            .callback = s_thread_queue_complete_promise,
+            .callback = s_thread_queue_complete_future,
             .data = queue_drained,
         };
         aws_php_thread_queue_push(queue, queue_drained_task);
-        aws_promise_wait(queue_drained);
-        aws_promise_release(queue_drained);
+        aws_future_void_wait(queue_drained, UINT64_MAX /*timeout*/);
+        aws_future_void_release(queue_drained);
     }
 }
 
-/* called from PHP thread to wait on async queued jobs, one of which should complete the promise */
-void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_promise *promise) {
-    while (!aws_promise_is_complete(promise)) {
+/* called from PHP thread to wait on async queued jobs, one of which should complete the future */
+void aws_php_thread_queue_wait(aws_php_thread_queue *queue, struct aws_future_void *future) {
+    while (!aws_future_void_is_done(future)) {
         aws_php_thread_queue_drain(queue);
     }
 }
