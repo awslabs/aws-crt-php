@@ -58,17 +58,18 @@ extension: $(builddir)/ext/awscrt.lo
 # Force the crt object target to depend on the CRT static library
 $(builddir)/ext/awscrt.lo: $(builddir)/ext/awscrt.c
 
-$(builddir)/ext/awscrt.c: $(CMAKE_BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a $(builddir)/ext/api.h $(builddir)/ext/awscrt_arginfo.h
+$(builddir)/ext/awscrt.c: $(CMAKE_BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a $(srcdir)/ext/api.h $(srcdir)/ext/awscrt_arginfo.h
 
-$(builddir)/ext/awscrt_arginfo.h: $(srcdir)/ext/awscrt.stub.php $(srcdir)/gen_stub.php
+$(srcdir)/ext/awscrt_arginfo.h: $(srcdir)/ext/awscrt.stub.php $(srcdir)/gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
 	# generate awscrt_arginfo.h
-	mkdir -p $(builddir)/ext && php $(srcdir)/gen_stub.php --minimal-arginfo $(srcdir)/ext/awscrt.stub.php
+	$(PHP_EXECUTABLE) $(srcdir)/gen_stub.php --minimal-arginfo $(srcdir)/ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
 $(srcdir)/ext/api.h: $(srcdir)/crt/aws-crt-ffi/src/api.h
-	php $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/ext/api.h
+	# generate api.h
+	$(PHP_EXECUTABLE) $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/ext/api.h
 
 # install api.h to ext/ as well
 $(builddir)/ext/api.h : $(srcdir)/ext/api.h
