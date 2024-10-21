@@ -26,5 +26,6 @@ if test "$PHP_AWSCRT" != "no"; then
     # Sources for the PHP extension itself
     AWSCRT_SOURCES=ext/awscrt.c
     PHP_NEW_EXTENSION(awscrt, $AWSCRT_SOURCES, $ext_shared)
+    PHP_ADD_BUILD_DIR($ext_builddir/ext)
     PHP_ADD_MAKEFILE_FRAGMENT
 fi
