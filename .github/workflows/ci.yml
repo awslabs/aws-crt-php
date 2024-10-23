@@ -26,7 +26,7 @@ jobs:
         ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -68,7 +68,7 @@ jobs:
         ini-values: xdebug.overload_var_dump=0, memory_limit=4G, phar.readonly=false
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -108,12 +108,11 @@ jobs:
       with:
         submodules: recursive
     - id: setup-php-sdk
-      uses: cmb69/setup-php-sdk@v0.6
+      uses: php/setup-php-sdk@v0.10
       with:
-        version: '8.0'
-        arch: ${{ matrix.arch }}
-        ts: ts
-        deps: openssl
+        version: 8.0
+        arch: x64
+        ts: nts
     - uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ matrix.arch }}
@@ -175,7 +174,7 @@ jobs:
         php-version: '8.0'
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
