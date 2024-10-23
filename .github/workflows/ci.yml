@@ -110,7 +110,7 @@ jobs:
     - id: setup-php-sdk
       uses: php/setup-php-sdk@v0.10
       with:
-        version: 8.1
+        version: '8.0'
         arch: ${{ matrix.arch }}
         ts: ts
     - uses: ilammy/msvc-dev-cmd@v1
