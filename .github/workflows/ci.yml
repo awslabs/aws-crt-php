@@ -79,6 +79,8 @@ jobs:
       run: |
         phpize
         ./configure
+        export PHP_EXECUTABLE=$(which php)
+        php --version
         make
         ./dev-scripts/run_tests.sh
 
