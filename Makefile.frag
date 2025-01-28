@@ -1,7 +1,7 @@
 
 INT_DIR=$(builddir)/build/install
 CMAKE_BUILD_DIR=$(builddir)/cmake_build
-GENERATE_STUBS=$(shell expr `$(PHP_EXECUTABLE) --version | head -1 | cut -f 2 -d' '` \>= 7.1)
+GENERATE_STUBS=$(shell expr `php --version | head -1 | cut -f 2 -d' '` \>= 7.1)
 
 CMAKE = cmake3
 ifeq (, $(shell which cmake3))
@@ -63,13 +63,13 @@ $(builddir)/ext/awscrt.c: $(CMAKE_BUILD_DIR)/aws-crt-ffi-static/libaws-crt-ffi.a
 $(srcdir)/ext/awscrt_arginfo.h: $(srcdir)/ext/awscrt.stub.php $(srcdir)/gen_stub.php
 ifeq ($(GENERATE_STUBS),1)
 	# generate awscrt_arginfo.h
-	$(PHP_EXECUTABLE) $(srcdir)/gen_stub.php --minimal-arginfo $(srcdir)/ext/awscrt.stub.php
+	php $(srcdir)/gen_stub.php --minimal-arginfo $(srcdir)/ext/awscrt.stub.php
 endif
 
 # transform/install api.h from FFI lib
 $(srcdir)/ext/api.h: $(srcdir)/crt/aws-crt-ffi/src/api.h
 	# generate api.h
-	$(PHP_EXECUTABLE) $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/ext/api.h
+	php $(srcdir)/gen_api.php $(srcdir)/crt/aws-crt-ffi/src/api.h > $(srcdir)/ext/api.h
 
 # install api.h to ext/ as well
 $(builddir)/ext/api.h : $(srcdir)/ext/api.h
