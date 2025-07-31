@@ -96,7 +96,7 @@ jobs:
     #       ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
 
   windows:
-    runs-on: windows-2025
+    runs-on: windows-2022
     defaults:
       run:
         shell: cmd # use CMD instead of powershell to catch error from bat script
