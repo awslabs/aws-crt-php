@@ -95,8 +95,8 @@ jobs:
     #       chmod a+x builder
     #       ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }} --spec=downstream
 
-  windows-vc16:
-    runs-on: windows-2019
+  windows:
+    runs-on: windows-2022
     defaults:
       run:
         shell: cmd # use CMD instead of powershell to catch error from bat script
