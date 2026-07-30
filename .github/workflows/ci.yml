@@ -145,7 +145,7 @@ jobs:
     runs-on: macos-${{ matrix.version }}
     strategy:
       matrix:
-        version: [13]
+        version: [14]
     steps:
       # Force PHP to 8.0
       # Doing this because tests fail in PHP 8.1 (default on macos Github Runner as of Dec 2021)
