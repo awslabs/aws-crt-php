@@ -12,11 +12,7 @@ jobs:
     - name: Fetch template body
       id: check_regression
       uses: actions/github-script@v7
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        IS_REGRESSION: ${{ steps.check_regression.outputs.is_regression }}
-        ISSUE_NUMBER: ${{ github.event.issue.number }}
-        REPO: ${{ github.repository }}
+      env:
         TEMPLATE_BODY: ${{ github.event.issue.body }}
       with:
         script: |
@@ -27,6 +23,9 @@ jobs:
     - name: Manage regression label
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        IS_REGRESSION: ${{ steps.check_regression.outputs.is_regression }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        REPO: ${{ github.repository }}
       run: |
         if [ "$IS_REGRESSION" == "true" ]; then
           gh issue edit "$ISSUE_NUMBER" --add-label "potential-regression" -R "$REPO"
